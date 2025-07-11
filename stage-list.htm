@@ -70,69 +70,98 @@
 
     <footer class="site-footer"> <p>© 2024 横浜南陵高校 コンピューター科学部</p> </footer>
 
-    <script defer src="data.js"></script>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            // === テンプレート共通処理 (省略) ===
-            const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
-    
-            const gridContainer = document.getElementById('project-grid-container');
-            const noResultsMessage = document.getElementById('no-results-message');
+    // ▼▼▼ stage-list.htm の script タグの中身を、これでまるごと上書き ▼▼▼
+<script defer src="data.js"></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- テンプレート共通処理 (省略) ---
+        const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
 
-            function renderCards(stagesToRender) {
-                if (!gridContainer || !noResultsMessage) return;
-                if (stagesToRender.length === 0) {
-                    gridContainer.innerHTML = '';
-                    noResultsMessage.innerText = '該当する発表はありませんでした。';
-                    noResultsMessage.style.display = 'block';
-                    return;
-                }
-                noResultsMessage.style.display = 'none';
+        // --- ページ固有要素の取得 ---
+        const gridContainer = document.getElementById('project-grid-container');
+        const noResultsMessage = document.getElementById('no-results-message');
+
+        // --- カード描画関数 (変更なし) ---
+        function renderCards(stagesToRender) {
+            if (!gridContainer || !noResultsMessage) return;
+            if (stagesToRender.length === 0) {
                 gridContainer.innerHTML = '';
+                noResultsMessage.innerText = '該当する発表はありませんでした。';
+                noResultsMessage.style.display = 'block';
+                return;
+            }
+            noResultsMessage.style.display = 'none';
+            gridContainer.innerHTML = '';
+            let cardsHTML = '';
+            stagesToRender.forEach((stage, index) => {
+                cardsHTML += `
+                    <a href="stage-detail.htm?id=${stage.id}" class="project-card" style="animation-delay: ${index * 0.05}s">
+                        <div class="card-image"><img src="${stage.image}" alt="${stage.name} のイメージ画像"></div>
+                        <div class="card-content">
+                            <span class="group-name">${stage.place}</span>
+                            <h3 class="project-title">${stage.name}</h3>
+                            <p class="catchphrase">開催時間： ${stage.time}</p>
+                            <div class="card-button-wrapper"><span class="card-button">詳しく見る</span></div>
+                        </div>
+                    </a>`;
+            });
+            gridContainer.innerHTML = cardsHTML;
+        }
+
+        // --- フィルター機能の初期化・実行 ---
+        if (typeof stageData !== 'undefined') {
+            const dayFilterContainer = document.getElementById('filter-by-day');
+            const placeFilterContainer = document.getElementById('filter-by-place');
+            let activeFilters = { day: 'すべて', place: 'すべて' };
+            
+            // ★★★ applyFilters関数を完全版に修正 ★★★
+            function applyFilters() {
+                let filtered = stageData;
+
+                // 1. 日程フィルターを適用
+                if (activeFilters.day !== 'すべて') {
+                    // stageのtagsに、選択した日程が含まれているかチェックする
+                    filtered = filtered.filter(stage => stage.tags && stage.tags.includes(activeFilters.day));
+                }
                 
-                let cardsHTML = '';
-                stagesToRender.forEach((stage, index) => {
-                    cardsHTML += `
-                        <a href="stage-detail.htm?id=${stage.id}" class="project-card" style="animation-delay: ${index * 0.05}s">
-                            <div class="card-image"><img src="${stage.image}" alt="${stage.name} のイメージ画像"></div>
-                            <div class="card-content">
-                                <span class="group-name">${stage.place}</span>
-                                <h3 class="project-title">${stage.name}</h3>
-                                <p class="catchphrase">開催時間： ${stage.time}</p>
-                                <div class="card-button-wrapper"><span class="card-button">詳しく見る</span></div>
-                            </div>
-                        </a>`;
+                // 2. 場所フィルターを適用
+                if (activeFilters.place !== 'すべて') {
+                    filtered = filtered.filter(stage => stage.place === activeFilters.place);
+                }
+                
+                renderCards(filtered);
+            }
+            
+            // ★★★ 日程フィルターのイベントリスナーを完全版に ★★★
+            if(dayFilterContainer){
+                dayFilterContainer.addEventListener('click', function(e) {
+                    if (!e.target.matches('.filter-btn')) return;
+                    dayFilterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    activeFilters.day = e.target.dataset.filter;
+                    applyFilters();
                 });
-                gridContainer.innerHTML = cardsHTML;
             }
 
-            if (typeof stageData !== 'undefined') {
-                const dayFilterContainer = document.getElementById('filter-by-day');
-                const placeFilterContainer = document.getElementById('filter-by-place');
-                let activeFilters = { day: 'すべて', place: 'すべて' };
-                
-                function applyFilters() {
-                    let filtered = stageData;
-                    if (activeFilters.place !== 'すべて') {
-                        filtered = filtered.filter(p => p.place === activeFilters.place);
-                    }
-                    renderCards(filtered);
-                }
-                
-                if (placeFilterContainer) {
-                    placeFilterContainer.addEventListener('click', function(e) {
-                        if (!e.target.matches('.filter-btn')) return;
-                        placeFilterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                        e.target.classList.add('active');
-                        activeFilters.place = e.target.dataset.filter;
-                        applyFilters();
-                    });
-                }
-                renderCards(stageData);
-            } else {
-                console.error("data.jsが読み込めていないか、stageDataが存在しません。");
+            if(placeFilterContainer){
+                placeFilterContainer.addEventListener('click', function(e) {
+                    if (!e.target.matches('.filter-btn')) return;
+                    placeFilterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    activeFilters.place = e.target.dataset.filter;
+                    applyFilters();
+                });
             }
-        });
-    </script>
+            
+            renderCards(stageData);
+        } else {
+            console.error("data.jsが読み込めていないか、stageDataが存在しません。");
+            if(noResultsMessage) {
+                 noResultsMessage.innerText = 'データ読み込みエラー。ページを再読み込みしてください。';
+                 noResultsMessage.style.display = 'block';
+            }
+        }
+    });
+</script>
 </body>
 </html>
