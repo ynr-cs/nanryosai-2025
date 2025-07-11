@@ -58,8 +58,8 @@ const projectData = [
 
 // ステージ発表のダミーデータ (これは変更なし)
 const stageData = [
-    { id: 'suibu-concert', name: '吹奏楽部コンサート', place: '体育館', time: '13:00 - 13:45', description: 'J-POPから定番のクラシックまで、誰もが楽しめるプログラムを用意しました。迫力のサウンドをお楽しみください！', image: 'https://via.placeholder.com/800x400.png?text=Brass+Band' },
-    { id: 'dance-show', name: 'ダンス部ショーケース', place: '中庭ステージ', time: '10:30 - 11:00', description: 'ヒップホップからK-POPまで、アツいダンスパフォーマンスを披露します！応援よろしくお願いします！', image: 'https://via.placeholder.com/800x400.png?text=Dance+Showcase' },
-    { id: 'keion-live', name: '軽音楽部 LIVE!', place: '体育館', time: '11:45 - 12:30', description: '1年生から3年生までのバンドが、練習の成果をぶつけます！あの人気曲もやるかも…？一緒に盛り上がろう！', image: 'https://via.placeholder.com/800x400.png?text=Rock+Live' },
+    { id: 'suibu-concert', name: '吹奏楽部コンサート', place: '体育館', time: '13:00 - 13:45',         tags: ['1日目', '音楽'],description: 'J-POPから定番のクラシックまで、誰もが楽しめるプログラムを用意しました。迫力のサウンドをお楽しみください！', image: 'https://via.placeholder.com/800x400.png?text=Brass+Band' },
+    { id: 'dance-show', name: 'ダンス部ショーケース', place: '中庭ステージ', time: '10:30 - 11:00', tags: ['1日目', 'ダンス'], description: 'ヒップホップからK-POPまで、アツいダンスパフォーマンスを披露します！応援よろしくお願いします！', image: 'https://via.placeholder.com/800x400.png?text=Dance+Showcase' },
+    { id: 'keion-live', name: '軽音楽部 LIVE!', place: '体育館', time: '11:45 - 12:30', tags: ['2日目', '演劇'],description: '1年生から3年生までのバンドが、練習の成果をぶつけます！あの人気曲もやるかも…？一緒に盛り上がろう！', image: 'https://via.placeholder.com/800x400.png?text=Rock+Live' },
     { id: 'drama-play', name: '演劇部「告白」', place: '視聴覚室', time: '9:30 - 10:15', description: '文化祭を舞台にした、甘酸っぱくも、ちょっぴり切ない青春劇。ハンカチのご用意を。', image: 'https://via.placeholder.com/800x400.png?text=Drama+Club' }
 ];
