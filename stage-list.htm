@@ -29,6 +29,29 @@
         .card-button-wrapper { margin-top: auto; text-align: center; padding-top: 15px; } .card-button { display: inline-block; background: var(--secondary-gradient); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9em; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: none; } .project-card:hover .card-button { transform: scale(1.05); }
         .no-results { color: white; font-size: 1.5em; font-weight: 500; text-align: center; padding: 80px 20px; background: rgba(0,0,0,0.2); border-radius: 15px; display: none; }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } } @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+/* styleタグのどこかに追加 */
+.search-box-wrapper {
+    width: 100%;
+    max-width: 600px;
+}
+.search-input {
+    width: 100%;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    color: white;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+.search-input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+.search-input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.7);
+    box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+}
     </style>
 </head>
 <body>
@@ -43,6 +66,10 @@
             </header>
 
             <div class="filter-section">
+                <!-- <div class="filter-section"> のすぐ下に追加 -->
+<div class="search-box-wrapper">
+    <input type="search" id="search-input" class="search-input" placeholder="発表名で検索...">
+</div>
                 <!-- フィルター1：日程分類（今はダミー） -->
                 <div class="filter-group">
                     <div id="filter-by-day" class="filter-buttons">
@@ -74,14 +101,31 @@
 <script defer src="data.js"></script>
 <script defer>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- テンプレート共通処理 (省略) ---
-        const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
-
-        // --- ページ固有要素の取得 ---
+        
+        // === 1. テンプレート共通の処理 ===
+        const body = document.body;
+        const hamburger = document.querySelector('.hamburger-menu');
+        const overlay = document.querySelector('.page-overlay');
+        function toggleSidenav() { body.classList.toggle('sidenav-open'); }
+        hamburger.addEventListener('click', toggleSidenav);
+        overlay.addEventListener('click', toggleSidenav);
+        let lastScrollTop = 0;
+        const header = document.querySelector('.site-header');
+        if (header) {
+            const headerHeight = header.offsetHeight;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); }
+                else { header.classList.remove('hidden'); }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
+        }
+    
+        // === 2. ページ固有要素の取得 ===
         const gridContainer = document.getElementById('project-grid-container');
         const noResultsMessage = document.getElementById('no-results-message');
 
-        // --- カード描画関数 (変更なし) ---
+        // === 3. カード描画関数 ===
         function renderCards(stagesToRender) {
             if (!gridContainer || !noResultsMessage) return;
             if (stagesToRender.length === 0) {
@@ -108,55 +152,78 @@
             gridContainer.innerHTML = cardsHTML;
         }
 
-        // --- フィルター機能の初期化・実行 ---
+        // === 4. フィルター機能の初期化・実行 ===
         if (typeof stageData !== 'undefined') {
             const dayFilterContainer = document.getElementById('filter-by-day');
             const placeFilterContainer = document.getElementById('filter-by-place');
-            let activeFilters = { day: 'すべて', place: 'すべて' };
+            const searchInput = document.getElementById('search-input'); // 検索ボックスを取得
+
+            // 全てのフィルターの状態を管理する
+            let activeFilters = {
+                day: 'すべて',
+                place: 'すべて',
+                search: ''
+            };
             
-            // ★★★ applyFilters関数を完全版に修正 ★★★
-            function applyFilters() {
+            // 全てのフィルターを適用して描画する司令官
+            function applyAllFilters() {
                 let filtered = stageData;
 
-                // 1. 日程フィルターを適用
+                // 1. 日程フィルター
                 if (activeFilters.day !== 'すべて') {
-                    // stageのtagsに、選択した日程が含まれているかチェックする
-                    filtered = filtered.filter(stage => stage.tags && stage.tags.includes(activeFilters.day));
+                    filtered = filtered.filter(s => s.tags && s.tags.includes(activeFilters.day));
                 }
-                
-                // 2. 場所フィルターを適用
+                // 2. 場所フィルター
                 if (activeFilters.place !== 'すべて') {
-                    filtered = filtered.filter(stage => stage.place === activeFilters.place);
+                    filtered = filtered.filter(s => s.place === activeFilters.place);
+                }
+                // 3. 検索キーワードフィルター
+                if (activeFilters.search) {
+                    filtered = filtered.filter(s => 
+                        s.name.toLowerCase().includes(activeFilters.search)
+                    );
                 }
                 
                 renderCards(filtered);
             }
-            
-            // ★★★ 日程フィルターのイベントリスナーを完全版に ★★★
-            if(dayFilterContainer){
+
+            // --- イベントリスナーを仕掛ける ---
+
+            // 検索ボックス
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    activeFilters.search = searchInput.value.toLowerCase().trim();
+                    applyAllFilters();
+                });
+            }
+
+            // 日程フィルター
+            if (dayFilterContainer) {
                 dayFilterContainer.addEventListener('click', function(e) {
                     if (!e.target.matches('.filter-btn')) return;
                     dayFilterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
                     activeFilters.day = e.target.dataset.filter;
-                    applyFilters();
+                    applyAllFilters();
                 });
             }
 
-            if(placeFilterContainer){
+            // 場所フィルター
+            if (placeFilterContainer) {
                 placeFilterContainer.addEventListener('click', function(e) {
                     if (!e.target.matches('.filter-btn')) return;
                     placeFilterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
                     activeFilters.place = e.target.dataset.filter;
-                    applyFilters();
+                    applyAllFilters();
                 });
             }
             
+            // 初回表示
             renderCards(stageData);
         } else {
             console.error("data.jsが読み込めていないか、stageDataが存在しません。");
-            if(noResultsMessage) {
+            if (noResultsMessage) {
                  noResultsMessage.innerText = 'データ読み込みエラー。ページを再読み込みしてください。';
                  noResultsMessage.style.display = 'block';
             }
