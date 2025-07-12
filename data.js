@@ -63,3 +63,28 @@ const stageData = [
     { id: 'keion-live', name: '軽音楽部 LIVE!', place: '体育館', time: '11:45 - 12:30', tags: ['2日目', 'ライブ'],description: '1年生から3年生までのバンドが、練習の成果をぶつけます！あの人気曲もやるかも…？一緒に盛り上がろう！', image: 'https://via.placeholder.com/800x400.png?text=Rock+Live' },
     { id: 'drama-play', name: '演劇部「告白」', place: '視聴覚室', time: '9:30 - 10:15', tags: ['2日目', '演劇'], description: '文化祭を舞台にした、甘酸っぱくも、ちょっぴり切ない青春劇。ハンカチのご用意を。', image: 'https://via.placeholder.com/800x400.png?text=Drama+Club' }
 ];
+
+// data.js の一番下に追加
+const memberData = [
+    { 
+        name: '(君の名前)', 
+        role: 'プロジェクトリーダー / Terapad職人', 
+        icon: 'https://via.placeholder.com/100x100.png?text=You' // ←君のアイコン画像
+    },
+    {
+        name: 'Geminiくん',
+        role: 'AIアシスタント / 壁打ち相手',
+        icon: 'https://via.placeholder.com/100x100.png?text=AI'
+    },
+    // ... 他の部員のデータもここに追加 ...
+    {
+        name: '部員B',
+        role: 'データ入力担当',
+        icon: 'https://via.placeholder.com/100x100.png?text=B'
+    },
+    {
+        name: '部員C',
+        role: 'デバッグ・テスト担当',
+        icon: 'https://via.placeholder.com/100x100.png?text=C'
+    },
+];
