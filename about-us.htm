@@ -104,6 +104,19 @@
     color: rgba(255,255,255,0.9);
 }
 
+/* styleタグの、ページ専用CSSエリアに追加 */
+
+/* ページ表示時のアニメーション */
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
     </style>
 </head>
 <body>
@@ -115,13 +128,13 @@
 <!-- ▼▼▼ <main>...</main> を、これでまるごと上書き ▼▼▼ -->
 <main>
     <div class="content-wrapper">
-        <header class="page-header">
+        <header class="page-header fade-up">
             <!-- 1. タイトル変更 -->
             <h1 class="page-title">About Us</h1>
         </header>
 
         <!-- 2. コンピューター科学部紹介 (内容差し替え) -->
-        <div class="info-card">
+        <div class="info-card fade-up">
             <h2>横浜南陵高校コンピューター科学部</h2>
             <p>
                 <strong>「次、どこ行く？をスマホで。」</strong><br>
@@ -137,7 +150,7 @@
         </div>
 
         <!-- 3. 技術スタック (スリム化) -->
-        <div class="info-card">
+        <div class="info-card fade-up">
             <h2>このサイトを支える技術</h2>
             <div class="tech-stack-grid">
                 <div class="tech-item"><span class="tech-category">言語</span>HTML / CSS / JS</div>
@@ -149,7 +162,7 @@
         </div>
 
         <!-- ★★★ セクション3：制作の裏側 (NEW!) ★★★ -->
-        <div class="info-card">
+        <div class="info-card fade-up">
             <h2>制作の裏側 </h2>
             <div class="qa-list">
                 <div class="qa-item">
@@ -169,7 +182,7 @@
 
 
         <!-- 4. お問い合わせ (文言修正) -->
-        <div class="info-card text-center">
+        <div class="info-card text-center fade-up">
             <h2>Contact</h2>
             <p style="margin-bottom: 25px;">
                 このサイトに関するご質問やお問い合わせは、<br>以下のフォームよりお気軽にご連絡ください。
@@ -185,9 +198,19 @@
 
     <!-- このページは複雑なJSは不要。テンプレートの基本機能だけでOK -->
     <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
+    document.addEventListener('DOMContentLoaded', function() {
+        // === 1. テンプレート共通の処理 (変更なし) ===
+        const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
+        
+        // ★★★ 2. ページ表示アニメーションの実行 ★★★
+        const animatedElements = document.querySelectorAll('.fade-up');
+        animatedElements.forEach((el, index) => {
+            // setTimeoutを使って、各要素の表示タイミングを少しずつずらす
+            setTimeout(() => {
+                el.classList.add('is-visible');
+            }, index * 150); // 0.15秒ずつ遅延させる
         });
-    </script>
+    });
+</script>
 </body>
 </html>
