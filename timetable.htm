@@ -1,151 +1,174 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 各ページで<title>は書き換える -->
-    <title>タイムテーブル|南陵祭'25</title>
+    <title>タイムテーブル | 南陵祭'25</title>
+    <!-- 全てのCSSをここに統合 -->
     <style>
+        /* --- テンプレートの基本CSS (省略) --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white;} body.sidenav-open { overflow: hidden; } body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); pointer-events: none; z-index: -1; } main { flex-grow: 1; position: relative; z-index: 2; }
+        .content-wrapper { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        /* --- テンプレートのナビゲーションCSS (省略) --- */
+        .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.2); z-index: 100; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); padding: 0 80px 0 30px; display: flex; align-items: center; } .site-header.hidden { transform: translateY(-100%); opacity: 0; } .site-title a { font-size: 1.8em; font-weight: 700; background: linear-gradient(45deg, #fff, #e8f4f8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; transition: all 0.3s ease; animation: float 6s ease-in-out infinite; } .desktop-nav { margin-left: auto; } .desktop-nav ul { display: flex; list-style: none; gap: 30px; } .desktop-nav a { text-decoration: none; color: rgba(255, 255, 255, 0.9); font-weight: 500; padding: 10px 20px; border-radius: 25px; position: relative; transition: all 0.3s ease; } .desktop-nav a::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border-radius: 25px; opacity: 0; transition: opacity 0.3s ease; } .desktop-nav a:hover::before { opacity: 1; } .desktop-nav a:hover { color: white; transform: translateY(-2px); } .hamburger-menu { position: fixed; top: 20px; right: 30px; width: 50px; height: 50px; background: var(--accent-gradient); border-radius: 50%; cursor: pointer; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: var(--shadow-medium); } .hamburger-menu:hover { transform: scale(1.1) rotate(5deg); box-shadow: var(--shadow-strong); } .hamburger-menu .bar { width: 22px; height: 2px; background-color: white; border-radius: 2px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .hamburger-menu { background: white; backdrop-filter: blur(10px); } body.sidenav-open .hamburger-menu .bar { background-color: #2c3e50; } body.sidenav-open .hamburger-menu .bar1 { transform: translateY(6px) rotate(45deg); } body.sidenav-open .hamburger-menu .bar2 { opacity: 0; transform: scaleX(0); } body.sidenav-open .hamburger-menu .bar3 { transform: translateY(-6px) rotate(-45deg); } .sidenav { position: fixed; top: 0; right: 0; width: var(--sidenav-width); max-width: 90vw; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(30px); border-left: 1px solid rgba(255, 255, 255, 0.2); z-index: 200; padding: 100px 30px 30px; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .sidenav { transform: translateX(0); } .sidenav ul { list-style: none; } .sidenav li { margin-bottom: 8px; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; } body.sidenav-open .sidenav li { opacity: 1; transform: translateX(0); } body.sidenav-open .sidenav li:nth-child(1) { transition-delay: 0.1s; } body.sidenav-open .sidenav li:nth-child(2) { transition-delay: 0.15s; } body.sidenav-open .sidenav li:nth-child(3) { transition-delay: 0.2s; } body.sidenav-open .sidenav li:nth-child(4) { transition-delay: 0.25s; } body.sidenav-open .sidenav li:nth-child(5) { transition-delay: 0.3s; } body.sidenav-open .sidenav li:nth-child(6) { transition-delay: 0.35s; } body.sidenav-open .sidenav li:nth-child(7) { transition-delay: 0.4s; } .sidenav a { color: rgba(255, 255, 255, 0.9); text-decoration: none; display: block; font-size: 1.1em; font-weight: 500; padding: 18px 25px; border-radius: 15px; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); } .sidenav a:hover { color: white; background: rgba(255, 255, 255, 0.1); transform: translateX(10px); } .sidenav .about-us { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.2); } .sidenav .about-us a { font-size: 1em; color: rgba(255, 255, 255, 0.6); } .page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0); z-index: 150; pointer-events: none; transition: background-color 0.5s; } body.sidenav-open .page-overlay { background-color: rgba(0, 0, 0, 0.6); pointer-events: auto; }
+        .site-footer { background: rgba(0, 0, 0, 0.2); text-align: center; padding: 30px 20px; color: rgba(255, 255, 255, 0.8); font-size: 0.9em; } @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } } @media (max-width: 900px) { .desktop-nav { display: none; } .site-header { padding: 0 80px 0 20px; } .hamburger-menu { right: 20px; width: 45px; height: 45px; } }
         
-        /* ==============================
-         * 基本設定と変数
-         * ============================== */
-        :root {
-            --header-height: 80px;
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --sidenav-width: 320px;
-            --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15);
-            --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2);
-        }
+        /* ★★★ このページ専用のCSS ★★★ */
+        .page-header { text-align: center; padding: 40px 20px; }
+        .page-title { font-size: 3em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex; flex-direction: column;
-            padding-top: var(--header-height);
-            overflow-x: hidden;
+        .timeline {
+            border-left: 3px solid rgba(255,255,255,0.3);
+            padding: 0 0 40px 30px;
             position: relative;
         }
-        body.sidenav-open { overflow: hidden; }
-
-        body::before { /* 背景の装飾 */
-            content: ''; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
-            pointer-events: none; z-index: -1;
+        .time-block {
+            margin-bottom: 40px;
+            position: relative;
         }
-
-        main {
-            flex-grow: 1; /* フッターを下に押し出す */
-            position: relative; z-index: 2;
+        .time-block::before { /* 時間軸上の丸ポチ */
+            content: '';
+            position: absolute;
+            left: -42px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.8);
         }
-
-        /* --- 共通のコンテナ（必要なら使う） --- */
-        .content-wrapper {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        .time-label {
+            font-size: 2em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
         }
-        
-        /* ==============================
-         * ヘッダー
-         * ============================== */
-        .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.2); z-index: 100; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); padding: 0 80px 0 30px; display: flex; align-items: center; } .site-header.hidden { transform: translateY(-100%); opacity: 0; }
-        .site-title a { font-size: 1.8em; font-weight: 700; background: linear-gradient(45deg, #fff, #e8f4f8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; transition: all 0.3s ease; animation: float 6s ease-in-out infinite; }
-        .desktop-nav { margin-left: auto; } .desktop-nav ul { display: flex; list-style: none; gap: 30px; } .desktop-nav a { text-decoration: none; color: rgba(255, 255, 255, 0.9); font-weight: 500; padding: 10px 20px; border-radius: 25px; position: relative; transition: all 0.3s ease; } .desktop-nav a::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border-radius: 25px; opacity: 0; transition: opacity 0.3s ease; } .desktop-nav a:hover::before { opacity: 1; } .desktop-nav a:hover { color: white; transform: translateY(-2px); }
-        .hamburger-menu { position: fixed; top: 20px; right: 30px; width: 50px; height: 50px; background: var(--accent-gradient); border-radius: 50%; cursor: pointer; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: var(--shadow-medium); } .hamburger-menu:hover { transform: scale(1.1) rotate(5deg); box-shadow: var(--shadow-strong); } .hamburger-menu .bar { width: 22px; height: 2px; background-color: white; border-radius: 2px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .hamburger-menu { background: white; backdrop-filter: blur(10px); } body.sidenav-open .hamburger-menu .bar { background-color: #2c3e50; } body.sidenav-open .hamburger-menu .bar1 { transform: translateY(6px) rotate(45deg); } body.sidenav-open .hamburger-menu .bar2 { opacity: 0; transform: scaleX(0); } body.sidenav-open .hamburger-menu .bar3 { transform: translateY(-6px) rotate(-45deg); }
-        .sidenav { position: fixed; top: 0; right: 0; width: var(--sidenav-width); max-width: 90vw; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(30px); border-left: 1px solid rgba(255, 255, 255, 0.2); z-index: 200; padding: 100px 30px 30px; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .sidenav { transform: translateX(0); } .sidenav ul { list-style: none; } .sidenav li { margin-bottom: 8px; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; } body.sidenav-open .sidenav li { opacity: 1; transform: translateX(0); } body.sidenav-open .sidenav li:nth-child(1) { transition-delay: 0.1s; } body.sidenav-open .sidenav li:nth-child(2) { transition-delay: 0.15s; } body.sidenav-open .sidenav li:nth-child(3) { transition-delay: 0.2s; } body.sidenav-open .sidenav li:nth-child(4) { transition-delay: 0.25s; } body.sidenav-open .sidenav li:nth-child(5) { transition-delay: 0.3s; } body.sidenav-open .sidenav li:nth-child(6) { transition-delay: 0.35s; } body.sidenav-open .sidenav li:nth-child(7) { transition-delay: 0.4s; } .sidenav a { color: rgba(255, 255, 255, 0.9); text-decoration: none; display: block; font-size: 1.1em; font-weight: 500; padding: 18px 25px; border-radius: 15px; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); } .sidenav a:hover { color: white; background: rgba(255, 255, 255, 0.1); transform: translateX(10px); } .sidenav .about-us { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.2); } .sidenav .about-us a { font-size: 1em; color: rgba(255, 255, 255, 0.6); }
-        .page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0); z-index: 150; pointer-events: none; transition: background-color 0.5s; } body.sidenav-open .page-overlay { background-color: rgba(0, 0, 0, 0.6); pointer-events: auto; }
-        .site-footer { background: rgba(0, 0, 0, 0.2); text-align: center; padding: 30px 20px; color: rgba(255, 255, 255, 0.8); font-size: 0.9em; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        @media (max-width: 900px) { .desktop-nav { display: none; } .site-header { padding: 0 80px 0 20px; } .hamburger-menu { right: 20px; width: 45px; height: 45px; } }
+        .event-card {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            background: rgba(0,0,0,0.4);
+            transform: translateX(10px);
+        }
+        .event-time {
+            font-size: 1.1em;
+            font-weight: 600;
+            min-width: 120px;
+        }
+        .event-details { flex-grow: 1; }
+        .event-name {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        .event-place {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-    <!-- ヘッダー -->
-    <header class="site-header">
-        <div class="site-title"><a href="index.htm">南陵祭'25</a></div> <!-- ← index.htm へのリンクに修正 -->
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="about.htm">概要</a></li>
-                <li><a href="projects-list.htm">企画一覧</a></li>
-                <li><a href="stage-list.htm">ステージ発表</a></li> <!-- ← stage-list.htm に修正 -->
-                <li><a href="map.htm">校内マップ</a></li>
-                <li><a href="access.htm">アクセス</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- ハンバーガーメニューアイコン -->
-    <div class="hamburger-menu"> <span class="bar bar1"></span><span class="bar bar2"></span><span class="bar bar3"></span> </div>
+    <header class="site-header"> <div class="site-title"><a href="index.htm">南陵祭'25</a></div> <nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav> </header>
+    <div class="hamburger-menu"> <span class="bar bar1"></span><span class="bar bar2"></span><span class="bar bar3"></span> </div> <div class="page-overlay"></div>
+    <nav class="sidenav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="timetable.htm">タイムテーブル</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li><li class="about-us"><a href="about-us.htm">About Us</a></li></ul></nav>
     
-    <!-- ページオーバーレイ -->
-    <div class="page-overlay"></div>
-    
-    <!-- サイドナビゲーション -->
-    <nav class="sidenav">
-        <ul> <!-- ← この ul の中身を、全部正しいリンクに書き換える -->
-            <li><a href="about.htm">概要</a></li>
-            <li><a href="projects-list.htm">企画一覧</a></li>
-            <li><a href="stage-list.htm">ステージ発表</a></li>
-            <li><a href="timetable.htm">タイムテーブル</a></li>
-            <li><a href="map.htm">校内マップ</a></li>
-            <li><a href="access.htm">アクセス</a></li>
-            <!-- <li><a href="news.htm">お知らせ</a></li> ※お知らせページを作る場合に使う -->
-            <li class="about-us"><a href="about-us.htm">About Us</a></li>
-        </ul>
-    </nav>
-    
-    <!-- ▼▼▼ ここに各ページの固有コンテンツが入る ▼▼▼ -->
     <main>
-        
-        <!-- コンテンツをここに追加 -->
-        <!-- 例:
         <div class="content-wrapper">
-             <h1>ページタイトル</h1>
-             <p>これはサンプルのコンテンツです。</p>
+            <header class="page-header">
+                <h1 class="page-title">Timetable</h1>
+            </header>
+            
+            <!-- JavaScriptがここにタイムラインを自動生成する -->
+            <div id="timeline-container" class="timeline">
+                <!-- 例：
+                <div class="time-block">
+                    <div class="time-label">9:00 - 10:00</div>
+                    <a href="#" class="event-card">
+                        <div class="event-time">9:30 - 10:15</div>
+                        <div class="event-details">
+                            <div class="event-name">演劇部「告白」</div>
+                            <div class="event-place">視聴覚室</div>
+                        </div>
+                    </a>
+                </div> 
+                -->
+            </div>
+
         </div>
-        -->
-
     </main>
-    <!-- ▲▲▲ ここまでが各ページの固有コンテンツ ▲▲▲ -->
 
+    <footer class="site-footer"> <p>&copy; 2024 横浜南陵高校 コンピューター科学部</p> </footer>
 
-    <!-- フッター -->
-    <footer class="site-footer">
-        <p>c 2024 横浜南陵高校 コンピューター科学部</p>
-    </footer>
+    <script defer src="data.js"></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- テンプレート共通処理 (省略) ---
+        
+        const container = document.getElementById('timeline-container');
+        if (container && typeof stageData !== 'undefined') {
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const body = document.body;
-            const hamburger = document.querySelector('.hamburger-menu');
-            const overlay = document.querySelector('.page-overlay');
+            // ★★★ 描画関数を新設 ★★★
+            function createTimetableForDay(day) {
+                // 1. 指定された日のデータだけを抽出＆時間順にソート
+                const dayData = stageData
+                    .filter(event => event.tags.includes(day))
+                    .sort((a, b) => (a.time.replace(/[^0-9]/g, '') || 0) - (b.time.replace(/[^0-9]/g, '') || 0));
 
-            function toggleSidenav() { body.classList.toggle('sidenav-open'); }
-            hamburger.addEventListener('click', toggleSidenav);
-            overlay.addEventListener('click', toggleSidenav);
-
-            let lastScrollTop = 0;
-            const header = document.querySelector('.site-header');
-            if (header) { // headerが存在する場合のみ処理
-                const headerHeight = header.offsetHeight;
+                // 2. イベントを時間帯ごとにグループ化
+                const groupedByHour = {};
+                dayData.forEach(event => {
+                    const startHour = parseInt(event.time.split(':')[0], 10);
+                    if (isNaN(startHour)) return; // 時間不明のデータは無視
+                    if (!groupedByHour[startHour]) groupedByHour[startHour] = [];
+                    groupedByHour[startHour].push(event);
+                });
                 
-                window.addEventListener('scroll', function() {
-                    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } 
-                    else { header.classList.remove('hidden'); }
-                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-                }, false);
+                // 3. HTMLを組み立て
+                let dayHTML = `<h2 style="font-size:2.5em; margin-bottom:20px; text-shadow:0 2px 10px rgba(0,0,0,0.3);">${day}</h2>`;
+                for (let hour = 9; hour <= 14; hour++) { // 9時から14時台まで
+                    if (groupedByHour[hour]) {
+                        dayHTML += `<div class="time-block">
+                                    <div class="time-label">${hour}:00 - ${hour+1}:00</div>`;
+                        groupedByHour[hour].forEach(event => {
+                            dayHTML += `
+                                <a href="stage-detail.htm?id=${event.id}" class="event-card">
+                                    <div class="event-time">${event.time}</div>
+                                    <div class="event-details">
+                                        <div class="event-name">${event.name}</div>
+                                        <div class="event-place">${event.place}</div>
+                                    </div>
+                                </a>`;
+                        });
+                        dayHTML += `</div>`;
+                    }
+                }
+                return dayHTML;
             }
-        });
-    </script>
+
+            // ★★★ DAY1とDAY2のタイムテーブルをそれぞれ生成して、結合する ★★★
+            const timetableHTML = createTimetableForDay('DAY1') + createTimetableForDay('DAY2');
+            container.innerHTML = timetableHTML;
+        }
+    });
+</script>
 </body>
 </html>
