@@ -1,153 +1,264 @@
-// data.js (第一次調査 全データ反映版)
+// ▼▼▼ data.jsの中身を、これで丸ごと上書きするんだ！ ▼▼▼
 
+// 企画の名簿データ
 const projectData = [
-    // === 1年生 ===
     {
-        id: '1-2',
-        name: '1年2組「赤字のカジノ〜ちょっぴり大人な休憩所〜」',
-        catchphrase: 'カジノで一攫千金！？',
-        tags: ['1年生', '展示', 'ゲーム'],
-        // 以下、ダミーデータ (今後更新)
-        place: '1-2教室', hours: '未定', ticket: 'なし', description: 'カジノをテーマにした休憩所です。', image: 'https://via.placeholder.com/800x400.png?text=1-2+Casino', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: '1-3',
-        name: '1年3組「中村縁日〜射的でストレス発散〜」',
-        catchphrase: '景品を狙って撃ちまくれ！',
-        tags: ['1年生', 'ゲーム', '体験'],
-        place: '1-3教室', hours: '未定', ticket: 'なし', description: '当てた景品の数によってお菓子が貰えます！！', image: 'https://via.placeholder.com/800x400.png?text=1-3+Ennichi', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: '1-4',
-        name: '1年4組「あの子はどこ？次々といなくなる不可解な事件」',
-        catchphrase: 'あなたはこの謎を解けるか。',
-        tags: ['1年生', 'お化け屋敷', 'ホラー'],
-        place: '1-4教室', hours: '未定', ticket: '未定', description: '西洋風のお化け屋敷です。', image: 'https://via.placeholder.com/800x400.png?text=1-4+OBAKE', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: '1-6',
-        name: '1年6組「前園のハッピーライド」',
-        catchphrase: '教室でコーヒーカップ！',
-        tags: ['1年生', '展示', '体験', '写真映え'],
-        place: '1-6教室', hours: '未定', ticket: '未定', description: 'コーヒーカップを作ります！', image: 'https://via.placeholder.com/800x400.png?text=1-6+Ride', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: '1-7',
-        name: '1年7組「メイドインメンディー」',
-        catchphrase: 'おかえりなさいませ、ご主人様！',
-        tags: ['1年生', 'カフェ', '飲食'],
-        place: '1-7教室', hours: '未定', ticket: '未定', description: 'メイドと執事の混合カフェです。', image: 'https://via.placeholder.com/800x400.png?text=1-7+Cafe', contentType: 'menu', menu: [], mapImage: ''
-    },
-    // === 2年生 ===
-    {
-        id: '2-2',
-        name: '2年2組「ROUND2」',
-        catchphrase: 'ストライクを目指せ！',
-        tags: ['2年生', 'ゲーム', '体験'],
-        place: '2-2教室', hours: '未定', ticket: 'なし', description: 'ダーツとボーリングが楽しめます。', image: 'https://via.placeholder.com/800x400.png?text=2-2+Game', contentType: 'gallery', gallery: [], mapImage: ''
+        id: '3-1',
+        name: '3年1組「絶叫ホラーハウス」',
+        catchphrase: '教室が悲鳴に包まれる…',
+        place: '3階 3-1教室',
+        hours: '9:00 - 15:00',
+        tags: ['3年生', 'お化け屋敷', 'ホラー'],
+        ticket: '9:00から教室前で配布',
+        description: '私たちのクラスでは、背筋も凍る本格的なお化け屋敷を準備しました。最高の体験をお届けします！ぜひお越しください。',
+        image: 'images/project-3-1.jpg', // ★ローカル画像パス
+        contentType: 'gallery',
+        gallery: [
+            'https://via.placeholder.com/400x300.png?text=準備風景1', 'https://via.placeholder.com/400x300.png?text=装飾A',
+            'https://via.placeholder.com/400x300.png?text=装飾B', 'https://via.placeholder.com/400x300.png?text=脅かし役の誰か'
+        ],
+        mapImage: 'https://via.placeholder.com/600x400.png?text=3F+Map+with+Pin'
     },
     {
         id: '2-4',
-        name: '2年4組「club 楓」',
-        catchphrase: '最高のひとときを、あなたに。',
-        tags: ['2年生', 'カフェ', '飲食', '販売'],
-        place: '2-4教室', hours: '未定', ticket: 'なし', description: '飲み物やお菓子を販売。キャバクラ、ホスト風の接客でおもてなしします。', image: 'https://via.placeholder.com/800x400.png?text=2-4+Club', contentType: 'menu', menu: [], mapImage: ''
+        name: '2年4組「エモCafe」',
+        catchphrase: 'インスタ映え間違いなし！',
+        place: '中庭 テントエリア',
+        hours: '10:00 - 14:30',
+        tags: ['2年生', 'カフェ', '写真映え', '休憩'],
+        ticket: 'なし',
+        description: 'レトロでかわいい内装のカフェです。美味しいドリンクとスイーツを用意してお待ちしています。',
+        image: 'images/project-2-4.jpg', // ★ローカル画像パス
+        contentType: 'menu',
+        menu: [
+            { name: 'クリームソーダ', price: '300円', desc: 'しゅわしゅわで一番人気！' },
+            { name: '手作りクッキー', price: '200円', desc: 'サクサクの自信作です。' },
+            { name: 'コーヒーフロート', price: '350円', desc: 'ほろ苦さと甘さのハーモニー。' }
+        ],
+        mapImage: 'https://via.placeholder.com/600x400.png?text=Courtyard+Map+with+Pin'
     },
     {
-        id: '2-7',
-        name: '2年7組「meltyメイド❤︎」',
-        catchphrase: '萌え萌えキュン！',
-        tags: ['2年生', 'カフェ', '飲食'],
-        place: '2-7教室', hours: '未定', ticket: 'なし', description: 'スイーツやドリンクをメイド服を着て提供するカフェです。', image: 'https://via.placeholder.com/800x400.png?text=2-7+MaidCafe', contentType: 'menu', menu: [], mapImage: ''
-    },
-    // === 3年生 ===
-    {
-        id: '3-2',
-        name: '3年2組「たこ焼き」',
-        catchphrase: '熱々ふわとろ！',
-        tags: ['3年生', '飲食'],
-        place: '3-2教室', hours: '未定', ticket: 'なし', description: 'たこ焼きを作って販売します。', image: 'https://via.placeholder.com/800x400.png?text=3-2+Takoyaki', contentType: 'menu', menu: [], mapImage: ''
-    },
-    {
-        id: '3-3',
-        name: '3年3組「ケバブ」',
-        catchphrase: 'ケバブ、いかがっすかー！',
-        tags: ['3年生', '飲食'],
-        place: '3-3教室', hours: '未定', ticket: 'なし', description: '本格ケバブを販売します。', image: 'https://via.placeholder.com/800x400.png?text=3-3+Kebab', contentType: 'menu', menu: [], mapImage: ''
-    },
-    // === 部活動・委員会など ===
-    {
-        id: 'manga-ken',
-        name: '漫画研究部「The Future of Daybreak」',
-        catchphrase: '黎明のその先へ。',
-        tags: ['部活動・同好会', '展示', 'アート'],
-        place: '未定', hours: '未定', ticket: 'なし', description: '漫画研究部のオリジナル漫画の展示です。', image: 'https://via.placeholder.com/800x400.png?text=Manga-ken', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: 'tosho-iinkai',
-        name: '図書委員会「銀河鉄道の夜展」',
-        catchphrase: 'ほんたうのさいはひは一体なんだらう。',
-        tags: ['委員会', '展示', 'アート'],
-        place: '図書室', hours: '未定', ticket: 'なし', description: '宮沢賢治「銀河鉄道の夜」をモチーフにした図書の展示です。', image: 'https://via.placeholder.com/800x400.png?text=GingaTetsudo', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: 'bungei-club',
-        name: '文芸同好会「丸い鈴に隠された物語」',
-        catchphrase: 'あなたはこの物語を知っている。',
-        tags: ['部活動・同好会', '展示', 'ゲーム'],
-        place: '未定', hours: '未定', ticket: 'なし', description: '物語のあらすじを頼りに作品名を当てるクイズです。景品有り！創作物の展示と配布もしております。', image: 'https://via.placeholder.com/800x400.png?text=Bungei', contentType: 'gallery', gallery: [], mapImage: ''
-    },
-    {
-        id: 'home-making-club',
-        name: 'ホームメイキング部「お菓子販売」',
-        catchphrase: '手作りの温もりをあなたに。',
-        tags: ['部活動・同好会', '飲食', '販売'],
-        place: '未定', hours: '未定', ticket: 'なし', description: 'ホームメイキング部の部員でスコーンを作って販売します。', image: 'https://via.placeholder.com/800x400.png?text=Scone', contentType: 'menu', menu: [], mapImage: ''
-    },
-    {
-        id: 'art-club-2', // art-clubがすでにあるので、IDをずらす
-        name: '美術部「美術部展示」',
-        catchphrase: '色彩の饗宴。',
-        tags: ['部活動・同好会', '展示', 'アート'],
-        place: '美術室', hours: '未定', ticket: 'なし', description: '美術部員が作成した作品の展示です。', image: 'https://via.placeholder.com/800x400.png?text=Art+Club+2', contentType: 'gallery', gallery: [], mapImage: ''
+        id: 'art-club',
+        name: '美術部「作品展」',
+        catchphrase: 'この一年に込めた情熱',
+        place: '2階 美術室',
+        hours: '9:00 - 15:00',
+        tags: ['部活動・同好会', '展示', 'アート', '静か'],
+        ticket: 'なし',
+        description: '油絵からデジタルイラストまで、部員たちが魂を込めて作り上げた作品をぜひご覧ください。',
+        image: 'images/project-art-club.jpg', // ★ローカル画像パス
+        contentType: 'gallery',
+        gallery: [
+            'https://via.placeholder.com/400x300.png?text=作品1', 'https://via.placeholder.com/400x300.png?text=作品2',
+            'https://via.placeholder.com/400x300.png?text=作品3', 'https://via.placeholder.com/400x300.png?text=作品4'
+        ],
+        mapImage: 'https://via.placeholder.com/600x400.png?text=2F+Map+with+Pin'
     }
 ];
 
+// ステージ発表のダミーデータ (これは変更なし)
 const stageData = [
-    { 
-        id: 'aomi-number', 
-        name: '〜あおみとnumber〜', 
-        place: '体育館', 
-        time: '未定', 
-        tags: ['有志', 'ダンス', '1日目'],
-        description: '見に来て損はない！最高のダンスパフォーマンスをお届けします。', 
-        image: 'https://via.placeholder.com/800x400.png?text=Aomi+Number'
+    // --- DAY 1 ---
+    {
+        id: 'day1-opening',
+        name: '開会式 (文化祭委員@放送室)',
+        place: '体育館',
+        time: '不明', // 時間の記載がないため
+        tags: ['DAY1', 'セレモニー'],
+        description: '文化祭の始まりを告げる開会式です。',
+        image: 'https://via.placeholder.com/800x400.png?text=Opening+Ceremony'
     },
-    { 
-        id: 'chorus-club', 
-        name: 'コーラス部「ミニコンサート」', 
-        place: '未定', 
-        time: '未定', 
-        tags: ['部活動・同好会', '音楽', '1日目'],
-        description: 'ディズニーの名曲を2曲、美しいハーモニーでお届けします。', 
+    {
+        id: 'day1-keion-1',
+        name: '軽音楽部',
+        place: '体育館',
+        time: '10:30 - 11:20',
+        tags: ['DAY1', '音楽', 'ライブ'],
+        description: '軽音楽部によるライブパフォーマンスです。熱い演奏をお楽しみください！',
+        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live'
+    },
+    {
+        id: 'day1-shafuku',
+        name: '社会福祉部',
+        place: '体育館',
+        time: '11:45 - 12:05',
+        tags: ['DAY1', '発表'],
+        description: '社会福祉部による活動報告・発表です。',
+        image: 'https://via.placeholder.com/800x400.png?text=Presentation'
+    },
+    {
+        id: 'day1-keion-2',
+        name: '軽音楽部',
+        place: '視聴覚室',
+        time: '12:00 - 15:00',
+        tags: ['DAY1', '音楽', 'ライブ'],
+        description: '視聴覚室から、軽音楽部がノンストップライブをお届けします！',
+        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+2'
+    },
+    {
+        id: 'day1-danbasu',
+        name: '男子バスケ部',
+        place: '体育館',
+        time: '12:20 - 12:45',
+        tags: ['DAY1', 'パフォーマンス'],
+        description: '男子バスケ部によるスペシャルパフォーマンス！',
+        image: 'https://via.placeholder.com/800x400.png?text=Basketball'
+    },
+    {
+        id: 'day1-gunma',
+        name: 'ぐんまさ',
+        place: '体育館',
+        time: '13:10 - 13:20',
+        tags: ['DAY1', 'パフォーマンス'],
+        description: '有志団体「ぐんまさ」によるパフォーマンスです。',
+        image: 'https://via.placeholder.com/800x400.png?text=Performance'
+    },
+    {
+        id: 'day1-aomito-1',
+        name: 'あおみと',
+        place: '体育館',
+        time: '13:30 - 13:40',
+        tags: ['DAY1', 'パフォーマンス'],
+        description: '有志団体「あおみと」によるパフォーマンスです。',
+        image: 'https://via.placeholder.com/800x400.png?text=Performance+2'
+    },
+    {
+        id: 'day1-suibu',
+        name: '吹奏楽部',
+        place: '音楽室',
+        time: '13:30 - 14:15',
+        tags: ['DAY1', '音楽', 'コンサート'],
+        description: '吹奏楽部によるミニコンサートです。美しいハーモニーをお楽しみください。',
+        image: 'https://via.placeholder.com/800x400.png?text=Brass+Band'
+    },
+    {
+        id: 'day1-modern-dance',
+        name: 'モダンダンス部',
+        place: '体育館',
+        time: '14:10 - 15:00',
+        tags: ['DAY1', 'ダンス'],
+        description: 'モダンダンス部による情熱的なパフォーマンスにご期待ください。',
+        image: 'https://via.placeholder.com/800x400.png?text=Modern+Dance'
+    },
+    
+    // --- DAY 2 ---
+    {
+        id: 'day2-attention',
+        name: '諸注意アナウンス (文化祭委員@放送室)',
+        place: '体育館',
+        time: '不明',
+        tags: ['DAY2', 'アナウンス'],
+        description: '文化祭を楽しむための諸注意アナウンスです。',
+        image: 'https://via.placeholder.com/800x400.png?text=Announce'
+    },
+    {
+        id: 'day2-soukyoku',
+        name: '箏曲部',
+        place: '体育館',
+        time: '10:30 - 11:00',
+        tags: ['DAY2', '音楽', '伝統'],
+        description: '箏曲部による、和の美しい音色をお楽しみください。',
+        image: 'https://via.placeholder.com/800x400.png?text=Koto+Music'
+    },
+    {
+        id: 'day2-keion-3',
+        name: '軽音楽部',
+        place: '視聴覚室',
+        time: '10:00 - 13:00',
+        tags: ['DAY2', '音楽', 'ライブ'],
+        description: 'DAY2も視聴覚室からノンストップライブ！',
+        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+3'
+    },
+    {
+        id: 'day2-danbasu',
+        name: '男子バスケ部',
+        place: '体育館',
+        time: '11:00 - 11:25',
+        tags: ['DAY2', 'パフォーマンス'],
+        description: '男子バスケ部、DAY2のスペシャルパフォーマンス！',
+        image: 'https://via.placeholder.com/800x400.png?text=Basketball+2'
+    },
+    {
+        id: 'day2-game',
+        name: 'ゲーム同好会',
+        place: '体育館',
+        time: '11:25 - 11:40',
+        tags: ['DAY2', '発表'],
+        description: 'ゲーム同好会による活動紹介＆デモンストレーション！',
+        image: 'https://via.placeholder.com/800x400.png?text=Game+Club'
+    },
+    {
+        id: 'day2-shafuku',
+        name: '社会福祉部',
+        place: '体育館',
+        time: '11:40 - 12:00',
+        tags: ['DAY2', '発表'],
+        description: '社会福祉部、DAY2の発表です。',
+        image: 'https://via.placeholder.com/800x400.png?text=Presentation+2'
+    },
+    {
+        id: 'day2-gunma',
+        name: 'ぐんまさ',
+        place: '体育館',
+        time: '12:00 - 12:10',
+        tags: ['DAY2', 'パフォーマンス'],
+        description: '有志団体「ぐんまさ」DAY2のステージ！',
+        image: 'https://via.placeholder.com/800x400.png?text=Performance+3'
+    },
+    {
+        id: 'day2-aomito-2',
+        name: 'あおみと',
+        place: '体育館',
+        time: '12:10 - 12:20',
+        tags: ['DAY2', 'パフォーマンス'],
+        description: '有志団体「あおみと」DAY2のステージ！',
+        image: 'https://via.placeholder.com/800x400.png?text=Performance+4'
+    },
+    {
+        id: 'day2-dancingjk',
+        name: 'ダンシングJK',
+        place: '体育館',
+        time: '12:20 - 13:00',
+        tags: ['DAY2', 'ダンス'],
+        description: '有志団体「ダンシングJK」による、パワフルなダンスステージ！',
+        image: 'https://via.placeholder.com/800x400.png?text=Dancing'
+    },
+    {
+        id: 'day2-chorus',
+        name: 'コーラス部',
+        place: '音楽室',
+        time: '12:30 - 13:30',
+        tags: ['DAY2', '音楽', '合唱'],
+        description: 'コーラス部による美しい歌声が音楽室に響き渡ります。',
         image: 'https://via.placeholder.com/800x400.png?text=Chorus'
     },
-    { 
-        id: 'smash-bros', 
-        name: 'ゲーム同好会「南陵スマブラ王決定戦」', 
-        place: '未定', 
-        time: '未定', 
-        tags: ['部活動・同好会', 'ゲーム', 'ステージ発表'],
-        description: '南陵の生徒、教師無差別で行うスマブラ大会。最強の栄冠は誰の手に！', 
-        image: 'https://via.placeholder.com/800x400.png?text=Smash+Bros'
+    {
+        id: 'day2-modern-dance',
+        name: 'モダンダンス部',
+        place: '体育館',
+        time: '13:00 - 13:50',
+        tags: ['DAY2', 'ダンス'],
+        description: 'モダンダンス部、DAY2のパフォーマンスです。',
+        image: 'https://via.placeholder.com/800x400.png?text=Modern+Dance+2'
     },
-    { 
-        id: 'keion-club', 
-        name: '軽音楽部「ROCK In The NANRYO」', 
-        place: '体育館', 
-        time: '未定', 
-        tags: ['部活動・同好会', '音楽', 'ライブ'],
-        description: '軽音楽部による熱いライブパフォーマンス！', 
-        image: 'https://via.placeholder.com/800x400.png?text=Keion'
+    {
+        id: 'day2-suibu',
+        name: '吹奏楽部',
+        place: '音楽室',
+        time: '13:30 - 14:15',
+        tags: ['DAY2', '音楽', 'コンサート'],
+        description: '吹奏楽部、音楽室からのミニコンサートDAY2！',
+        image: 'https://via.placeholder.com/800x400.png?text=Brass+Band+2'
+    },
+    {
+        id: 'day2-keion-4',
+        name: '軽音楽部',
+        place: '体育館',
+        time: '14:10 - 15:00',
+        tags: ['DAY2', '音楽', 'ライブ'],
+        description: '文化祭のフィナーレを飾る、軽音楽部の熱いライブ！',
+        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+Final'
     }
 ];
+
+
