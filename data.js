@@ -7,6 +7,9 @@ const projectData = [
         name: '3年1組「絶叫ホラーハウス」',
         catchphrase: '教室が悲鳴に包まれる…',
         place: '3階 3-1教室',
+        floor: 3,
+	mapX: 994,
+        mapY: 836,
         hours: '9:00 - 15:00',
         tags: ['3年生', 'お化け屋敷', 'ホラー'],
         description: '私たちのクラスでは、背筋も凍る本格的なお化け屋敷を準備しました。最高の体験をお届けします！ぜひお越しください。',
@@ -62,15 +65,7 @@ const projectData = [
 // ステージ発表のダミーデータ (これは変更なし)
 const stageData = [
     // --- DAY 1 ---
-    {
-        id: 'day1-opening',
-        name: '開会式 (文化祭委員@放送室)',
-        place: '体育館',
-        time: '不明', // 時間の記載がないため
-        tags: ['DAY1', 'セレモニー'],
-        description: '文化祭の始まりを告げる開会式です。',
-        image: 'https://via.placeholder.com/800x400.png?text=Opening+Ceremony'
-    },
+    
     {
         id: 'day1-keion-1',
         name: '軽音楽部',
@@ -145,15 +140,6 @@ const stageData = [
     },
     
     // --- DAY 2 ---
-    {
-        id: 'day2-attention',
-        name: '諸注意アナウンス (文化祭委員@放送室)',
-        place: '体育館',
-        time: '不明',
-        tags: ['DAY2', 'アナウンス'],
-        description: '文化祭を楽しむための諸注意アナウンスです。',
-        image: 'https://via.placeholder.com/800x400.png?text=Announce'
-    },
     {
         id: 'day2-soukyoku',
         name: '箏曲部',
