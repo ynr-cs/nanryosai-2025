@@ -9,7 +9,6 @@ const projectData = [
         place: '3階 3-1教室',
         hours: '9:00 - 15:00',
         tags: ['3年生', 'お化け屋敷', 'ホラー'],
-        ticket: '9:00から教室前で配布',
         description: '私たちのクラスでは、背筋も凍る本格的なお化け屋敷を準備しました。最高の体験をお届けします！ぜひお越しください。',
         image: 'images/project-3-1.jpg', // ★ローカル画像パス
         contentType: 'gallery',
@@ -26,7 +25,6 @@ const projectData = [
         place: '中庭 テントエリア',
         hours: '10:00 - 14:30',
         tags: ['2年生', 'カフェ', '写真映え', '休憩'],
-        ticket: 'なし',
         description: 'レトロでかわいい内装のカフェです。美味しいドリンクとスイーツを用意してお待ちしています。',
         image: 'images/project-2-4.jpg', // ★ローカル画像パス
         contentType: 'menu',
@@ -37,24 +35,29 @@ const projectData = [
         ],
         mapImage: 'https://via.placeholder.com/600x400.png?text=Courtyard+Map+with+Pin'
     },
-    {
-        id: 'art-club',
-        name: '美術部「作品展」',
-        catchphrase: 'この一年に込めた情熱',
-        place: '2階 美術室',
-        hours: '9:00 - 15:00',
-        tags: ['部活動・同好会', '展示', 'アート', '静か'],
-        ticket: 'なし',
-        description: '油絵からデジタルイラストまで、部員たちが魂を込めて作り上げた作品をぜひご覧ください。',
-        image: 'images/project-art-club.jpg', // ★ローカル画像パス
+    {  
+        id: 'computer-club',
+        name: 'コンピューター科学部「文化祭サイト 制作展示」',
+        catchphrase: '「次、どこ行く？」をスマホで。',
+        place: '2階 PC教室',
+        hours: '10:00 - 14:00',
+        tags: ['部活動・同好会', '展示', 'テクノロジー'],
+        description: 'あなたが今見ている、この文化祭公式サイトの全てを大公開！普段は見られない設計の裏側や、リアルタイム更新の仕組みなどを、パネルや実機デモで解説します。プログラミングに興味がある君、ぜひ遊びに来てくれ！',
+        image: 'images/project-3-1.jpg', // カッコいいPCやコード画面の写真に差し替えるんだ！
         contentType: 'gallery',
         gallery: [
-            'https://via.placeholder.com/400x300.png?text=作品1', 'https://via.placeholder.com/400x300.png?text=作品2',
-            'https://via.placeholder.com/400x300.png?text=作品3', 'https://via.placeholder.com/400x300.png?text=作品4'
+            'images/project-3-1.jpg?text=開発風景1',
+            'images/project-3-1.jpg?text=リアルタイム更新の仕組み図解',
+            'https://via.placeholder.com/400x300.png?text=バグとの死闘の記録',
+            'https://via.placeholder.com/400x300.png?text=君たちのTerapad画面'
         ],
-        mapImage: 'https://via.placeholder.com/600x400.png?text=2F+Map+with+Pin'
+        mapImage: 'https://via.placeholder.com/600x400.png?text=3F+Map+with+PC-Club+Pin'
     }
+
+
 ];
+
+
 
 // ステージ発表のダミーデータ (これは変更なし)
 const stageData = [
