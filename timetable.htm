@@ -165,6 +165,7 @@
     }
 
     /* ★★★ここが本丸★★★ */
+
     
     /* リストカードのデザインを、スマホ用に最適化 */
     .list-event-card {
@@ -179,6 +180,70 @@
         align-self: flex-end; /* ボタンだけ右下に配置する */
     }
 }
+
+/* ★★★ このブロックを style タグのどこかに追加 ★★★ */
+.timeline-controls {
+    display: flex;
+    justify-content: flex-end; /* 右寄せにする */
+    align-items: center;
+    padding: 0 10px 20px;
+    margin-top: 20px;
+}
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    color: white;
+    -webkit-user-select: none; /* テキスト選択を無効化 */
+    user-select: none;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-switch .slider {
+    width: 50px;
+    height: 26px;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 34px;
+    transition: .4s;
+    margin-right: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.toggle-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.toggle-switch input:checked + .slider {
+    background: var(--accent-gradient);
+    border-color: transparent;
+}
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* ★★★ リスト表示時のカスケードアニメーション ★★★ */
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
     </style>
 </head>
 <body>
@@ -202,6 +267,15 @@
             <div id="gantt-chart" class="gantt-chart"></div>
         </div>
 
+<!-- ★★★ このブロックを timeline-list-container の直前に追加 ★★★ -->
+        <div class="timeline-controls">
+            <label class="toggle-switch">
+                <input type="checkbox" id="show-past-events-toggle">
+                <span class="slider"></span>
+                過去の発表も表示する
+            </label>
+        </div>
+
         <!-- 2. 時系列リストのエリア -->
         <div id="timeline-list-container" class="timeline-list-container">
             <!-- JavaScriptがここにリストを自動生成する -->
@@ -214,209 +288,285 @@
 <script defer src="data.js"></script>
 <script defer>
     document.addEventListener('DOMContentLoaded', function() {
-        // === 1. テンプレート共通の処理 ===
-        const body = document.body;
-        const hamburger = document.querySelector('.hamburger-menu');
-        const overlay = document.querySelector('.page-overlay');
-        function toggleSidenav() { body.classList.toggle('sidenav-open'); }
-        hamburger.addEventListener('click', toggleSidenav);
-        overlay.addEventListener('click', toggleSidenav);
-        let lastScrollTop = 0;
-        const header = document.querySelector('.site-header');
-        if (header) {
-            const headerHeight = header.offsetHeight;
-            window.addEventListener('scroll', function() {
-                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); }
-                else { header.classList.remove('hidden'); }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-            });
-        }
+    // === 1. テンプレート共通の処理 (変更なし) ===
+    const body = document.body;
+    const hamburger = document.querySelector('.hamburger-menu');
+    const overlay = document.querySelector('.page-overlay');
+    function toggleSidenav() { body.classList.toggle('sidenav-open'); }
+    hamburger.addEventListener('click', toggleSidenav);
+    overlay.addEventListener('click', toggleSidenav);
+    let lastScrollTop = 0;
+    const header = document.querySelector('.site-header');
+    if (header) {
+        const headerHeight = header.offsetHeight;
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); }
+            else { header.classList.remove('hidden'); }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+    }
+
+    // === 2. ページ固有要素の取得 (変更なし) ===
+    const chartWrapper = document.getElementById('gantt-chart-container');
+    const chartContainer = document.getElementById('gantt-chart');
+    const listContainer = document.getElementById('timeline-list-container');
+    const daySelector = document.querySelector('.day-selector');
+    const pastEventsToggle = document.getElementById('show-past-events-toggle');
+
+    // === 3. 定数とヘルパー関数の定義 (変更なし) ===
+    const timeHeaders = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+    const totalMinutes = (timeHeaders.length - 1) * 60;
+    const startHour = 9;
     
-        // === 2. ページ固有要素の取得 ===
-        const chartWrapper = document.getElementById('gantt-chart-container');
-        const chartContainer = document.getElementById('gantt-chart');
-        const listContainer = document.getElementById('timeline-list-container');
-        const daySelector = document.querySelector('.day-selector');
+    // 文化祭の開催日をここで設定します
+    // 注意：月は0から始まります (1月=0, 2月=1, ... , 9月=8)
+    const festivalDates = {
+        DAY1: new Date(2025, 8, 5), // 2025年9月5日
+        DAY2: new Date(2025, 8, 6)  // 2025年9月6日
+    };
+    
+    function timeToMinutes(timeStr) {
+        if (typeof timeStr !== 'string' || !timeStr.includes(':')) return null;
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        if (isNaN(hours) || isNaN(minutes)) return null;
+        return hours * 60 + minutes;
+    }
 
-        // === 3. 定数とヘルパー関数の定義 ===
-        const timeHeaders = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
-        const totalMinutes = (timeHeaders.length - 1) * 60;
-        const startHour = 9;
-        
-        function timeToMinutes(timeStr) {
-            if (typeof timeStr !== 'string' || !timeStr.includes(':')) return null;
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            if (isNaN(hours) || isNaN(minutes)) return null;
-            return hours * 60 + minutes;
+    // === 4. ガントチャート描画関数 (変更なし) ===
+    function renderGanttChart(day) {
+        if (!chartContainer || typeof stageData === 'undefined') return;
+        const dayData = stageData.filter(event => event.tags && event.tags.includes(day) && event.time !== '不明');
+        const places = [...new Set(dayData.map(event => event.place))].sort();
+        if (places.length === 0) {
+            chartContainer.innerHTML = `<div style="grid-column: 1 / -1; padding: 40px; text-align: center; font-size: 1.2em; opacity: 0.8;">この日の発表予定はありません。</div>`;
+            chartContainer.style.gridTemplateColumns = '1fr';
+            return;
         }
-
-        // === 4. ガントチャート描画関数 (変更なし) ===
-        function renderGanttChart(day) {
-            if (!chartContainer || typeof stageData === 'undefined') return;
-            const dayData = stageData.filter(event => event.tags && event.tags.includes(day) && event.time !== '不明');
-            const places = [...new Set(dayData.map(event => event.place))].sort();
-            if (places.length === 0) { chartContainer.innerHTML = `<div style="grid-column: 1 / -1; padding: 40px; text-align: center; font-size: 1.2em; opacity: 0.8;">この日の発表予定はありません。</div>`; chartContainer.style.gridTemplateColumns = '1fr'; return; }
-
-            const columnWidth = 180;
-            chartContainer.style.gridTemplateColumns = `120px repeat(${timeHeaders.length - 1}, ${columnWidth}px)`;
-            
-            let html = '<div class="gantt-header"><div class="gantt-place-header">場所</div>';
-            timeHeaders.forEach(time => { html += `<div class="gantt-time-header">${time}</div>`; });
-            html += '</div>';
-
-            places.forEach((place, placeIndex) => {
-                const placeEvents = dayData.filter(event => event.place === place);
-                html += `<div class="gantt-row"><div class="gantt-place" style="grid-row: ${placeIndex + 2}">${place}</div>`;
-                for (let i = 0; i < timeHeaders.length; i++) { html += `<div class="gantt-time-cell" style="grid-row: ${placeIndex + 2}; grid-column: ${i + 2}"></div>`; }
-                html += `<div class="gantt-events" style="grid-row: ${placeIndex + 2}; grid-column: 2 / span ${timeHeaders.length -1}">`;
-                
-                placeEvents.forEach(event => {
-                    const [startTime, endTime] = (event.time || " - ").split('-').map(s => s.trim());
-                    const startMinutes = timeToMinutes(startTime);
-                    const endMinutes = timeToMinutes(endTime);
-                    if (startMinutes !== null && endMinutes !== null) {
-                        const left = ((startMinutes - (startHour * 60)) / totalMinutes) * 100;
-                        const width = ((endMinutes - startMinutes) / totalMinutes) * 100;
-                        if (width > 0) {
-                    html += `<div class="gantt-event-bar" 
-                                style="left: ${left}%; width: ${width}%" 
-                                data-target-id="list-${event.id}" 
-                                data-detail-link="stage-detail.htm?id=${event.id}"> 
-                                ${event.name}
-                                <span class="event-time-in-bar">${event.time}</span>
-                            </div>`;
-                        }
+        const columnWidth = 180;
+        chartContainer.style.gridTemplateColumns = `120px repeat(${timeHeaders.length - 1}, ${columnWidth}px)`;
+        let html = '<div class="gantt-header"><div class="gantt-place-header">場所</div>';
+        timeHeaders.forEach(time => { html += `<div class="gantt-time-header">${time}</div>`; });
+        html += '</div>';
+        places.forEach((place, placeIndex) => {
+            const placeEvents = dayData.filter(event => event.place === place);
+            html += `<div class="gantt-row"><div class="gantt-place" style="grid-row: ${placeIndex + 2}">${place}</div>`;
+            for (let i = 0; i < timeHeaders.length; i++) { html += `<div class="gantt-time-cell" style="grid-row: ${placeIndex + 2}; grid-column: ${i + 2}"></div>`; }
+            html += `<div class="gantt-events" style="grid-row: ${placeIndex + 2}; grid-column: 2 / span ${timeHeaders.length -1}">`;
+            placeEvents.forEach(event => {
+                const [startTime, endTime] = (event.time || " - ").split('-').map(s => s.trim());
+                const startMinutes = timeToMinutes(startTime);
+                const endMinutes = timeToMinutes(endTime);
+                if (startMinutes !== null && endMinutes !== null) {
+                    const left = ((startMinutes - (startHour * 60)) / totalMinutes) * 100;
+                    const width = ((endMinutes - startMinutes) / totalMinutes) * 100;
+                    if (width > 0) {
+                        html += `<div class="gantt-event-bar" 
+                                    style="left: ${left}%; width: ${width}%" 
+                                    data-target-id="list-${event.id}" 
+                                    data-id="${event.id}"> 
+                                    ${event.name}<span class="event-time-in-bar">${event.time}</span>
+                                </div>`;
                     }
-                });
-                html += `</div></div>`;
-            });
-            chartContainer.innerHTML = html;
-        }
-
-        // === 5. 現在時刻インジケーターの処理 (神化) ===
-        function manageCurrentTimeIndicator() {
-            let indicator = document.getElementById('current-time-indicator');
-            if (!indicator) {
-                indicator = document.createElement('div');
-                indicator.id = 'current-time-indicator';
-                indicator.innerHTML = `<div class="time-label"></div>`;
-                chartWrapper.appendChild(indicator);
-            }
-            const timeLabel = indicator.querySelector('.time-label');
-
-            function update() {
-                const now = new Date();
-                const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
-                const chartAreaWidth = chartWrapper.scrollWidth - 120;
-                const leftPosition = ((currentMinutes - (startHour * 60)) / totalMinutes) * chartAreaWidth;
-
-                if (now.getHours() >= startHour && now.getHours() < (startHour + timeHeaders.length - 1)) {
-                    indicator.style.left = `${120 + leftPosition}px`;
-                    timeLabel.textContent = now.toLocaleTimeString('ja-JP');
-                    indicator.classList.add('visible');
-                } else {
-                    indicator.classList.remove('visible');
                 }
-                
-                requestAnimationFrame(update); // 次の描画フレームで、自分自身を再度呼び出す
-            }
-
-            update(); // アニメーションループを開始
-        }
-
-// === 6. 時系列リスト描画関数 (NEW!) ===
-        function renderTimelineList(day) {
-            if (!listContainer || typeof stageData === 'undefined') return;
-            const dayData = stageData
-                .filter(event => event.tags && event.tags.includes(day) && event.time !== '不明')
-                .sort((a, b) => (a.time.replace(/[^0-9]/g, '') || 0) - (b.time.replace(/[^0-9]/g, '') || 0));
-
-            let listHTML = '';
-            dayData.forEach(event => {
-                listHTML += `
-                    <div class="list-event-card" id="list-${event.id}">
-                        <div class="list-time">${event.time}</div>
-                        <div class="list-details">
-                            <div class="list-name">${event.name}</div>
-                            <div class="list-place">${event.place}</div>
-                        </div>
-                        <a href="stage-detail.htm?id=${event.id}" class="list-link-button">詳しく見る</a>
-                    </div>
-                `;
             });
-            listContainer.innerHTML = listHTML;
-        }
-        
-        // === 7. 全描画を統括する司令官 (NEW!) ===
-        function renderPage(day) {
-            renderGanttChart(day);
-            renderTimelineList(day);
-            // バーの位置とスクロールは描画後に再計算/実行するのが確実
-            updateCurrentTimeIndicator();
-            setTimeout(() => { /* ... スクロール処理 ... */ }, 500);
-        }
+            html += `</div></div>`;
+        });
+        chartContainer.innerHTML = html;
+    }
 
-        // === 8. イベントリスナー ===
-        // DAYボタンのクリック
-        if (daySelector) {
-            daySelector.addEventListener('click', function(e) {
-                if (!e.target.matches('.day-btn')) return;
-                daySelector.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                renderPage(e.target.dataset.day);
-            });
-        }
-        
-        // ★★★ ガントチャートのイベント監視体制を近代化！ ★★★
-        if (chartContainer) {
-            chartContainer.addEventListener('click', function(e){
-                // クリックされた要素(またはその親)が.gantt-event-barであるかチェック
-                const eventBar = e.target.closest('.gantt-event-bar');
-                if(!eventBar) return; // 関係ない場所なら何もしない
+// === 5. 時系列リスト描画関数 ===
+function renderTimelineList(day, showPastEvents) {
+    if (!listContainer || typeof stageData === 'undefined') return;
+    
+    const now = new Date();
+    // ★テスト用: const now = new Date(2025, 8, 5, 11, 30, 0);
+    const festivalDay = festivalDates[day];
+    if (!festivalDay) return;
 
-                // 1. スムーズスクロール処理
-                const targetId = eventBar.dataset.targetId;
-                const targetElement = document.getElementById(targetId);
-                if(targetElement) {
-                    document.querySelectorAll('.list-event-card.highlight').forEach(el => {
-                        el.classList.remove('highlight');
-                    });
-                    targetElement.classList.add('highlight');
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+    const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const festivalDateOnly = new Date(festivalDay.getFullYear(), festivalDay.getMonth(), festivalDay.getDate());
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    
+    let dayData = stageData.filter(event => event.tags && event.tags.includes(day) && event.time !== '不明');
 
-                // 2. 詳細ページへの遷移処理（ダブルクリックで発動！）
-                // （この処理は後述のダブルクリックイベントで代替するため、コメントアウトまたは削除）
-            });
+    if (!showPastEvents) {
+        dayData = dayData.filter(event => {
+            const timeParts = (event.time || "").split('-');
+            if (timeParts.length < 2) return true;
+            const endMinutes = timeToMinutes(timeParts[1].trim());
+            if (endMinutes === null) return true;
             
-            // ★★★ ダブルクリックで詳細ページに飛ぶ、という最高のUXを追加！ ★★★
-            chartContainer.addEventListener('dblclick', function(e){
-                const eventBar = e.target.closest('.gantt-event-bar');
-                if(!eventBar) return;
-                
-                const detailLink = eventBar.dataset.detailLink;
-                if(detailLink) {
-                    window.location.href = detailLink;
-                }
-            });
-        }
+            if (todayDateOnly.getTime() < festivalDateOnly.getTime()) { return true; }
+            if (todayDateOnly.getTime() > festivalDateOnly.getTime()) { return false; }
+            return endMinutes > currentMinutes;
+        });
+    }
+    
+    dayData.sort((a, b) => (a.time.replace(/[^0-9]/g, '') || 0) - (b.time.replace(/[^0-9]/g, '') || 0));
 
-        // === 8. 初回実行ロジック & 全描画を統括する司令官 ===
-        function renderPage(day) {
-            if (typeof stageData === 'undefined') return;
-            renderGanttChart(day);
-            renderTimelineList(day);
-        }
+    let listHTML = '';
+    if (dayData.length === 0) {
+        listHTML = `<div style="padding: 40px; text-align: center; font-size: 1.1em; opacity: 0.8;">表示できる発表はありません。</div>`;
+    } else {
+        dayData.forEach(event => {
+            // ★変更点1: ここに 'fade-up' クラスを追加して、アニメーションの対象にする
+            listHTML += `
+                <div class="list-event-card fade-up" id="list-${event.id}">
+                    <div class="list-time">${event.time}</div>
+                    <div class="list-details">
+                        <div class="list-name">${event.name}</div>
+                        <div class="list-place">${event.place}</div>
+                    </div>
+                    <a href="stage-detail.htm?id=${event.id}" class="list-link-button">詳しく見る</a>
+                </div>`;
+        });
+    }
+    
+    // リストの内容を一度にHTMLに反映させる
+    listContainer.innerHTML = listHTML;
 
-        if (typeof stageData !== 'undefined') {
-            renderPage('DAY1');
-            manageCurrentTimeIndicator();
-        } else {
-            console.error("data.jsが読み込めていません。");
-        }
+    // ★★★ ここからがアニメーション実行のロジックです ★★★
+    // 1. 新しく生成されたカード要素をすべて取得します
+    const newCards = listContainer.querySelectorAll('.fade-up');
+
+    // 2. 取得した各カードに、0.15秒ずつタイミングをずらして 'is-visible' クラスを付与します
+    newCards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('is-visible');
+        }, index * 150); // 2枚目は0.15秒後、3枚目は0.3秒後...にアニメーション開始
     });
+}
+    
+    // === 6. 現在時刻インジケーターの処理 (変更なし) ===
+    function manageCurrentTimeIndicator() {
+        let indicator = document.getElementById('current-time-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'current-time-indicator';
+            const timeLabel = document.createElement('div');
+            timeLabel.className = 'time-label';
+            indicator.appendChild(timeLabel);
+            chartWrapper.appendChild(indicator);
+        }
+        const timeLabel = indicator.querySelector('.time-label');
+        const placeHeaderWidth = 120;
+        function update() {
+            const currentChartContainer = document.getElementById('gantt-chart');
+            if (!currentChartContainer) { requestAnimationFrame(update); return; }
+            const now = new Date();
+            const activeDayBtn = daySelector.querySelector('.day-btn.active');
+            if (!activeDayBtn) { indicator.classList.remove('visible'); requestAnimationFrame(update); return; }
+            
+            const activeFestivalDate = festivalDates[activeDayBtn.dataset.day];
+            const isTodayTheActiveDay = now.getFullYear() === activeFestivalDate.getFullYear() &&
+                                        now.getMonth() === activeFestivalDate.getMonth() &&
+                                        now.getDate() === activeFestivalDate.getDate();
+
+            if (isTodayTheActiveDay && now.getHours() >= startHour && now.getHours() < (startHour + timeHeaders.length - 1)) {
+                const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+                const chartAreaWidth = currentChartContainer.scrollWidth - placeHeaderWidth;
+                if (chartAreaWidth <= 0) { requestAnimationFrame(update); return; }
+                const leftPosition = ((currentMinutes - (startHour * 60)) / totalMinutes) * chartAreaWidth;
+                indicator.style.left = `${placeHeaderWidth + leftPosition}px`;
+                indicator.classList.add('visible');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                timeLabel.textContent = `${hours}:${minutes}`;
+            } else {
+                indicator.classList.remove('visible');
+            }
+            requestAnimationFrame(update);
+        }
+        update();
+    }
+    
+    // === 7. 全描画を統括する司令官 (変更なし) ===
+    function renderPage(day, isInitialLoad = false) {
+        if (typeof stageData === 'undefined') { console.error("data.jsが読み込めていません。"); return; }
+        renderGanttChart(day);
+        const showPast = pastEventsToggle ? pastEventsToggle.checked : false;
+        renderTimelineList(day, showPast);
+        if (isInitialLoad) {
+            setTimeout(() => {
+                const indicator = document.getElementById('current-time-indicator');
+                if (indicator && indicator.classList.contains('visible')) {
+                    const scrollPosition = indicator.offsetLeft - (chartWrapper.clientWidth / 2) + (indicator.clientWidth / 2);
+                    chartWrapper.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+                }
+            }, 500);
+        }
+    }
+
+    // === 8. イベントリスナー (★★★ ここが最重要修正箇所 ★★★) ===
+    if (daySelector) {
+        daySelector.addEventListener('click', function(e) {
+            if (!e.target.matches('.day-btn')) return;
+            daySelector.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            renderPage(e.target.dataset.day, false);
+        });
+    }
+    
+    // イベントの伝播を利用して、chartWrapperでイベントを監視する方が堅牢です
+    if(chartWrapper) {
+        chartWrapper.addEventListener('click', function(e){
+            const eventBar = e.target.closest('.gantt-event-bar');
+            if(!eventBar) return;
+            const targetId = eventBar.dataset.targetId;
+            const targetElement = document.getElementById(targetId);
+            if(targetElement) {
+                document.querySelectorAll('.list-event-card.highlight').forEach(el => el.classList.remove('highlight'));
+                targetElement.classList.add('highlight');
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+        chartWrapper.addEventListener('dblclick', function(e){
+            const eventBar = e.target.closest('.gantt-event-bar');
+            if(!eventBar) return;
+            const detailLink = `stage-detail.htm?id=${eventBar.dataset.id}`;
+            if(detailLink) { window.location.href = detailLink; }
+        });
+    }
+
+    if (pastEventsToggle) {
+        pastEventsToggle.addEventListener('change', function() {
+            const activeDayBtn = daySelector.querySelector('.day-btn.active');
+            if (activeDayBtn) {
+                const currentDay = activeDayBtn.dataset.day;
+                renderTimelineList(currentDay, this.checked);
+            }
+        });
+    }
+
+    // === 9. 初回実行ロジック (変更なし) ===
+    function initializePage() {
+        const now = new Date();
+        const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const day2Date = festivalDates.DAY2;
+        let initialDay = 'DAY1';
+        
+        // ★改善: 日付比較をより安全な getTime() で行う
+        if (todayDateOnly.getTime() === day2Date.getTime()) {
+            initialDay = 'DAY2';
+        }
+        
+        daySelector.querySelectorAll('.day-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.day === initialDay);
+        });
+        
+        renderPage(initialDay, true);
+        manageCurrentTimeIndicator();
+    }
+    
+    // data.jsの読み込みを待ってから初期化処理を実行する
+    // これにより、stageDataが未定義のエラーを防ぐ
+    if (typeof stageData !== 'undefined') {
+        initializePage();
+    } else {
+        window.addEventListener('load', initializePage, { once: true });
+    }
+});
 </script>
 </body>
 </html>
-
