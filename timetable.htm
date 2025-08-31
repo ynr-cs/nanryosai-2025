@@ -4,169 +4,360 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タイムテーブル | 南陵祭'25</title>
-    <!-- 全てのCSSをここに統合 -->
     <style>
         /* --- テンプレートの基本CSS (省略) --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
         :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
-        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white;} body.sidenav-open { overflow: hidden; } body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); pointer-events: none; z-index: -1; } main { flex-grow: 1; position: relative; z-index: 2; }
-        .content-wrapper { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        /* --- テンプレートのナビゲーションCSS (省略) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; } 
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white;} 
+        body.sidenav-open { overflow: hidden; } 
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); pointer-events: none; z-index: -1; } 
+        main { flex-grow: 1; position: relative; z-index: 2; }
+        
+        /* --- テンプレートのナビゲーションCSS --- */
         .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.2); z-index: 100; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); padding: 0 80px 0 30px; display: flex; align-items: center; } .site-header.hidden { transform: translateY(-100%); opacity: 0; } .site-title a { font-size: 1.8em; font-weight: 700; background: linear-gradient(45deg, #fff, #e8f4f8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; transition: all 0.3s ease; animation: float 6s ease-in-out infinite; } .desktop-nav { margin-left: auto; } .desktop-nav ul { display: flex; list-style: none; gap: 30px; } .desktop-nav a { text-decoration: none; color: rgba(255, 255, 255, 0.9); font-weight: 500; padding: 10px 20px; border-radius: 25px; position: relative; transition: all 0.3s ease; } .desktop-nav a::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); border-radius: 25px; opacity: 0; transition: opacity 0.3s ease; } .desktop-nav a:hover::before { opacity: 1; } .desktop-nav a:hover { color: white; transform: translateY(-2px); } .hamburger-menu { position: fixed; top: 20px; right: 30px; width: 50px; height: 50px; background: var(--accent-gradient); border-radius: 50%; cursor: pointer; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: var(--shadow-medium); } .hamburger-menu:hover { transform: scale(1.1) rotate(5deg); box-shadow: var(--shadow-strong); } .hamburger-menu .bar { width: 22px; height: 2px; background-color: white; border-radius: 2px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .hamburger-menu { background: white; backdrop-filter: blur(10px); } body.sidenav-open .hamburger-menu .bar { background-color: #2c3e50; } body.sidenav-open .hamburger-menu .bar1 { transform: translateY(6px) rotate(45deg); } body.sidenav-open .hamburger-menu .bar2 { opacity: 0; transform: scaleX(0); } body.sidenav-open .hamburger-menu .bar3 { transform: translateY(-6px) rotate(-45deg); } .sidenav { position: fixed; top: 0; right: 0; width: var(--sidenav-width); max-width: 90vw; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(30px); border-left: 1px solid rgba(255, 255, 255, 0.2); z-index: 200; padding: 100px 30px 30px; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); } body.sidenav-open .sidenav { transform: translateX(0); } .sidenav ul { list-style: none; } .sidenav li { margin-bottom: 8px; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; } body.sidenav-open .sidenav li { opacity: 1; transform: translateX(0); } body.sidenav-open .sidenav li:nth-child(1) { transition-delay: 0.1s; } body.sidenav-open .sidenav li:nth-child(2) { transition-delay: 0.15s; } body.sidenav-open .sidenav li:nth-child(3) { transition-delay: 0.2s; } body.sidenav-open .sidenav li:nth-child(4) { transition-delay: 0.25s; } body.sidenav-open .sidenav li:nth-child(5) { transition-delay: 0.3s; } body.sidenav-open .sidenav li:nth-child(6) { transition-delay: 0.35s; } body.sidenav-open .sidenav li:nth-child(7) { transition-delay: 0.4s; } .sidenav a { color: rgba(255, 255, 255, 0.9); text-decoration: none; display: block; font-size: 1.1em; font-weight: 500; padding: 18px 25px; border-radius: 15px; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); } .sidenav a:hover { color: white; background: rgba(255, 255, 255, 0.1); transform: translateX(10px); } .sidenav .about-us { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.2); } .sidenav .about-us a { font-size: 1em; color: rgba(255, 255, 255, 0.6); } .page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0); z-index: 150; pointer-events: none; transition: background-color 0.5s; } body.sidenav-open .page-overlay { background-color: rgba(0, 0, 0, 0.6); pointer-events: auto; }
         .site-footer { background: rgba(0, 0, 0, 0.2); text-align: center; padding: 30px 20px; color: rgba(255, 255, 255, 0.8); font-size: 0.9em; } @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } } @media (max-width: 900px) { .desktop-nav { display: none; } .site-header { padding: 0 80px 0 20px; } .hamburger-menu { right: 20px; width: 45px; height: 45px; } }
         
-        /* ★★★ このページ専用のCSS ★★★ */
-        .page-header { text-align: center; padding: 40px 20px; }
-        .page-title { font-size: 3em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        /* ★★★ このページ専用のCSS (最終版) ★★★ */
+.content-wrapper { max-width: 100%; padding: 40px 10px; }
+@media (min-width: 768px) { .content-wrapper { padding: 40px 30px; } }
+.page-header { text-align: center; padding: 0 20px 20px; }
+.page-title { font-size: 3em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.day-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+.day-btn { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 1.1em; font-weight: 600; transition: all 0.3s ease; }
+.day-btn:hover { background: rgba(255,255,255,0.2); }
+.day-btn.active { background: var(--secondary-gradient); box-shadow: var(--shadow-medium); border-color: transparent; }
 
-        .timeline {
-            border-left: 3px solid rgba(255,255,255,0.3);
-            padding: 0 0 40px 30px;
-            position: relative;
-        }
-        .time-block {
-            margin-bottom: 40px;
-            position: relative;
-        }
-        .time-block::before { /* 時間軸上の丸ポチ */
-            content: '';
-            position: absolute;
-            left: -42px;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            border: 3px solid white;
-            box-shadow: 0 0 10px rgba(79, 172, 254, 0.8);
-        }
-        .time-label {
-            font-size: 2em;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 20px;
-        }
-        .event-card {
-            background: rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            margin-bottom: 15px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .event-card:hover {
-            background: rgba(0,0,0,0.4);
-            transform: translateX(10px);
-        }
-        .event-time {
-            font-size: 1.1em;
-            font-weight: 600;
-            min-width: 120px;
-        }
-        .event-details { flex-grow: 1; }
-        .event-name {
-            font-size: 1.3em;
-            font-weight: 700;
-        }
-        .event-place {
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.8);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 500;
-            display: inline-block;
-            margin-top: 5px;
-        }
+.gantt-chart-container { overflow-x: auto; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; position: relative; /* ★現在時刻バーのために必要 */ }
+.gantt-chart { display: grid; border-collapse: collapse; min-width: 1000px; }
+        
+.gantt-header, .gantt-row { display: contents; }
+.gantt-place-header, .gantt-place, .gantt-time-header, .gantt-time-cell { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); }
+/* ★15:00の縦線が消えるバグを修正 */
+.gantt-time-header:last-child, .gantt-time-cell:last-child { border-right: none; }
+
+.gantt-place-header, .gantt-place { font-weight: 700; font-size: 1.1em; background: rgba(0,0,0,0.4); position: sticky; left: 0; z-index: 10; border-right: 1px solid rgba(255,255,255,0.2) !important; }
+.gantt-time-header { text-align: center; font-size: 0.9em; }
+
+.gantt-events { grid-column-start: 2; position: relative; }
+.gantt-event-bar {
+    position: absolute; background: var(--accent-gradient); color: white; padding: 10px;
+    border-radius: 8px; font-size: 0.9em; font-weight: 600; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; justify-content: center;
+}
+.gantt-event-bar:hover { filter: brightness(1.2); transform: scale(1.02); z-index: 20;}
+.gantt-event-bar .event-time-in-bar { font-size: 0.8em; opacity: 0.8; display: block; }
+
+/* ★★★ 現在時刻インジケーターのデザイン ★★★ */
+#current-time-indicator {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 3px; /* 線の太さ */
+    background-color: #ff4757; /* 目立つ赤色 */
+    z-index: 30;
+    box-shadow: 0 0 15px #ff4757;
+    opacity: 0; /* 最初は隠しておく */
+    transition: opacity 0.5s;
+}
+#current-time-indicator.visible {
+    opacity: 1;
+}
+/* ★★★ 現在時刻インジケーターのデザイン (神化) ★★★ */
+#current-time-indicator {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: #ff4757;
+    z-index: 30;
+    box-shadow: 0 0 15px #ff4757;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none; /* ★バーがクリックの邪魔をしないように */
+}
+#current-time-indicator.visible { opacity: 1; }
+
+/* ★時刻表示ラベルのデザイン */
+#current-time-indicator .time-label {
+    position: absolute;
+    top: -30px; /* バーの上に配置 */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4757;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* styleタグのどこかに追加 */
+
+/* ★★★ 時系列リストのデザイン ★★★ */
+.timeline-list-container {
+    margin-top: 40px;
+}
+.list-event-card {
+    background: rgba(0,0,0,0.2);
+    border-radius: 15px;
+    margin-bottom: 15px;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+/* ★クリックされたときに光るような効果 */
+.list-event-card.highlight {
+    border-color: var(--accent-gradient);
+    box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+    transform: scale(1.02);
+}
+.list-time {
+    font-size: 1.3em;
+    font-weight: 700;
+    min-width: 130px; /* 幅を揃える */
+}
+.list-details { flex-grow: 1; }
+.list-name {
+    font-size: 1.4em;
+    font-weight: 700;
+}
+.list-place {
+    font-size: 1em;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+.list-link-button {
+    display: inline-block; /* ★cta-buttonのスタイルを適用するために必要 */
+    background: var(--secondary-gradient); /* ★★★ ピンクのグラデーション！ ★★★ */
+    color: white;
+    padding: 10px 22px; /* サイズ感を少し調整 */
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em; /* ★少しだけサイズ調整 */
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-medium);
+    white-space: nowrap;
+    border: none;
+}
+.list-link-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-strong);
+}
+
     </style>
 </head>
 <body>
-    <header class="site-header"> <div class="site-title"><a href="index.htm">南陵祭'25</a></div> <nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav> </header>
-    <div class="hamburger-menu"> <span class="bar bar1"></span><span class="bar bar2"></span><span class="bar bar3"></span> </div> <div class="page-overlay"></div>
+    <header class="site-header"> <div class="site-title"><a href="index.htm">南陵祭'25</a></div><nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav> </header>
+    <div class="hamburger-menu"> <span class="bar bar1"></span><span class="bar bar2"></span><span class="bar bar3"></span> </div><div class="page-overlay"></div>
     <nav class="sidenav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="timetable.htm">タイムテーブル</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li><li class="about-us"><a href="about-us.htm">About Us</a></li></ul></nav>
     
     <main>
-        <div class="content-wrapper">
-            <header class="page-header">
-                <h1 class="page-title">Timetable</h1>
-            </header>
-            
-            <!-- JavaScriptがここにタイムラインを自動生成する -->
-            <div id="timeline-container" class="timeline">
-                <!-- 例：
-                <div class="time-block">
-                    <div class="time-label">9:00 - 10:00</div>
-                    <a href="#" class="event-card">
-                        <div class="event-time">9:30 - 10:15</div>
-                        <div class="event-details">
-                            <div class="event-name">演劇部「告白」</div>
-                            <div class="event-place">視聴覚室</div>
-                        </div>
-                    </a>
-                </div> 
-                -->
-            </div>
-
+    <div class="content-wrapper">
+        <header class="page-header">
+            <h1 class="page-title">Timetable</h1>
+        </header>
+        
+        <div class="day-selector">
+            <button class="day-btn active" data-day="DAY1">DAY 1</button>
+            <button class="day-btn" data-day="DAY2">DAY 2</button>
         </div>
-    </main>
+
+        <!-- 1. ガントチャートのエリア -->
+        <div id="gantt-chart-container" class="gantt-chart-container">
+            <div id="gantt-chart" class="gantt-chart"></div>
+        </div>
+
+        <!-- 2. 時系列リストのエリア -->
+        <div id="timeline-list-container" class="timeline-list-container">
+            <!-- JavaScriptがここにリストを自動生成する -->
+        </div>
+    </div>
+</main>
 
     <footer class="site-footer"> <p>&copy; 2024 横浜南陵高校 コンピューター科学部</p> </footer>
 
-    <script defer src="data.js"></script>
+<script defer src="data.js"></script>
 <script defer>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- テンプレート共通処理 (省略) ---
+        // === 1. テンプレート共通の処理 ===
+        const body = document.body;
+        const hamburger = document.querySelector('.hamburger-menu');
+        const overlay = document.querySelector('.page-overlay');
+        function toggleSidenav() { body.classList.toggle('sidenav-open'); }
+        hamburger.addEventListener('click', toggleSidenav);
+        overlay.addEventListener('click', toggleSidenav);
+        let lastScrollTop = 0;
+        const header = document.querySelector('.site-header');
+        if (header) {
+            const headerHeight = header.offsetHeight;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); }
+                else { header.classList.remove('hidden'); }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
+        }
+    
+        // === 2. ページ固有要素の取得 ===
+const chartWrapper = document.getElementById('gantt-chart-container');
+        const chartContainer = document.getElementById('gantt-chart');
+        const listContainer = document.getElementById('timeline-list-container'); // ★リスト表示用のコンテナを追加
+        const daySelector = document.querySelector('.day-selector');
+
+        // === 3. 定数とヘルパー関数の定義 ===
+        const timeHeaders = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+        const totalMinutes = (timeHeaders.length - 1) * 60;
+        const startHour = 9;
         
-        const container = document.getElementById('timeline-container');
-        if (container && typeof stageData !== 'undefined') {
+        function timeToMinutes(timeStr) {
+            if (typeof timeStr !== 'string' || !timeStr.includes(':')) return null;
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            if (isNaN(hours) || isNaN(minutes)) return null;
+            return hours * 60 + minutes;
+        }
 
-            // ★★★ 描画関数を新設 ★★★
-            function createTimetableForDay(day) {
-                // 1. 指定された日のデータだけを抽出＆時間順にソート
-                const dayData = stageData
-                    .filter(event => event.tags.includes(day))
-                    .sort((a, b) => (a.time.replace(/[^0-9]/g, '') || 0) - (b.time.replace(/[^0-9]/g, '') || 0));
+        // === 4. ガントチャート描画関数 (変更なし) ===
+        function renderGanttChart(day) {
+            if (!chartContainer || typeof stageData === 'undefined') return;
+            const dayData = stageData.filter(event => event.tags && event.tags.includes(day) && event.time !== '不明');
+            const places = [...new Set(dayData.map(event => event.place))].sort();
+            if (places.length === 0) { chartContainer.innerHTML = `<div style="grid-column: 1 / -1; padding: 40px; text-align: center; font-size: 1.2em; opacity: 0.8;">この日の発表予定はありません。</div>`; chartContainer.style.gridTemplateColumns = '1fr'; return; }
 
-                // 2. イベントを時間帯ごとにグループ化
-                const groupedByHour = {};
-                dayData.forEach(event => {
-                    const startHour = parseInt(event.time.split(':')[0], 10);
-                    if (isNaN(startHour)) return; // 時間不明のデータは無視
-                    if (!groupedByHour[startHour]) groupedByHour[startHour] = [];
-                    groupedByHour[startHour].push(event);
-                });
+            const columnWidth = 180;
+            chartContainer.style.gridTemplateColumns = `120px repeat(${timeHeaders.length - 1}, ${columnWidth}px)`;
+            
+            let html = '<div class="gantt-header"><div class="gantt-place-header">場所</div>';
+            timeHeaders.forEach(time => { html += `<div class="gantt-time-header">${time}</div>`; });
+            html += '</div>';
+
+            places.forEach((place, placeIndex) => {
+                const placeEvents = dayData.filter(event => event.place === place);
+                html += `<div class="gantt-row"><div class="gantt-place" style="grid-row: ${placeIndex + 2}">${place}</div>`;
+                for (let i = 0; i < timeHeaders.length; i++) { html += `<div class="gantt-time-cell" style="grid-row: ${placeIndex + 2}; grid-column: ${i + 2}"></div>`; }
+                html += `<div class="gantt-events" style="grid-row: ${placeIndex + 2}; grid-column: 2 / span ${timeHeaders.length -1}">`;
                 
-                // 3. HTMLを組み立て
-                let dayHTML = `<h2 style="font-size:2.5em; margin-bottom:20px; text-shadow:0 2px 10px rgba(0,0,0,0.3);">${day}</h2>`;
-                for (let hour = 9; hour <= 14; hour++) { // 9時から14時台まで
-                    if (groupedByHour[hour]) {
-                        dayHTML += `<div class="time-block">
-                                    <div class="time-label">${hour}:00 - ${hour+1}:00</div>`;
-                        groupedByHour[hour].forEach(event => {
-                            dayHTML += `
-                                <a href="stage-detail.htm?id=${event.id}" class="event-card">
-                                    <div class="event-time">${event.time}</div>
-                                    <div class="event-details">
-                                        <div class="event-name">${event.name}</div>
-                                        <div class="event-place">${event.place}</div>
-                                    </div>
-                                </a>`;
-                        });
-                        dayHTML += `</div>`;
+                placeEvents.forEach(event => {
+                    const [startTime, endTime] = (event.time || " - ").split('-').map(s => s.trim());
+                    const startMinutes = timeToMinutes(startTime);
+                    const endMinutes = timeToMinutes(endTime);
+                    if (startMinutes !== null && endMinutes !== null) {
+                        const left = ((startMinutes - (startHour * 60)) / totalMinutes) * 100;
+                        const width = ((endMinutes - startMinutes) / totalMinutes) * 100;
+                        if (width > 0) {
+                            // ★★★ onclick を削除し、data-target-id を追加 ★★★
+                            html += `<div class="gantt-event-bar" 
+                                        style="left: ${left}%; width: ${width}%" 
+                                        data-target-id="list-${event.id}">
+                                        ${event.name}<span class="event-time-in-bar">${event.time}</span>
+                                    </div>`;
+                        }
                     }
+                });
+                html += `</div></div>`;
+            });
+            chartContainer.innerHTML = html;
+        }
+
+        // === 5. 現在時刻インジケーターの処理 (神化) ===
+        function manageCurrentTimeIndicator() {
+            let indicator = document.getElementById('current-time-indicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'current-time-indicator';
+                indicator.innerHTML = `<div class="time-label"></div>`;
+                chartWrapper.appendChild(indicator);
+            }
+            const timeLabel = indicator.querySelector('.time-label');
+
+            function update() {
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+                const chartAreaWidth = chartWrapper.scrollWidth - 120;
+                const leftPosition = ((currentMinutes - (startHour * 60)) / totalMinutes) * chartAreaWidth;
+
+                if (now.getHours() >= startHour && now.getHours() < (startHour + timeHeaders.length - 1)) {
+                    indicator.style.left = `${120 + leftPosition}px`;
+                    timeLabel.textContent = now.toLocaleTimeString('ja-JP');
+                    indicator.classList.add('visible');
+                } else {
+                    indicator.classList.remove('visible');
                 }
-                return dayHTML;
+                
+                requestAnimationFrame(update); // 次の描画フレームで、自分自身を再度呼び出す
             }
 
-            // ★★★ DAY1とDAY2のタイムテーブルをそれぞれ生成して、結合する ★★★
-            const timetableHTML = createTimetableForDay('DAY1') + createTimetableForDay('DAY2');
-            container.innerHTML = timetableHTML;
+            update(); // アニメーションループを開始
+        }
+
+// === 6. 時系列リスト描画関数 (NEW!) ===
+        function renderTimelineList(day) {
+            if (!listContainer || typeof stageData === 'undefined') return;
+            const dayData = stageData
+                .filter(event => event.tags && event.tags.includes(day) && event.time !== '不明')
+                .sort((a, b) => (a.time.replace(/[^0-9]/g, '') || 0) - (b.time.replace(/[^0-9]/g, '') || 0));
+
+            let listHTML = '';
+            dayData.forEach(event => {
+                listHTML += `
+                    <div class="list-event-card" id="list-${event.id}">
+                        <div class="list-time">${event.time}</div>
+                        <div class="list-details">
+                            <div class="list-name">${event.name}</div>
+                            <div class="list-place">${event.place}</div>
+                        </div>
+                        <a href="stage-detail.htm?id=${event.id}" class="list-link-button">詳しく見る</a>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = listHTML;
+        }
+        
+        // === 7. 全描画を統括する司令官 (NEW!) ===
+        function renderPage(day) {
+            renderGanttChart(day);
+            renderTimelineList(day);
+            // バーの位置とスクロールは描画後に再計算/実行するのが確実
+            updateCurrentTimeIndicator();
+            setTimeout(() => { /* ... スクロール処理 ... */ }, 500);
+        }
+
+        // === 8. イベントリスナー ===
+        // DAYボタンのクリック
+        if (daySelector) {
+            daySelector.addEventListener('click', function(e) {
+                if (!e.target.matches('.day-btn')) return;
+                daySelector.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                renderPage(e.target.dataset.day); // 司令官を呼び出す
+            });
+        }
+        // ガントチャートのクリック
+        if (chartContainer) {
+            chartContainer.addEventListener('click', function(e){
+                if(!e.target.classList.contains('gantt-event-bar')) return;
+                const targetId = e.target.dataset.targetId;
+                const targetElement = document.getElementById(targetId);
+                if(targetElement) {
+                    document.querySelectorAll('.list-event-card.highlight').forEach(el => el.classList.remove('highlight'));
+                    targetElement.classList.add('highlight');
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
+        
+        // === 9. 初回実行ロジック ===
+        if (typeof stageData !== 'undefined') {
+            renderPage('DAY1'); // 司令官を呼び出して初回描画
+            manageCurrentTimeIndicator();
+        } else {
+            console.error("data.jsが読み込めていません。");
         }
     });
 </script>
