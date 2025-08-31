@@ -150,7 +150,39 @@
     transform: translateY(-3px) scale(1.05);
     box-shadow: var(--shadow-strong);
 }
+/* ★★★ このブロックを、styleタグの一番下に追加するんだ！ ★★★ */
 
+/* レスポンシブ対応：画面幅が768px以下（スマホ・タブレット）の場合のスタイル */
+@media (max-width: 768px) {
+    /* コンテンツの余白を調整 */
+    .content-wrapper {
+        padding: 20px 10px;
+    }
+    
+    /* ページタイトルを少し小さく */
+    .page-title {
+        font-size: 2.5em;
+    }
+
+    /* ★★★ここが本丸★★★ */
+    /* PC用のガントチャートは、潔く非表示にする */
+    .gantt-chart-container {
+        display: none;
+    }
+    
+    /* リストカードのデザインを、スマホ用に最適化 */
+    .list-event-card {
+        flex-direction: column; /* 縦並びにする */
+        align-items: flex-start; /* 左揃えにする */
+        gap: 10px;
+    }
+    .list-details {
+        width: 100%;
+    }
+    .list-link-button {
+        align-self: flex-end; /* ボタンだけ右下に配置する */
+    }
+}
     </style>
 </head>
 <body>
@@ -206,9 +238,9 @@
         }
     
         // === 2. ページ固有要素の取得 ===
-const chartWrapper = document.getElementById('gantt-chart-container');
+        const chartWrapper = document.getElementById('gantt-chart-container');
         const chartContainer = document.getElementById('gantt-chart');
-        const listContainer = document.getElementById('timeline-list-container'); // ★リスト表示用のコンテナを追加
+        const listContainer = document.getElementById('timeline-list-container');
         const daySelector = document.querySelector('.day-selector');
 
         // === 3. 定数とヘルパー関数の定義 ===
@@ -251,12 +283,13 @@ const chartWrapper = document.getElementById('gantt-chart-container');
                         const left = ((startMinutes - (startHour * 60)) / totalMinutes) * 100;
                         const width = ((endMinutes - startMinutes) / totalMinutes) * 100;
                         if (width > 0) {
-                            // ★★★ onclick を削除し、data-target-id を追加 ★★★
-                            html += `<div class="gantt-event-bar" 
-                                        style="left: ${left}%; width: ${width}%" 
-                                        data-target-id="list-${event.id}">
-                                        ${event.name}<span class="event-time-in-bar">${event.time}</span>
-                                    </div>`;
+                    html += `<div class="gantt-event-bar" 
+                                style="left: ${left}%; width: ${width}%" 
+                                data-target-id="list-${event.id}" 
+                                data-detail-link="stage-detail.htm?id=${event.id}"> 
+                                ${event.name}
+                                <span class="event-time-in-bar">${event.time}</span>
+                            </div>`;
                         }
                     }
                 });
@@ -335,26 +368,53 @@ const chartWrapper = document.getElementById('gantt-chart-container');
                 if (!e.target.matches('.day-btn')) return;
                 daySelector.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
-                renderPage(e.target.dataset.day); // 司令官を呼び出す
-            });
-        }
-        // ガントチャートのクリック
-        if (chartContainer) {
-            chartContainer.addEventListener('click', function(e){
-                if(!e.target.classList.contains('gantt-event-bar')) return;
-                const targetId = e.target.dataset.targetId;
-                const targetElement = document.getElementById(targetId);
-                if(targetElement) {
-                    document.querySelectorAll('.list-event-card.highlight').forEach(el => el.classList.remove('highlight'));
-                    targetElement.classList.add('highlight');
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                renderPage(e.target.dataset.day);
             });
         }
         
-        // === 9. 初回実行ロジック ===
+        // ★★★ ガントチャートのイベント監視体制を近代化！ ★★★
+        if (chartContainer) {
+            chartContainer.addEventListener('click', function(e){
+                // クリックされた要素(またはその親)が.gantt-event-barであるかチェック
+                const eventBar = e.target.closest('.gantt-event-bar');
+                if(!eventBar) return; // 関係ない場所なら何もしない
+
+                // 1. スムーズスクロール処理
+                const targetId = eventBar.dataset.targetId;
+                const targetElement = document.getElementById(targetId);
+                if(targetElement) {
+                    document.querySelectorAll('.list-event-card.highlight').forEach(el => {
+                        el.classList.remove('highlight');
+                    });
+                    targetElement.classList.add('highlight');
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                // 2. 詳細ページへの遷移処理（ダブルクリックで発動！）
+                // （この処理は後述のダブルクリックイベントで代替するため、コメントアウトまたは削除）
+            });
+            
+            // ★★★ ダブルクリックで詳細ページに飛ぶ、という最高のUXを追加！ ★★★
+            chartContainer.addEventListener('dblclick', function(e){
+                const eventBar = e.target.closest('.gantt-event-bar');
+                if(!eventBar) return;
+                
+                const detailLink = eventBar.dataset.detailLink;
+                if(detailLink) {
+                    window.location.href = detailLink;
+                }
+            });
+        }
+
+        // === 8. 初回実行ロジック & 全描画を統括する司令官 ===
+        function renderPage(day) {
+            if (typeof stageData === 'undefined') return;
+            renderGanttChart(day);
+            renderTimelineList(day);
+        }
+
         if (typeof stageData !== 'undefined') {
-            renderPage('DAY1'); // 司令官を呼び出して初回描画
+            renderPage('DAY1');
             manageCurrentTimeIndicator();
         } else {
             console.error("data.jsが読み込めていません。");
