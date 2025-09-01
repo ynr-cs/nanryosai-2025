@@ -233,81 +233,69 @@
         
         // === 3. カウントダウンタイマーの処理 ===
         const countdownContainer = document.getElementById('countdown-timer'); if(countdownContainer) { const countdownTimer = () => { const targetDate = new Date('2025-09-05T09:00:00').getTime(); const now = new Date().getTime(); const remainingTime = targetDate - now; if (remainingTime < 0) { countdownContainer.innerHTML = `<h3 style='color:white;width:100%;text-align:center;'>南陵祭、開催中！</h3>`; if(window.countdownInterval) clearInterval(window.countdownInterval); } else { document.getElementById('days').innerText = String(Math.floor(remainingTime / (1000 * 60 * 60 * 24))).padStart(2, '0'); document.getElementById('hours').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); document.getElementById('minutes').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); document.getElementById('seconds').innerText = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0'); } }; window.countdownInterval = setInterval(countdownTimer, 1000); countdownTimer(); }
-        
-        // ▼▼▼ このブロックをまるごと差し替え ▼▼▼
-        // === 3. リアルタイム情報取得の処理 ===
-        const infoElement = document.getElementById('realtime-info');
-        if (infoElement) {
-            const apiUrl = 'https://script.google.com/macros/s/AKfycbxQCPYzWgzyU5cb70e_fDLYYtcYyongBq45AVmjWej4rndA3lTSCBcmSH5hM5PiBmCM8g/exec';
+    
+// === 3. リアルタイム情報取得の処理 (Firebase版) ===
+const infoElement = document.getElementById('realtime-info');
+if (infoElement) {
+    // Firebaseデータベースの変更をリアルタイムで監視
+    realtimeInfoRef.on('value', (snapshot) => {
+        const data = snapshot.val(); // 現在のデータベースの値を取得
+        if (data && data.currentEventId) { // データが存在し、かつcurrentEventIdがあれば
+            // APIデータとdata.jsをIDで連携させる
+            const currentEvent = stageData.find(item => item.id === data.currentEventId);
+            const nextEvent = stageData.find(item => item.id === data.nextEventId);
+            
+            if (!currentEvent) {
+                infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">情報取得エラー (該当イベントなし)<br>管理画面のID設定を確認してください。</p>`;
+                return;
+            }
+            
+            // ステータスに応じた色分け
+            let statusClass = 'preparing';
+            let statusText = data.status || '情報なし';
+            switch (statusText) {
+                case 'ライブ中！': case 'ライブ中':
+                    statusClass = 'live'; statusText = 'ライブ中！'; break;
+                case 'まもなく開始':
+                    statusClass = 'soon'; break;
+                case '準備中':
+                    statusClass = 'preparing'; break;
+                case '終了':
+                    statusClass = 'finished'; break;
+            }
 
-            const fetchRealtimeInfo = () => {
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(apiData => {
-                        if (!apiData || !apiData.now || !apiData.now.id) {
-                            infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">現在、ステージ発表はありません。</p>`;
-                            return;
-                        }
-                        
-                        // APIデータとdata.jsをIDで連携させる
-                        const currentEvent = stageData.find(item => item.id === apiData.now.id);
-                        const nextEvent = stageData.find(item => item.id === apiData.next.id);
-                        
-                        if (!currentEvent) {
-                            infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">情報取得エラー (該当イベントなし)</p>`;
-                            return;
-                        }
-                        
-                        // ステータスに応じた色分け
-                        let statusClass = 'preparing';
-                        let statusText = apiData.now.status || '情報なし';
-                        switch (statusText) {
-                            case 'ライブ中！': case 'ライブ中':
-                                statusClass = 'live'; statusText = 'ライブ中！'; break;
-                            case 'まもなく開始':
-                                statusClass = 'soon'; break;
-                            case '準備中':
-                                statusClass = 'preparing'; break;
-                            case '終了':
-                                statusClass = 'finished'; break;
-                        }
-
-                        // 表示するHTMLを組み立てる
-        let html = `
-            <div class="rt-status">
-                <div class="status-indicator ${statusClass}"></div>
-                <div class="status-text">${statusText}</div>
-            </div>
-            <div class="rt-event-container">
-                <div class="rt-main-event-name">${currentEvent.name}</div>
-                <div class="rt-main-event-time">予定時間: ${currentEvent.time}</div>
-                <a href="stage-detail.htm?id=${currentEvent.id}" class="rt-button">詳しく見る</a>
-            </div>
-        `;
-
-        if (nextEvent) {
-            html += `
-                <div class="rt-next-event">
-                    <div class="next-label">NEXT</div>
-                    <div class="next-event-name">${nextEvent.name} (${nextEvent.time})</div>
-                    <a href="stage-detail.htm?id=${nextEvent.id}" class="card-button small">詳しく見る</a>
+            let html = `
+                <div class="rt-status">
+                    <div class="status-indicator ${statusClass}"></div>
+                    <div class="status-text">${statusText}</div>
+                </div>
+                <div class="rt-event-container">
+                    <div class="rt-main-event-name">${currentEvent.name}</div>
+                    <div class="rt-main-event-time">予定時間: ${currentEvent.time}</div>
+                    <a href="stage-detail.htm?id=${currentEvent.id}" class="rt-button">詳しく見る</a>
                 </div>
             `;
-        } else {
-            html += `<div class="rt-next-event"><div class="next-event-name">本日の発表はすべて終了しました</div></div>`;
-        }
 
-        infoElement.innerHTML = html;
-                    })
-                    .catch(error => {
-                        console.error('リアルタイム情報の取得に失敗:', error);
-                        infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">情報取得エラー</p>`;
-                    });
-            };
-            
-            setInterval(fetchRealtimeInfo, 30000);
-            fetchRealtimeInfo();
+            if (nextEvent) {
+                html += `
+                    <div class="rt-next-event">
+                        <div class="next-label">NEXT</div>
+                        <div class="next-event-name">${nextEvent.name} (${nextEvent.time})</div>
+                        <a href="stage-detail.htm?id=${nextEvent.id}" class="card-button small">詳しく見る</a>
+                    </div>
+                `;
+            } else if (data.nextEventId) { // Firebaseに次のIDはあるがdata.jsに見つからない
+                html += `<div class="rt-next-event"><div class="next-event-name">NEXT: 未登録のイベント (${data.nextEventId})</div></div>`;
+            } else {
+                html += `<div class="rt-next-event"><div class="next-event-name">本日の発表はすべて終了しました</div></div>`;
+            }
+            infoElement.innerHTML = html;
+
+        } else {
+            infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">まだ情報が登録されていません。<br>管理画面で設定してください。</p>`;
         }
+    });
+}
         // ★★★ 4. 横スクロールの中身を自動生成する処理 (NEW!) ★★★
         const populateScroller = (containerId, dataArray, detailPage) => {
             const container = document.getElementById(containerId);
@@ -346,3 +334,4 @@
 </script>
 </body>
 </html>
+
