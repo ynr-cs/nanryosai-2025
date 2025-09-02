@@ -308,7 +308,7 @@
             function setupSpecialPanel() { const panel = document.getElementById('special-panel'); const tabs = panel.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => { tab.addEventListener('click', (e) => { const day = e.target.dataset.day; const currentHubId = panel.dataset.hubId; const hubEvents = [...stageData].filter(p => p.locationId === currentHubId); updatePanelContent(day, hubEvents); }); }); }
             function openSpecialPanel(group, representative) { const panel = document.getElementById('special-panel'); panel.dataset.hubId = representative.locationId; document.getElementById('panel-title').textContent = representative.name; const hubEvents = group.filter(p => p.tags); updatePanelContent('DAY1', hubEvents); body.classList.add('panel-open'); panel.classList.add('is-open'); }
             function updatePanelContent(day, allEvents) { const contentArea = document.getElementById('panel-content'); const tabs = document.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day)); const displayGroup = allEvents.filter(p => !p.id.startsWith('place-')); const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a, b) => (a.time || "").localeCompare(b.time || "")); let contentHtml = ''; if (eventsForDay.length > 0) { eventsForDay.forEach((event, index) => { contentHtml += `<div class="timetable-item" style="animation-delay: ${index * 0.05}s"><div class="time">${event.time || '時間未定'}</div><div class="details"><h3>${event.name}</h3><p>${event.description || ''}</p><a href="project-detail.htm?id=${event.id}">詳細を見る →</a></div></div>`; }); } else { contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`; } contentArea.innerHTML = contentHtml; }
-            function activateCoordinateFinder(map) { const displayPanel = document.getElementById('coordinate-display'); if (!displayPanel) { return; } displayPanel.innerHTML = '<strong>マップ上をクリックして座標を取得</strong>'; displayPanel.classList.add('is-visible'); map.on('click', function(e) { const lat = e.latlng.lat; const lng = e.latlng.lng; const messageHtml = `<strong>クリックした地点の座標:</strong><br><code>mapX: ${lng.toFixed(0)},</code><br><code>mapY: ${lat.toFixed(0)},</code>`; displayPanel.innerHTML = messageHtml; }); }
+            
 
             // --- 実行フェーズ ---
             initializeMap();
@@ -318,3 +318,4 @@
     </script>
 </body>
 </html>
+
