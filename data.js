@@ -1,75 +1,543 @@
-// ▼▼▼ data.jsの中身を、これで丸ごと上書きするんだ！ ▼▼▼
+// =======================================================
+// ★★★ 2025年度南陵祭 公式企画データ ★★★
+// =======================================================
 
 // 企画の名簿データ
 const projectData = [
+    // --- 4階 ---
     {
-        id: '3-1',
-        name: '3年1組「絶叫ホラーハウス」',
-        catchphrase: '教室が悲鳴に包まれる…',
-        place: '3階 3-1教室',
-        floor: 3,
-	mapX: 994,
-        mapY: 836,
-        hours: '9:00 - 15:00',
-        tags: ['3年生', 'お化け屋敷', 'ホラー'],
-        description: '私たちのクラスでは、背筋も凍る本格的なお化け屋敷を準備しました。最高の体験をお届けします！ぜひお越しください。',
-        image: 'images/project-3-1.jpg', // ★ローカル画像パス
+        id: '1-1',
+        name: '1年1組「タケムランド」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 160,
+        mapY: 833,
+        tags: ['1年生', 'カジノ'],
+        description: '',
+        image: 'images/placeholder.jpg',
         contentType: 'gallery',
-        gallery: [
-            'https://via.placeholder.com/400x300.png?text=準備風景1', 'https://via.placeholder.com/400x300.png?text=装飾A',
-            'https://via.placeholder.com/400x300.png?text=装飾B', 'https://via.placeholder.com/400x300.png?text=脅かし役の誰か'
-        ],
-        mapImage: 'https://via.placeholder.com/600x400.png?text=3F+Map+with+Pin'
+        gallery: []
+    },
+    {
+        id: '1-2',
+        name: '1年2組「赤字のカジノ ~ちょっぴり大人な休憩所~」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 362,
+        mapY: 833,
+        tags: ['1年生', 'カジノ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '1-3',
+        name: '1年3組「中村縁日 ~射的でストレス発散~」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 574,
+        mapY: 833,
+        tags: ['1年生', '縁日'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '1-4',
+        name: '1年4組「あの子はどこ? ~次々といなくなる不可解な事件~」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 784,
+        mapY: 833,
+        tags: ['1年生', 'お化け屋敷'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '1-5',
+        name: '1年5組「メイド喫茶ひさし」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 998,
+        mapY: 833,
+        tags: ['1年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '1-6',
+        name: '1年6組「前園のハッピーライド」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 2034,
+        mapY: 833,
+        tags: ['1年生', 'アトラクション'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '1-7',
+        name: '1年7組「MADE in MENDY」',
+        catchphrase: '',
+        place: '4階',
+        floor: 4,
+        mapX: 2240,
+        mapY: 833,
+        tags: ['1年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: 'election-corner',
+        name: '選挙コーナー「選挙の投票体験」',
+        catchphrase: '',
+        place: '4階 選択教室1',
+	locationId: 'ec1',
+        floor: 4,
+        mapX: 1823,
+        mapY: 833,
+        tags: ['特別企画', '体験'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'megumi',
+        name: '横田めぐみさん「拉致被害者 横田めぐみさんに関する展示」',
+        catchphrase: '',
+        place: '4階 選択教室1',
+	locationId: 'ec1',
+        tags: ['特別企画', '展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+
+    // --- 3階 ---
+    {
+        id: '2-1',
+        name: '2年1組「13年前の校舎」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 162,
+        mapY: 833,
+        tags: ['2年生', 'お化け屋敷'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '2-2',
+        name: '2年2組「ROUND2」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 372,
+        mapY: 833,
+        tags: ['2年生', 'アトラクション'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: '2-3',
+        name: '2年3組「ボードゲームカフェ ~SUGURU~」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 573,
+        mapY: 833,
+        tags: ['2年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
     },
     {
         id: '2-4',
-        name: '2年4組「エモCafe」',
-        catchphrase: 'インスタ映え間違いなし！',
-        place: '中庭 テントエリア',
-        hours: '10:00 - 14:30',
-        tags: ['2年生', 'カフェ', '写真映え', '休憩'],
-        description: 'レトロでかわいい内装のカフェです。美味しいドリンクとスイーツを用意してお待ちしています。',
-        image: 'images/project-2-4.jpg', // ★ローカル画像パス
+        name: '2年4組「Club楓」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 788,
+        mapY: 833,
+        tags: ['2年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: [
-            { name: 'クリームソーダ', price: '300円', desc: 'しゅわしゅわで一番人気！' },
-            { name: '手作りクッキー', price: '200円', desc: 'サクサクの自信作です。' },
-            { name: 'コーヒーフロート', price: '350円', desc: 'ほろ苦さと甘さのハーモニー。' }
-        ],
-        mapImage: 'https://via.placeholder.com/600x400.png?text=Courtyard+Map+with+Pin'
+        menu: []
     },
-    {  
-        id: 'computer-club',
-        name: 'コンピューター科学部「文化祭サイト 制作展示」',
-        catchphrase: '「次、どこ行く？」をスマホで。',
-        place: '2階 PC教室',
-        hours: '10:00 - 14:00',
-        tags: ['部活動・同好会', '展示', 'テクノロジー'],
-        description: 'あなたが今見ている、この文化祭公式サイトの全てを大公開！普段は見られない設計の裏側や、リアルタイム更新の仕組みなどを、パネルや実機デモで解説します。プログラミングに興味がある君、ぜひ遊びに来てくれ！',
-        image: 'images/project-3-1.jpg', // カッコいいPCやコード画面の写真に差し替えるんだ！
+    {
+        id: '2-5',
+        name: '2年5組「純喫茶ナオヤとヒカル兄やん。」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 992,
+        mapY: 833,
+        tags: ['2年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '2-6',
+        name: '2年6組「ナベ病院 ~開かずの診察室~」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 1611,
+        mapY: 833,
+        tags: ['2年生', 'お化け屋敷'],
+        description: '',
+        image: 'images/placeholder.jpg',
         contentType: 'gallery',
-        gallery: [
-            'images/project-3-1.jpg?text=開発風景1',
-            'images/project-3-1.jpg?text=リアルタイム更新の仕組み図解',
-            'https://via.placeholder.com/400x300.png?text=バグとの死闘の記録',
-            'https://via.placeholder.com/400x300.png?text=君たちのTerapad画面'
-        ],
-        mapImage: 'https://via.placeholder.com/600x400.png?text=3F+Map+with+PC-Club+Pin'
-    }
+        gallery: []
+    },
+    {
+        id: '2-7',
+        name: '2年7組「?Melty めいど?」',
+        catchphrase: '',
+        place: '3階',
+        floor: 3,
+        mapX: 1816,
+        mapY: 833,
+        tags: ['2年生', 'カフェ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: 'biology-club',
+        name: '生物部「生物部」',
+        catchphrase: '',
+        place: '3階 生物室',
+        floor: 3,
+        mapX: 162,
+        mapY: 1431,
+        tags: ['部活動', '生物展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'art-club',
+        name: '美術部「展示発表会」',
+        catchphrase: '',
+        place: '3階 美術室',
+        floor: 3,
+        mapX: 1757,
+        mapY: 1292,
+	locationId: 'art-room', 
+        tags: ['部活動', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'art-course',
+        name: '美術科「美術科 授業制作作品展示」',
+        catchphrase: '',
+        place: '3階 美術室',
+        floor: 3,
+	locationId: 'art-room', 
+        tags: ['教科', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    
+    // --- 2階 ---
+    {
+        id: 'game-club',
+        name: 'ゲーム同好会「南陵スマブラ王決定戦」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: 573,
+        mapY: 833,
+        tags: ['部活動', 'ゲーム大会'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'tea-ceremony-club',
+        name: '茶道部「夏果の茶会~ふらっと茶縁日和~」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: 2271,
+        mapY: 867,
+        tags: ['部活動', 'お茶会'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'literature-club',
+        name: '文芸同好会「丸い鈴に隠された物語 ~あらすじを辿って~」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: 783,
+        mapY: 833,
+        tags: ['部活動', '作品展示', 'クイズラリー'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'manga-club',
+        name: '漫画研究部「The future day break」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: 998,
+        mapY: 833,
+        tags: ['部活動', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'disaster-prevention-committee',
+        name: '防災委員「高めよう防災意識」',
+        catchphrase: '',
+        place: '2階廊下',
+        floor: 2,
+        mapX: 1492,
+        mapY: 968,
+        tags: ['委員会', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'calligraphy-course',
+        name: '書道科「書道展2025」',
+        catchphrase: '',
+        place: '2階 書道室',
+        floor: 2,
+        mapX: 1752,
+        mapY: 1301,
+        tags: ['教科', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'cs-club',
+        name: 'コンピューター科学部「南稜文化祭ホームページ」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: null,
+        mapY: null,
+        tags: ['部活動', '展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
+    {
+        id: 'pta',
+        name: 'PTA「Nanryo Mart」',
+        catchphrase: '',
+        place: '2階',
+        floor: 2,
+        mapX: 366,
+        mapY: 833,
+        tags: ['PTA', '販売'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
 
+    // --- 5階 ---
+    {
+        id: 'library-committee',
+        name: '図書委員「天球の図書館」',
+        catchphrase: '',
+        place: '5階 図書館',
+        floor: 5,
+        mapX: 2235,
+        mapY: 874,
+        tags: ['委員会', '作品展示'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
 
+    // --- 外/ピロティ/昇降口など (便宜上1階として扱います) ---
+    {
+        id: '3-1-food',
+        name: '3年1組「フランクフルト」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 367,
+        mapY: 1238,
+        tags: ['3年生', 'フランクフルト'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-2-food',
+        name: '3年2組「たこってかない?」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 367,
+        mapY: 1128,
+        tags: ['3年生', 'たこ焼き'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-3-food',
+        name: '3年3組「ケバブ」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 2124,
+        mapY: 1452,
+        tags: ['3年生', 'ケバブ'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-4-food',
+        name: '3年4組「やきとり」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 367,
+        mapY: 1348,
+        tags: ['3年生', '焼き鳥'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-5-food',
+        name: '3年5組「畠山が認めた三ツ星炭火焼き店」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 2124,
+        mapY: 1550,
+        tags: ['3年生', '焼き鳥'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-6-food',
+        name: '3年6組「そばにいて。」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 2124,
+        mapY: 1350,
+        tags: ['3年生', '焼きそば'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: '3-7-food',
+        name: '3年7組「豚串こみちゃん」',
+        catchphrase: '',
+        place: '外テント',
+        floor: 1,
+        mapX: 598,
+        mapY: 1128,
+        tags: ['3年生', '豚串'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: 'home-making-club',
+        name: 'ホームメイキング部「手作りお菓子の販売」',
+        catchphrase: '',
+        place: 'ピロティ(外)',
+        floor: 1,
+        mapX: 1993,
+        mapY: 879,
+        tags: ['部活動', 'お菓子販売'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'menu',
+        menu: []
+    },
+    {
+        id: 'student-council',
+        name: '生徒会「南陵祭部門別ランキング」',
+        catchphrase: '',
+        tags: ['生徒会', 'ランキング'],
+        description: '',
+        image: 'images/placeholder.jpg',
+        contentType: 'gallery',
+        gallery: []
+    },
 ];
 
 
-
-// ステージ発表のダミーデータ (これは変更なし)
+// ステージ発表のデータ
+// (内容は変更せず、floor, mapX, mapY を追加)
 const stageData = [
     // --- DAY 1 ---
-    
     {
         id: 'day1-keion-1',
         name: '軽音楽部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '10:30 - 11:20',
         tags: ['DAY1', '音楽', 'ライブ'],
         description: '軽音楽部によるライブパフォーマンスです。熱い演奏をお楽しみください！',
@@ -79,6 +547,7 @@ const stageData = [
         id: 'day1-shafuku',
         name: '社会福祉部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '11:45 - 12:05',
         tags: ['DAY1', '発表'],
         description: '社会福祉部による活動報告・発表です。',
@@ -87,7 +556,8 @@ const stageData = [
     {
         id: 'day1-keion-2',
         name: '軽音楽部',
-        place: '視聴覚室',
+        place: '3階視聴覚室',
+    locationId: 'av-room',
         time: '12:00 - 15:00',
         tags: ['DAY1', '音楽', 'ライブ'],
         description: '視聴覚室から、軽音楽部がノンストップライブをお届けします！',
@@ -97,6 +567,7 @@ const stageData = [
         id: 'day1-danbasu',
         name: '男子バスケ部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '12:20 - 12:45',
         tags: ['DAY1', 'パフォーマンス'],
         description: '男子バスケ部によるスペシャルパフォーマンス！',
@@ -106,6 +577,7 @@ const stageData = [
         id: 'day1-gunma',
         name: 'ぐんまさ',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '13:10 - 13:20',
         tags: ['DAY1', 'パフォーマンス'],
         description: '有志団体「ぐんまさ」によるパフォーマンスです。',
@@ -115,6 +587,7 @@ const stageData = [
         id: 'day1-aomito-1',
         name: 'あおみと',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '13:30 - 13:40',
         tags: ['DAY1', 'パフォーマンス'],
         description: '有志団体「あおみと」によるパフォーマンスです。',
@@ -123,7 +596,8 @@ const stageData = [
     {
         id: 'day1-suibu',
         name: '吹奏楽部',
-        place: '音楽室',
+        place: '4階 音楽室',
+locationId: 'music-room',
         time: '13:30 - 14:15',
         tags: ['DAY1', '音楽', 'コンサート'],
         description: '吹奏楽部によるミニコンサートです。美しいハーモニーをお楽しみください。',
@@ -133,6 +607,7 @@ const stageData = [
         id: 'day1-modern-dance',
         name: 'モダンダンス部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '14:10 - 15:00',
         tags: ['DAY1', 'ダンス'],
         description: 'モダンダンス部による情熱的なパフォーマンスにご期待ください。',
@@ -144,6 +619,7 @@ const stageData = [
         id: 'day2-soukyoku',
         name: '箏曲部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '10:30 - 11:00',
         tags: ['DAY2', '音楽', '伝統'],
         description: '箏曲部による、和の美しい音色をお楽しみください。',
@@ -152,7 +628,8 @@ const stageData = [
     {
         id: 'day2-keion-3',
         name: '軽音楽部',
-        place: '視聴覚室',
+        place: '3階視聴覚室',
+    locationId: 'av-room',
         time: '10:00 - 13:00',
         tags: ['DAY2', '音楽', 'ライブ'],
         description: 'DAY2も視聴覚室からノンストップライブ！',
@@ -162,6 +639,7 @@ const stageData = [
         id: 'day2-danbasu',
         name: '男子バスケ部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '11:00 - 11:25',
         tags: ['DAY2', 'パフォーマンス'],
         description: '男子バスケ部、DAY2のスペシャルパフォーマンス！',
@@ -171,6 +649,7 @@ const stageData = [
         id: 'day2-game',
         name: 'ゲーム同好会',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '11:25 - 11:40',
         tags: ['DAY2', '発表'],
         description: 'ゲーム同好会による活動紹介＆デモンストレーション！',
@@ -180,6 +659,7 @@ const stageData = [
         id: 'day2-shafuku',
         name: '社会福祉部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '11:40 - 12:00',
         tags: ['DAY2', '発表'],
         description: '社会福祉部、DAY2の発表です。',
@@ -189,6 +669,7 @@ const stageData = [
         id: 'day2-gunma',
         name: 'ぐんまさ',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '12:00 - 12:10',
         tags: ['DAY2', 'パフォーマンス'],
         description: '有志団体「ぐんまさ」DAY2のステージ！',
@@ -198,6 +679,7 @@ const stageData = [
         id: 'day2-aomito-2',
         name: 'あおみと',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '12:10 - 12:20',
         tags: ['DAY2', 'パフォーマンス'],
         description: '有志団体「あおみと」DAY2のステージ！',
@@ -207,6 +689,7 @@ const stageData = [
         id: 'day2-dancingjk',
         name: 'ダンシングJK',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '12:20 - 13:00',
         tags: ['DAY2', 'ダンス'],
         description: '有志団体「ダンシングJK」による、パワフルなダンスステージ！',
@@ -215,7 +698,8 @@ const stageData = [
     {
         id: 'day2-chorus',
         name: 'コーラス部',
-        place: '音楽室',
+        place: '4階 音楽室',
+locationId: 'music-room',
         time: '12:30 - 13:30',
         tags: ['DAY2', '音楽', '合唱'],
         description: 'コーラス部による美しい歌声が音楽室に響き渡ります。',
@@ -225,6 +709,7 @@ const stageData = [
         id: 'day2-modern-dance',
         name: 'モダンダンス部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '13:00 - 13:50',
         tags: ['DAY2', 'ダンス'],
         description: 'モダンダンス部、DAY2のパフォーマンスです。',
@@ -233,7 +718,8 @@ const stageData = [
     {
         id: 'day2-suibu',
         name: '吹奏楽部',
-        place: '音楽室',
+        place: '4階 音楽室',
+locationId: 'music-room',
         time: '13:30 - 14:15',
         tags: ['DAY2', '音楽', 'コンサート'],
         description: '吹奏楽部、音楽室からのミニコンサートDAY2！',
@@ -243,11 +729,51 @@ const stageData = [
         id: 'day2-keion-4',
         name: '軽音楽部',
         place: '体育館',
+    locationId: 'gymnasium',
         time: '14:10 - 15:00',
         tags: ['DAY2', '音楽', 'ライブ'],
         description: '文化祭のフィナーレを飾る、軽音楽部の熱いライブ！',
         image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+Final'
-    }
+    },
+{
+    id: 'place-gym',
+    name: '体育館ステージ',
+    place: '体育館',
+    locationId: 'gymnasium', 
+    hubType: 'primary',
+    floor: 1, 
+    mapX: 1014,
+    mapY: 1327,  
+    catchphrase: '文化祭のメインステージ！',
+    description: '熱いパフォーマンスが繰り広げられるメインステージです。タイムテーブルをチェック！',
+    tags: ['ステージ', '特別企画'],
+    image: 'images/gym-stage.jpg' 
+},
+{
+    id: 'place-av-room', // 場所専用のユニークなID
+    name: '視聴覚室ライブ',
+    place: '3階 視聴覚室',
+    locationId: 'av-room', // ← 他の視聴覚室企画と全く同じ合言葉
+    floor: 3,  // 視聴覚室の階数
+    mapX: 1300, // 視聴覚室の座標
+    mapY: 570,  // 視聴覚室の座標
+    hubType: 'secondary',
+    catchphrase: 'ライブハウスはこちら！',
+    description: '熱いライブが繰り広げられるサブステージです。タイムテーブルをチェック！',
+    tags: ['ステージ', 'ライブ'],
+    image: 'images/av-room.jpg' // 視聴覚室の写真など
+},
+{
+    id: 'place-music-room', // 場所専用のユニークなID
+    name: '音楽室コンサート',
+    place: '4階 音楽室',
+    locationId: 'music-room', // ← 他の音楽室企画と全く同じ合言葉
+    floor: 4,  // 音楽室の階数
+    mapX: 1752, // 音楽室の座標 (あなたの実測値に書き換える)
+    mapY: 1300,  // 音楽室の座標 (あなたの実測値に書き換える)
+    hubType: 'secondary',
+    catchphrase: '美しい音色が響き渡る。',
+    tags: ['ステージ', 'コンサート'],
+    image: 'images/music-room.jpg'
+},
 ];
-
-
