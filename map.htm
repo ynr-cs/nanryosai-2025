@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校内マップ | 南陵祭'25</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <style>
-        /* (基本CSSは変更ありません) */
+        /* (CSSは変更ありません) */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-        :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
+        :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
+        html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white; }
         body.sidenav-open, body.panel-open { overflow: hidden; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); pointer-events: none; z-index: -1; }
         main { flex-grow: 1; position: relative; z-index: 2; }
@@ -23,8 +26,10 @@
         .site-footer { background: rgba(0, 0, 0, 0.2); text-align: center; padding: 30px 20px; color: rgba(255, 255, 255, 0.8); font-size: 0.9em; }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
         @media (max-width: 900px) { .desktop-nav { display: none; } .site-header { padding: 0 80px 0 20px; } .hamburger-menu { right: 20px; width: 45px; height: 45px; } }
-        #map-container { position: relative; width: 100%; height: calc(100vh - var(--header-height) - 93px); overflow: hidden; background: rgba(0, 0, 0, 0.2); }
-        #map { width: 100%; height: 100%; background-color: transparent; }
+        .page-title { text-align: center; font-size: 2.5em; font-weight: 700; color: white; margin-bottom: 30px; text-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        #map-container { position: relative; height: 70vh; max-height: 800px; overflow: hidden; background: rgba(0, 0, 0, 0.2); border-radius: 20px; box-shadow: var(--shadow-strong); margin-bottom: 40px; }
+        #map { width: 100%; height: 100%; background-color: transparent; border-radius: 20px; }
         .leaflet-control-zoom-in, .leaflet-control-zoom-out { background: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(10px) !important; color: white !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; line-height: 40px !important; transition: all 0.3s ease !important; }
         .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover { background: rgba(255, 255, 255, 0.2) !important; transform: scale(1.1); }
         .leaflet-control-zoom a { font-size: 1.5em; }
@@ -33,7 +38,7 @@
         .project-marker.is-group { border-color: #00f2fe; }
         .project-marker.is-hub { border-color: #ff7eb9; animation: pulse 2s infinite; } @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 126, 185, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 126, 185, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 126, 185, 0); } }
         .project-marker .marker-name { font-size: 14px; font-weight: 700; white-space: nowrap; }
-        .project-marker .marker-id { font-size: 11px; font-weight: 400; opacity: 0.8; white-space: nowrap; }
+        .project-marker .marker-id { font-size: 11px; font-weight: 400; opacity: 0.8; white-space: nowrap; margin-top: 2px; }
         .leaflet-popup-content-wrapper { background: rgba(255, 255, 255, 0.15) !important; backdrop-filter: blur(20px) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 16px !important; box-shadow: var(--shadow-strong) !important; }
         .leaflet-popup-content { color: white !important; margin: 15px 20px !important; font-size: 16px !important; line-height: 1.6 !important; }
         .leaflet-popup-tip { background: rgba(255, 255, 255, 0.15) !important; }
@@ -42,8 +47,6 @@
         .popup-content p { font-size: 0.9em; opacity: 0.9; margin-bottom: 15px; }
         .popup-content .detail-button { display: inline-block; text-decoration: none; color: white; font-weight: 500; padding: 10px 20px; border-radius: 25px; background: var(--accent-gradient); transition: all 0.3s ease; }
         .popup-content .detail-button:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
-        
-        /* ★★★ 修正されたCSS：汎用リストポップアップ ★★★ */
         .list-popup-content { width: 280px; }
         .list-popup-content h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
         .list-popup-content .popup-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -56,7 +59,6 @@
         .list-popup-content li a:hover { background: rgba(255,255,255,0.2); transform: translateX(5px); }
         .list-popup-content .time { font-size: 0.8em; font-weight: 700; background: rgba(255,255,255,0.15); padding: 3px 8px; border-radius: 5px; flex-shrink: 0; }
         .list-popup-content .name { font-size: 0.9em; white-space: normal; }
-
         .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .fade-up.is-visible { opacity: 1; transform: translateY(0); }
         .floor-switcher { position: absolute; top: 20px; left: 20px; z-index: 800; display: flex; flex-direction: column; gap: 10px; }
@@ -84,6 +86,36 @@
         .timetable-item h3 { font-size: 1.2em; color: white; margin-bottom: 5px; }
         .timetable-item p { font-size: 0.9em; color: rgba(255,255,255,0.8); margin-bottom: 10px; }
         .timetable-item a { font-size: 0.9em; font-weight: 500; color: #4facfe; text-decoration: none; }
+        .marker-cluster { background-clip: padding-box; border-radius: 50%; }
+        .marker-cluster div { width: 30px; height: 30px; margin-left: 5px; margin-top: 5px; text-align: center; border-radius: 50%; font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif; color: white; }
+        .marker-cluster span { line-height: 30px; }
+        .marker-cluster-small { background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .marker-cluster-medium { background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .marker-cluster-large { background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.4); }
+        .filter-section { background: rgba(0,0,0,0.2); padding: 30px; border-radius: 15px; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .filter-group { display: flex; align-items: center; gap: 15px; }
+        .filter-group:not(:last-child) { margin-bottom: 15px; }
+        .filter-label { color: rgba(255,255,255,0.8); font-weight: 500; white-space: nowrap; }
+        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; } /* 中央揃えを追加 */
+        .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 8px 18px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: all 0.2s ease-in-out; }
+        .filter-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        .filter-btn.active { background: var(--secondary-gradient); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-color: transparent; }
+        .search-box-wrapper { width: 100%; max-width: 600px; }
+        .search-input { width: 100%; padding: 15px 25px; font-size: 1.1em; color: white; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; transition: all 0.3s ease; }
+        .search-input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-input:focus { outline: none; border-color: rgba(255,255,255,0.7); box-shadow: 0 0 20px rgba(79, 172, 254, 0.3); }
+        .project-list-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; padding: 20px 25px; margin-bottom: 15px; display: flex; align-items: center; gap: 20px; transition: all 0.3s ease; }
+        .project-list-item:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+        .item-content { flex-grow: 1; }
+        .item-content .group-name { color: rgba(255,255,255,0.7); font-size: 0.9em; font-weight: 500; }
+        .item-content .project-title { font-size: 1.3em; font-weight: 700; margin-top: 2px; }
+        .item-actions { display: flex; gap: 10px; flex-shrink: 0; }
+        .item-actions .list-button { display: inline-block; text-decoration: none; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; border: 1px solid transparent; }
+        .item-actions .list-button:hover:not(:disabled) { transform: scale(1.05); }
+        .item-actions .list-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .item-actions .detail-btn { background: var(--secondary-gradient); }
+        .item-actions .map-btn { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+        .no-results { color: white; font-size: 1.5em; font-weight: 500; text-align: center; padding: 80px 20px; background: rgba(0,0,0,0.2); border-radius: 15px; display: none; }
     </style>
 </head>
 <body>
@@ -92,22 +124,59 @@
     <div class="page-overlay"></div>
     <nav class="sidenav"> <ul> <li><a href="about.htm">概要</a></li> <li><a href="projects-list.htm">企画一覧</a></li> <li><a href="stage-list.htm">ステージ発表</a></li> <li><a href="timetable.htm">タイムテーブル</a></li> <li><a href="map.htm">校内マップ</a></li> <li><a href="access.htm">アクセス</a></li> <li class="about-us"><a href="about-us.htm">About Us</a></li> </ul> </nav>
     <main>
-        <div id="map-container" class="fade-up">
-            <div id="map"></div>
-            <div class="floor-switcher">
-                <button data-floor="5">5F</button>
-                <button data-floor="4">4F</button>
-                <button data-floor="3">3F</button>
-                <button data-floor="2">2F</button>
-                <button data-floor="1" class="active">1F</button>
+        <div class="content-wrapper">
+            <h1 class="page-title fade-up">校内マップ</h1>
+            <div id="map-container" class="fade-up" style="animation-delay: 0.15s;">
+                <div id="map"></div>
+                <div class="floor-switcher">
+                    <button data-floor="5">5F</button>
+                    <button data-floor="4">4F</button>
+                    <button data-floor="3">3F</button>
+                    <button data-floor="2">2F</button>
+                    <button data-floor="1" class="active">1F</button>
+                </div>
+                <div id="coordinate-display"></div>
             </div>
-            <div id="coordinate-display"></div>
+            
+            <!-- ★★★ 修正点(1)：新しいジャンルのHTMLボタン ★★★ -->
+            <div class="filter-section fade-up" style="animation-delay: 0.3s;">
+                <div class="search-box-wrapper">
+                    <input type="search" id="search-input" class="search-input" placeholder="企画名で検索...">
+                </div>
+                <div class="filter-group">
+                    <strong class="filter-label">団体</strong>
+                    <div id="filter-by-grade" class="filter-buttons">
+                        <button class="filter-btn active" data-filter="すべて">すべて</button>
+                        <button class="filter-btn" data-filter="1年生">1年生</button>
+                        <button class="filter-btn" data-filter="2年生">2年生</button>
+                        <button class="filter-btn" data-filter="3年生">3年生</button>
+                        <button class="filter-btn" data-filter="部活動・同好会">部活動・同好会</button>
+                        <button class="filter-btn" data-filter="委員会">委員会</button>
+                        <button class="filter-btn" data-filter="その他">その他</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <strong class="filter-label">ジャンル</strong>
+                    <div id="filter-by-type" class="filter-buttons">
+                        <button class="filter-btn active" data-filter="すべて">すべて</button>
+                        <button class="filter-btn" data-filter="体験・ゲーム">体験・ゲーム</button>
+                        <button class="filter-btn" data-filter="お化け屋敷">お化け屋敷</button>
+                        <button class="filter-btn" data-filter="カフェ">カフェ</button>
+                        <button class="filter-btn" data-filter="展示">展示</button>
+                        <button class="filter-btn" data-filter="販売">販売</button>
+                        <button class="filter-btn" data-filter="ステージ">ステージ</button>
+                        <button class="filter-btn" data-filter="その他">その他</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="project-list-container"></div>
+            <div id="no-results-message" class="no-results"></div>
         </div>
     </main>
     <footer class="site-footer"> 
         <p>&copy; 2024 横浜南陵高校 コンピューター科学部</p> 
     </footer>
-    
     <div id="special-panel" class="special-panel">
         <div class="panel-header"> <h2 id="panel-title"></h2> </div>
         <div class="panel-tabs"> <button id="panel-tab-day1" data-day="DAY1">DAY 1</button> <button id="panel-tab-day2" data-day="DAY2">DAY 2</button> </div>
@@ -115,6 +184,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="data.js"></script> 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -123,174 +193,127 @@
             const fadeUpElements = document.querySelectorAll('.fade-up'); fadeUpElements.forEach((el, index) => { setTimeout(() => { el.classList.add('is-visible'); }, index * 150); });
 
             // =========================================================================
-            // ▼▼▼ Version 4.3：校内マップ専用ロジック (ハイブリッドポップアップ版) ▼▼▼
+            // ▼▼▼ Version 7.4：マップ ＆ リスト統合ロジック (最終ジャンル対応) ▼▼▼
             // =========================================================================
 
             let map;
             let imageOverlay;
-            let markerGroup;
-            const floorImageUrls = {
-                1: 'images/map-1f.png',
-                2: 'images/map-2f.png',
-                3: 'images/map-3f.png',
-                4: 'images/map-4f.png',
-                5: 'images/map-5f.png' 
-            };
+            let markerClusterGroup;
+            let imageBounds;
+            const floorImageUrls = { 1: 'images/map-1f.png', 2: 'images/map-2f.png', 3: 'images/map-3f.png', 4: 'images/map-4f.png', 5: 'images/map-5f.png' };
+            const listContainer = document.getElementById('project-list-container');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const gradeFilterContainer = document.getElementById('filter-by-grade');
+            const typeFilterContainer = document.getElementById('filter-by-type');
+            const searchInput = document.getElementById('search-input');
+            let activeFilters = { grade: 'すべて', type: 'すべて', search: '' };
             
             function initializeMap() {
-                if (typeof projectData === 'undefined' || typeof stageData === 'undefined') { console.error('data.jsが正しく読み込まれていません。'); document.getElementById('map').innerHTML = '<p style="color:white; text-align:center; padding-top: 50px;">企画データの読み込みに失敗しました。</p>'; return; }
+                if (typeof projectData === 'undefined' || typeof stageData === 'undefined') { console.error('data.jsが正しく読み込まれていません。'); return; }
                 const initialImage = new Image();
                 initialImage.onload = function() {
-                    const imgWidth = this.width; const imgHeight = this.height; const bounds = [[0, 0], [imgHeight, imgWidth]];
+                    const imgWidth = this.width; const imgHeight = this.height; 
+                    imageBounds = [[0, 0], [imgHeight, imgWidth]];
                     map = L.map('map', { crs: L.CRS.Simple, minZoom: -3, maxZoom: 4, center: [imgHeight / 2, imgWidth / 2], zoom: -1, zoomControl: false });
-                    imageOverlay = L.imageOverlay(floorImageUrls[1], bounds).addTo(map);
-                    markerGroup = L.layerGroup().addTo(map);
+                    imageOverlay = L.imageOverlay(floorImageUrls[1], imageBounds).addTo(map);
+                    markerClusterGroup = L.markerClusterGroup({ zoomToBoundsOnClick: true, maxClusterRadius: 40, disableClusteringAtZoom: 2 });
+                    map.addLayer(markerClusterGroup);
                     L.control.zoom({ position: 'bottomright' }).addTo(map);
-                    map.fitBounds(bounds);
+                    map.fitBounds(imageBounds);
                     setupFloorSwitcher();
                     updateMapForFloor(1);
                     activateCoordinateFinder(map);
                     setupSpecialPanel();
+                    markerClusterGroup.on('clusterclick', function (a) { a.layer.zoomToBounds({padding: [20, 20]}); });
+                    markerClusterGroup.on('click', handleMarkerClick);
                 };
-                initialImage.onerror = function() { console.error('マップ画像(1F)の読み込みに失敗しました。'); document.getElementById('map').innerHTML = '<p style="color:white; text-align:center; padding-top: 50px;">マップ画像の読み込みに失敗しました。</p>'; }
+                initialImage.onerror = function() { console.error('マップ画像(1F)の読み込みに失敗しました。'); }
                 initialImage.src = floorImageUrls[1];
             }
 
-            function setupFloorSwitcher() { const buttons = document.querySelectorAll('.floor-switcher button'); buttons.forEach(button => { button.addEventListener('click', () => { const floor = parseInt(button.dataset.floor, 10); updateMapForFloor(floor); }); }); }
-            function updateMapForFloor(floor) { document.querySelectorAll('.floor-switcher button').forEach(btn => { btn.classList.toggle('active', parseInt(btn.dataset.floor, 10) === floor); }); imageOverlay.setUrl(floorImageUrls[floor]); renderMarkers(floor); }
-            
-            function renderMarkers(floor) {
-                markerGroup.clearLayers();
-                const allProjects = [...projectData, ...stageData];
-
-                const locations = {};
-                allProjects.forEach(project => {
-                    const key = project.locationId || project.id;
-                    if (!locations[key]) { locations[key] = []; }
-                    locations[key].push(project);
+            function applyAllFilters() {
+                let allProjectAndStage = [...projectData, ...stageData];
+                let filtered = allProjectAndStage.filter(p => !p.id.startsWith('place-'));
+                if (activeFilters.grade !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.grade)); }
+                if (activeFilters.type !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.type)); }
+                if (activeFilters.search) { filtered = filtered.filter(p => p.name.toLowerCase().includes(activeFilters.search)); }
+                renderList(filtered);
+            }
+            function renderList(projectsToRender) {
+                if (!listContainer || !noResultsMessage) return;
+                if (projectsToRender.length === 0) { listContainer.innerHTML = ''; noResultsMessage.innerText = '該当する企画はありませんでした。'; noResultsMessage.style.display = 'block'; return; }
+                noResultsMessage.style.display = 'none';
+                listContainer.innerHTML = '';
+                let itemsHTML = '';
+                projectsToRender.forEach(project => {
+                    const match = project.name.match(/^(.+?組|.+?部|.+?科|.+?委員)/);
+                    let groupName = '', projectName = project.name;
+                    if (match) { groupName = match[1]; projectName = project.name.replace(groupName, '').trim().replace(/「|」/g, ''); }
+                    const hasLocation = project.mapX != null || project.locationId;
+                    const mapButtonData = hasLocation ? `data-project-id="${project.id}"` : '';
+                    itemsHTML += `
+                        <div class="project-list-item">
+                            <div class="item-content">
+                                <span class="group-name">${groupName}</span>
+                                <h3 class="project-title">${projectName}</h3>
+                            </div>
+                            <div class="item-actions">
+                                <a href="project-detail.htm?id=${project.id}" class="list-button detail-btn">詳しく見る</a>
+                                <button class="list-button map-btn" ${mapButtonData} ${!hasLocation ? 'disabled' : ''}>地図</button>
+                            </div>
+                        </div>`;
                 });
-
-                for (const locationKey in locations) {
-                    const group = locations[locationKey];
-                    const representative = group.find(p => p.mapX != null) || group[0];
-                    if (representative.floor !== floor) { continue; }
-                    if (representative.mapX == null || representative.mapY == null) continue;
-
-                    const isGroup = group.length > 1;
-                    const isPrimaryHub = representative.hubType === 'primary';
-                    const isHub = representative.hubType != null;
-
-                    const markerName = isHub ? representative.name : (isGroup ? `${group.length}件の企画` : representative.name.split('「')[0]);
-                    const markerId = isHub ? "タイムテーブル" : (isGroup ? representative.place || locationKey : representative.id);
-                    const markerClass = `project-marker ${isGroup ? 'is-group' : ''} ${isHub ? 'is-hub' : ''}`;
-                    
-                    const markerHtml = `<div class="${markerClass}"><div class="marker-name">${markerName}</div><div class="marker-id">${markerId}</div></div>`;
-                    const customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [null, null] });
-                    const marker = L.marker([representative.mapY, representative.mapX], { icon: customIcon }).addTo(markerGroup);
-                    
-                    if (isPrimaryHub) {
-                        marker.on('click', () => openSpecialPanel(group, representative));
-                    } else {
-                        marker.bindPopup(() => createStandardPopup(group, representative), { minWidth: 310 });
+                listContainer.innerHTML = itemsHTML;
+            }
+            function flyToMarker(projectId) {
+                document.getElementById('map-container').scrollIntoView({ behavior: 'smooth' });
+                const allProjects = [...projectData, ...stageData];
+                const targetProject = allProjects.find(p => p.id === projectId);
+                if (!targetProject) return;
+                let locationData = targetProject;
+                if (targetProject.locationId) {
+                    const representative = allProjects.find(p => p.locationId === targetProject.locationId && p.mapX != null);
+                    if (representative) { locationData = representative; }
+                }
+                if (locationData.floor == null || locationData.mapX == null || locationData.mapY == null) {
+                    alert('この企画の場所は現在マップに登録されていません。');
+                    return;
+                }
+                const flyToTarget = () => { map.flyTo([locationData.mapY, locationData.mapX], 1, { animate: true, duration: 1.0 }); };
+                const floorSwitcher = document.querySelector('.floor-switcher');
+                const currentFloor = parseInt(floorSwitcher.querySelector('.active').dataset.floor, 10);
+                if (currentFloor !== locationData.floor) {
+                    map.once('moveend', flyToTarget);
+                    updateMapForFloor(locationData.floor);
+                } else {
+                    flyToTarget();
+                }
+            }
+            function setupEventListeners() {
+                searchInput.addEventListener('input', () => { activeFilters.search = searchInput.value.toLowerCase().trim(); applyAllFilters(); });
+                gradeFilterContainer.addEventListener('click', (e) => { if (!e.target.matches('.filter-btn')) return; gradeFilterContainer.querySelector('.active').classList.remove('active'); e.target.classList.add('active'); activeFilters.grade = e.target.dataset.filter; applyAllFilters(); });
+                typeFilterContainer.addEventListener('click', (e) => { if (!e.target.matches('.filter-btn')) return; typeFilterContainer.querySelector('.active').classList.remove('active'); e.target.classList.add('active'); activeFilters.type = e.target.dataset.filter; applyAllFilters(); });
+                listContainer.addEventListener('click', (e) => {
+                    const mapButton = e.target.closest('.map-btn');
+                    if (mapButton && mapButton.dataset.projectId) {
+                        flyToMarker(mapButton.dataset.projectId);
                     }
-                }
+                });
             }
-
-            // ★★★ 新しいポップアップ生成関数（ハイブリッド版）★★★
-            function createStandardPopup(group, representative) {
-                const container = L.DomUtil.create('div', 'popup-content list-popup-content');
-                const project = group[0];
-                const isGroup = group.length > 1;
-                const isSecondaryHub = representative.hubType === 'secondary';
-
-                let html = `<h3>${representative.place || project.name}</h3>`;
-
-                if (isSecondaryHub) {
-                    // セカンダリーハブの場合：タブ付きタイムテーブルリスト
-                    const tabsHtml = `<div class="popup-tabs"><button data-day="DAY1" class="active">DAY 1</button><button data-day="DAY2">DAY 2</button></div>`;
-                    const listContainerHtml = `<ul class="list-container"></ul>`;
-                    container.innerHTML = html + tabsHtml + listContainerHtml;
-
-                    const listContainer = container.querySelector('.list-container');
-                    const updateList = (day) => {
-                        const displayGroup = group.filter(p => !p.id.startsWith('place-'));
-                        const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
-                        
-                        let listHtml = '';
-                        if(eventsForDay.length > 0) {
-                            listHtml = eventsForDay.map(event => `<li><a href="project-detail.htm?id=${event.id}"><span class="time">${event.time || ''}</span><span class="name">${event.name}</span></a></li>`).join('');
-                        } else {
-                            listHtml = `<p style="font-size:0.9em; opacity:0.8; padding-left: 5px;">この日の発表はありません。</p>`;
-                        }
-                        listContainer.innerHTML = listHtml;
-                    };
-                    
-                    L.DomEvent.on(container, 'click', (e) => {
-                        if (e.target.tagName === 'BUTTON') {
-                            const day = e.target.dataset.day;
-                            container.querySelector('.popup-tabs .active').classList.remove('active');
-                            e.target.classList.add('active');
-                            updateList(day);
-                        }
-                    });
-                    
-                    updateList('DAY1'); // 初期表示
-                } else if (isGroup) {
-                    // 通常のグループ（時間情報なし）
-                    const displayGroup = group.filter(p => !p.id.startsWith('place-'));
-                    const listItems = displayGroup.map(p => `<li><a href="project-detail.htm?id=${p.id}"><span class="name">${p.name}</span></a></li>`).join('');
-                    html += `<ul>${listItems}</ul>`;
-                    container.innerHTML = html;
-                } else {
-                    // 単独企画
-                    html += `<p>${project.catchphrase || (project.description && project.description.substring(0, 30) + '...') || ''}</p>
-                             <a href="project-detail.htm?id=${project.id}" class="detail-button">詳細を見る</a>`;
-                    container.innerHTML = html;
-                }
-                
-                return container;
-            }
-
-            // (openSpecialPanel と updatePanelContent は変更なし)
-            function openSpecialPanel(group, representative) {
-                const panel = document.getElementById('special-panel');
-                panel.dataset.hubId = representative.locationId;
-                document.getElementById('panel-title').textContent = representative.name;
-                const hubEvents = group.filter(p => p.tags);
-                updatePanelContent('DAY1', hubEvents); 
-                body.classList.add('panel-open');
-                panel.classList.add('is-open');
-            }
-            function updatePanelContent(day, allEvents) {
-                const contentArea = document.getElementById('panel-content');
-                const tabs = document.querySelectorAll('.panel-tabs button');
-                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day));
-                const displayGroup = allEvents.filter(p => !p.id.startsWith('place-'));
-                const eventsForDay = displayGroup
-                    .filter(p => p.tags && p.tags.includes(day))
-                    .sort((a, b) => (a.time || "").localeCompare(b.time || ""));
-                let contentHtml = '';
-                if (eventsForDay.length > 0) {
-                    eventsForDay.forEach((event, index) => {
-                        contentHtml += `
-                            <div class="timetable-item" style="animation-delay: ${index * 0.05}s">
-                                <div class="time">${event.time || '時間未定'}</div>
-                                <div class="details">
-                                    <h3>${event.name}</h3>
-                                    <p>${event.description || ''}</p>
-                                    <a href="project-detail.htm?id=${event.id}">詳細を見る →</a>
-                                </div>
-                            </div>`;
-                    });
-                } else {
-                    contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`;
-                }
-                contentArea.innerHTML = contentHtml;
-            }
-
+            function setupFloorSwitcher() { const buttons = document.querySelectorAll('.floor-switcher button'); buttons.forEach(button => { button.addEventListener('click', () => { const floor = parseInt(button.dataset.floor, 10); updateMapForFloor(floor); }); }); }
+            function updateMapForFloor(floor) { document.querySelectorAll('.floor-switcher button').forEach(btn => { btn.classList.toggle('active', parseInt(btn.dataset.floor, 10) === floor); }); imageOverlay.setUrl(floorImageUrls[floor]); renderMarkers(floor); if (map && imageBounds) { map.fitBounds(imageBounds); } }
+            function renderMarkers(floor) { markerClusterGroup.clearLayers(); const allProjects = [...projectData, ...stageData]; const locations = {}; allProjects.forEach(project => { const key = project.locationId || project.id; if (!locations[key]) { locations[key] = []; } locations[key].push(project); }); const markersToAdd = []; for (const locationKey in locations) { const group = locations[locationKey]; const representative = group.find(p => p.mapX != null) || group[0]; if (representative.floor !== floor) { continue; } if (representative.mapX == null || representative.mapY == null) continue; const isGroup = group.length > 1; const isPrimaryHub = representative.hubType === 'primary'; const isHub = representative.hubType != null; const markerName = isHub ? representative.name : (isGroup ? `${group.length}件の企画` : representative.name.split('「')[0]); const markerSubText = (representative.tags && representative.tags.length > 1) ? representative.tags[1] : (representative.place || ''); const markerClass = `project-marker ${isGroup ? 'is-group' : ''} ${isHub ? 'is-hub' : ''}`; const markerHtml = `<div class="${markerClass}"><div class="marker-name">${markerName}</div><div class="marker-id">${markerSubText}</div></div>`; const customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [null, null] }); const marker = L.marker([representative.mapY, representative.mapX], { icon: customIcon }); marker.options.customData = { group: group, representative: representative }; markersToAdd.push(marker); } markerClusterGroup.addLayers(markersToAdd); }
+            function handleMarkerClick(e) { const marker = e.layer; const { group, representative } = marker.options.customData; const isPrimaryHub = representative.hubType === 'primary'; if (isPrimaryHub) { openSpecialPanel(group, representative); } else { marker.bindPopup(() => createStandardPopup(group, representative), { minWidth: 310 }).openPopup(); } }
+            function createStandardPopup(group, representative) { const container = L.DomUtil.create('div', 'popup-content list-popup-content'); const project = group[0]; const isGroup = group.length > 1; const isSecondaryHub = representative.hubType === 'secondary'; const title = (isGroup || isSecondaryHub) ? (representative.place || project.name) : project.name; let html = `<h3>${title}</h3>`; const displayGroup = group.filter(p => !p.id.startsWith('place-')); if (isSecondaryHub) { const tabsHtml = `<div class="popup-tabs"><button data-day="DAY1" class="active">DAY 1</button><button data-day="DAY2">DAY 2</button></div>`; const listContainerHtml = `<ul class="list-container"></ul>`; container.innerHTML = html + tabsHtml + listContainerHtml; const listContainer = container.querySelector('.list-container'); const updateList = (day) => { const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99")); let listHtml = ''; if(eventsForDay.length > 0) { listHtml = eventsForDay.map(event => `<li><a href="project-detail.htm?id=${event.id}"><span class="time">${event.time || ''}</span><span class="name">${event.name}</span></a></li>`).join(''); } else { listHtml = `<p style="font-size:0.9em; opacity:0.8; padding-left: 5px;">この日の発表はありません。</p>`; } listContainer.innerHTML = listHtml; }; L.DomEvent.on(container, 'click', (e) => { if (e.target.tagName === 'BUTTON') { const day = e.target.dataset.day; container.querySelector('.popup-tabs .active').classList.remove('active'); e.target.classList.add('active'); updateList(day); } }); updateList('DAY1'); } else if (isGroup) { const listItems = displayGroup.map(p => `<li><a href="project-detail.htm?id=${p.id}"><span class="name">${p.name}</span></a></li>`).join(''); html += `<ul>${listItems}</ul>`; container.innerHTML = html; } else { const descriptionText = project.catchphrase || project.description || (project.tags && project.tags.length > 1 ? project.tags[1] : ''); html += `<p>${descriptionText}</p> <a href="project-detail.htm?id=${project.id}" class="detail-button">詳細を見る</a>`; container.innerHTML = html; } return container; }
+            function setupSpecialPanel() { const panel = document.getElementById('special-panel'); const tabs = panel.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => { tab.addEventListener('click', (e) => { const day = e.target.dataset.day; const currentHubId = panel.dataset.hubId; const hubEvents = [...stageData].filter(p => p.locationId === currentHubId); updatePanelContent(day, hubEvents); }); }); }
+            function openSpecialPanel(group, representative) { const panel = document.getElementById('special-panel'); panel.dataset.hubId = representative.locationId; document.getElementById('panel-title').textContent = representative.name; const hubEvents = group.filter(p => p.tags); updatePanelContent('DAY1', hubEvents); body.classList.add('panel-open'); panel.classList.add('is-open'); }
+            function updatePanelContent(day, allEvents) { const contentArea = document.getElementById('panel-content'); const tabs = document.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day)); const displayGroup = allEvents.filter(p => !p.id.startsWith('place-')); const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a, b) => (a.time || "").localeCompare(b.time || "")); let contentHtml = ''; if (eventsForDay.length > 0) { eventsForDay.forEach((event, index) => { contentHtml += `<div class="timetable-item" style="animation-delay: ${index * 0.05}s"><div class="time">${event.time || '時間未定'}</div><div class="details"><h3>${event.name}</h3><p>${event.description || ''}</p><a href="project-detail.htm?id=${event.id}">詳細を見る →</a></div></div>`; }); } else { contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`; } contentArea.innerHTML = contentHtml; }
             function activateCoordinateFinder(map) { const displayPanel = document.getElementById('coordinate-display'); if (!displayPanel) { return; } displayPanel.innerHTML = '<strong>マップ上をクリックして座標を取得</strong>'; displayPanel.classList.add('is-visible'); map.on('click', function(e) { const lat = e.latlng.lat; const lng = e.latlng.lng; const messageHtml = `<strong>クリックした地点の座標:</strong><br><code>mapX: ${lng.toFixed(0)},</code><br><code>mapY: ${lat.toFixed(0)},</code>`; displayPanel.innerHTML = messageHtml; }); }
 
+            // --- 実行フェーズ ---
             initializeMap();
+            setupEventListeners();
+            applyAllFilters();
         });
     </script>
 </body>
