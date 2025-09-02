@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <style>
-        /* (CSSは変更ありません) */
+        /* (基本CSSは変更ありません) */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
         :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; } /* ★★★ ページ内スクロールを滑らかに ★★★ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white; }
         body.sidenav-open, body.panel-open { overflow: hidden; }
@@ -65,10 +65,6 @@
         .floor-switcher button { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: white; width: 50px; height: 50px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: all 0.3s ease; }
         .floor-switcher button:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); box-shadow: var(--shadow-medium); }
         .floor-switcher button.active { background: var(--accent-gradient); box-shadow: 0 5px 20px rgba(0, 242, 254, 0.3); border-color: rgba(255, 255, 255, 0.4); transform: scale(1.1); }
-        #coordinate-display { position: absolute; bottom: 20px; left: 20px; z-index: 1000; background: rgba(0, 0, 0, 0.7); color: white; padding: 15px; border-radius: 10px; font-family: 'Inter', monospace; font-size: 14px; line-height: 1.8; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow-medium); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        #coordinate-display.is-visible { opacity: 1; }
-        #coordinate-display code { background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius:3px; display: inline-block; margin-top: 3px; }
-        #coordinate-display strong { display: block; margin-bottom: 5px; }
         .special-panel { position: fixed; bottom: 0; left: 0; width: 100%; max-height: 70vh; background: rgba(0,0,0,0.2); backdrop-filter: blur(30px); border-top: 1px solid rgba(255,255,255,0.2); z-index: 1000; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; }
         .special-panel.is-open { transform: translateY(0); }
         .panel-header { padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.2); }
@@ -96,7 +92,7 @@
         .filter-group { display: flex; align-items: center; gap: 15px; }
         .filter-group:not(:last-child) { margin-bottom: 15px; }
         .filter-label { color: rgba(255,255,255,0.8); font-weight: 500; white-space: nowrap; }
-        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; } /* 中央揃えを追加 */
+        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
         .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 8px 18px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: all 0.2s ease-in-out; }
         .filter-btn:hover { background: rgba(255,255,255,0.2); color: white; }
         .filter-btn.active { background: var(--secondary-gradient); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-color: transparent; }
@@ -111,6 +107,7 @@
         .item-content .project-title { font-size: 1.3em; font-weight: 700; margin-top: 2px; }
         .item-actions { display: flex; gap: 10px; flex-shrink: 0; }
         .item-actions .list-button { display: inline-block; text-decoration: none; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; border: 1px solid transparent; }
+        /* ★★★ 修正点(1)：地図ボタンのアニメーションと無効化スタイルを追加 ★★★ */
         .item-actions .list-button:hover:not(:disabled) { transform: scale(1.05); }
         .item-actions .list-button:disabled { opacity: 0.5; cursor: not-allowed; }
         .item-actions .detail-btn { background: var(--secondary-gradient); }
@@ -135,41 +132,12 @@
                     <button data-floor="2">2F</button>
                     <button data-floor="1" class="active">1F</button>
                 </div>
-                <div id="coordinate-display"></div>
             </div>
-            
-            <!-- ★★★ 修正点(1)：新しいジャンルのHTMLボタン ★★★ -->
             <div class="filter-section fade-up" style="animation-delay: 0.3s;">
-                <div class="search-box-wrapper">
-                    <input type="search" id="search-input" class="search-input" placeholder="企画名で検索...">
-                </div>
-                <div class="filter-group">
-                    <strong class="filter-label">団体</strong>
-                    <div id="filter-by-grade" class="filter-buttons">
-                        <button class="filter-btn active" data-filter="すべて">すべて</button>
-                        <button class="filter-btn" data-filter="1年生">1年生</button>
-                        <button class="filter-btn" data-filter="2年生">2年生</button>
-                        <button class="filter-btn" data-filter="3年生">3年生</button>
-                        <button class="filter-btn" data-filter="部活動・同好会">部活動・同好会</button>
-                        <button class="filter-btn" data-filter="委員会">委員会</button>
-                        <button class="filter-btn" data-filter="その他">その他</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <strong class="filter-label">ジャンル</strong>
-                    <div id="filter-by-type" class="filter-buttons">
-                        <button class="filter-btn active" data-filter="すべて">すべて</button>
-                        <button class="filter-btn" data-filter="体験・ゲーム">体験・ゲーム</button>
-                        <button class="filter-btn" data-filter="お化け屋敷">お化け屋敷</button>
-                        <button class="filter-btn" data-filter="カフェ">カフェ</button>
-                        <button class="filter-btn" data-filter="展示">展示</button>
-                        <button class="filter-btn" data-filter="販売">販売</button>
-                        <button class="filter-btn" data-filter="ステージ">ステージ</button>
-                        <button class="filter-btn" data-filter="その他">その他</button>
-                    </div>
-                </div>
+                <div class="search-box-wrapper"> <input type="search" id="search-input" class="search-input" placeholder="企画名で検索..."> </div>
+                <div class="filter-group"> <strong class="filter-label">団体</strong> <div id="filter-by-grade" class="filter-buttons"> <button class="filter-btn active" data-filter="すべて">すべて</button> <button class="filter-btn" data-filter="1年生">1年生</button> <button class="filter-btn" data-filter="2年生">2年生</button> <button class="filter-btn" data-filter="3年生">3年生</button> <button class="filter-btn" data-filter="部活動・同好会">部活動・同好会</button> <button class="filter-btn" data-filter="委員会">委員会</button> <button class="filter-btn" data-filter="その他">その他</button> </div> </div>
+                <div class="filter-group"> <strong class="filter-label">ジャンル</strong> <div id="filter-by-type" class="filter-buttons"> <button class="filter-btn active" data-filter="すべて">すべて</button> <button class="filter-btn" data-filter="展示">展示</button> <button class="filter-btn" data-filter="カフェ">カフェ</button> <button class="filter-btn" data-filter="お化け屋敷">お化け屋敷</button> </div> </div>
             </div>
-
             <div id="project-list-container"></div>
             <div id="no-results-message" class="no-results"></div>
         </div>
@@ -193,7 +161,7 @@
             const fadeUpElements = document.querySelectorAll('.fade-up'); fadeUpElements.forEach((el, index) => { setTimeout(() => { el.classList.add('is-visible'); }, index * 150); });
 
             // =========================================================================
-            // ▼▼▼ Version 7.4：マップ ＆ リスト統合ロジック (最終ジャンル対応) ▼▼▼
+            // ▼▼▼ Version 7.2：マップ ＆ リスト統合ロジック (UX最終調整版) ▼▼▼
             // =========================================================================
 
             let map;
@@ -222,7 +190,6 @@
                     map.fitBounds(imageBounds);
                     setupFloorSwitcher();
                     updateMapForFloor(1);
-                    activateCoordinateFinder(map);
                     setupSpecialPanel();
                     markerClusterGroup.on('clusterclick', function (a) { a.layer.zoomToBounds({padding: [20, 20]}); });
                     markerClusterGroup.on('click', handleMarkerClick);
@@ -239,6 +206,7 @@
                 if (activeFilters.search) { filtered = filtered.filter(p => p.name.toLowerCase().includes(activeFilters.search)); }
                 renderList(filtered);
             }
+
             function renderList(projectsToRender) {
                 if (!listContainer || !noResultsMessage) return;
                 if (projectsToRender.length === 0) { listContainer.innerHTML = ''; noResultsMessage.innerText = '該当する企画はありませんでした。'; noResultsMessage.style.display = 'block'; return; }
@@ -265,30 +233,49 @@
                 });
                 listContainer.innerHTML = itemsHTML;
             }
+            
+            // ★★★ 修正点(2)：flyToMarker関数を修正 ★★★
             function flyToMarker(projectId) {
+                // まず、マップが表示されている位置までスクロール
                 document.getElementById('map-container').scrollIntoView({ behavior: 'smooth' });
+
                 const allProjects = [...projectData, ...stageData];
                 const targetProject = allProjects.find(p => p.id === projectId);
                 if (!targetProject) return;
+
                 let locationData = targetProject;
                 if (targetProject.locationId) {
                     const representative = allProjects.find(p => p.locationId === targetProject.locationId && p.mapX != null);
                     if (representative) { locationData = representative; }
                 }
+                
                 if (locationData.floor == null || locationData.mapX == null || locationData.mapY == null) {
                     alert('この企画の場所は現在マップに登録されていません。');
                     return;
                 }
-                const flyToTarget = () => { map.flyTo([locationData.mapY, locationData.mapX], 1, { animate: true, duration: 1.0 }); };
+                
+                // --- 視点移動のロジック ---
+                const flyToTarget = () => {
+                    map.flyTo([locationData.mapY, locationData.mapX], 1, { // ズームレベルを「1」に調整
+                        animate: true,
+                        duration: 1.0 
+                    });
+                };
+
+                // 現在表示中のフロアと目的のフロアが違う場合のみ、フロアを切り替える
                 const floorSwitcher = document.querySelector('.floor-switcher');
                 const currentFloor = parseInt(floorSwitcher.querySelector('.active').dataset.floor, 10);
                 if (currentFloor !== locationData.floor) {
+                    // フロア切り替えが完了してから視点移動を実行するための工夫
+                    // 'moveend' イベントはマップの移動が完了した時に発火する
                     map.once('moveend', flyToTarget);
                     updateMapForFloor(locationData.floor);
                 } else {
+                    // すでに同じフロアなら、すぐに視点移動
                     flyToTarget();
                 }
             }
+
             function setupEventListeners() {
                 searchInput.addEventListener('input', () => { activeFilters.search = searchInput.value.toLowerCase().trim(); applyAllFilters(); });
                 gradeFilterContainer.addEventListener('click', (e) => { if (!e.target.matches('.filter-btn')) return; gradeFilterContainer.querySelector('.active').classList.remove('active'); e.target.classList.add('active'); activeFilters.grade = e.target.dataset.filter; applyAllFilters(); });
@@ -300,6 +287,7 @@
                     }
                 });
             }
+
             function setupFloorSwitcher() { const buttons = document.querySelectorAll('.floor-switcher button'); buttons.forEach(button => { button.addEventListener('click', () => { const floor = parseInt(button.dataset.floor, 10); updateMapForFloor(floor); }); }); }
             function updateMapForFloor(floor) { document.querySelectorAll('.floor-switcher button').forEach(btn => { btn.classList.toggle('active', parseInt(btn.dataset.floor, 10) === floor); }); imageOverlay.setUrl(floorImageUrls[floor]); renderMarkers(floor); if (map && imageBounds) { map.fitBounds(imageBounds); } }
             function renderMarkers(floor) { markerClusterGroup.clearLayers(); const allProjects = [...projectData, ...stageData]; const locations = {}; allProjects.forEach(project => { const key = project.locationId || project.id; if (!locations[key]) { locations[key] = []; } locations[key].push(project); }); const markersToAdd = []; for (const locationKey in locations) { const group = locations[locationKey]; const representative = group.find(p => p.mapX != null) || group[0]; if (representative.floor !== floor) { continue; } if (representative.mapX == null || representative.mapY == null) continue; const isGroup = group.length > 1; const isPrimaryHub = representative.hubType === 'primary'; const isHub = representative.hubType != null; const markerName = isHub ? representative.name : (isGroup ? `${group.length}件の企画` : representative.name.split('「')[0]); const markerSubText = (representative.tags && representative.tags.length > 1) ? representative.tags[1] : (representative.place || ''); const markerClass = `project-marker ${isGroup ? 'is-group' : ''} ${isHub ? 'is-hub' : ''}`; const markerHtml = `<div class="${markerClass}"><div class="marker-name">${markerName}</div><div class="marker-id">${markerSubText}</div></div>`; const customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [null, null] }); const marker = L.marker([representative.mapY, representative.mapX], { icon: customIcon }); marker.options.customData = { group: group, representative: representative }; markersToAdd.push(marker); } markerClusterGroup.addLayers(markersToAdd); }
@@ -308,7 +296,6 @@
             function setupSpecialPanel() { const panel = document.getElementById('special-panel'); const tabs = panel.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => { tab.addEventListener('click', (e) => { const day = e.target.dataset.day; const currentHubId = panel.dataset.hubId; const hubEvents = [...stageData].filter(p => p.locationId === currentHubId); updatePanelContent(day, hubEvents); }); }); }
             function openSpecialPanel(group, representative) { const panel = document.getElementById('special-panel'); panel.dataset.hubId = representative.locationId; document.getElementById('panel-title').textContent = representative.name; const hubEvents = group.filter(p => p.tags); updatePanelContent('DAY1', hubEvents); body.classList.add('panel-open'); panel.classList.add('is-open'); }
             function updatePanelContent(day, allEvents) { const contentArea = document.getElementById('panel-content'); const tabs = document.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day)); const displayGroup = allEvents.filter(p => !p.id.startsWith('place-')); const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a, b) => (a.time || "").localeCompare(b.time || "")); let contentHtml = ''; if (eventsForDay.length > 0) { eventsForDay.forEach((event, index) => { contentHtml += `<div class="timetable-item" style="animation-delay: ${index * 0.05}s"><div class="time">${event.time || '時間未定'}</div><div class="details"><h3>${event.name}</h3><p>${event.description || ''}</p><a href="project-detail.htm?id=${event.id}">詳細を見る →</a></div></div>`; }); } else { contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`; } contentArea.innerHTML = contentHtml; }
-            
 
             // --- 実行フェーズ ---
             initializeMap();
@@ -318,4 +305,3 @@
     </script>
 </body>
 </html>
-
