@@ -2,7 +2,7 @@
 // ★★★ 2025年度南陵祭 公式企画データ ★★★
 // =======================================================
 
-// 企画の名簿データ
+// 企画の名簿データ (変更なし)
 const projectData = [
     // --- 4階 ---
     {
@@ -275,7 +275,7 @@ const projectData = [
     
     // --- 2階 ---
     {
-        id: 'game-club',
+        id: 'game-club-room', // ★IDをステージ発表と区別するために変更
         name: 'ゲーム同好会「南陵スマブラ王決定戦」',
         catchphrase: '',
         place: '2階',
@@ -529,251 +529,293 @@ const projectData = [
 ];
 
 
-// ステージ発表のデータ
-// (内容は変更せず、floor, mapX, mapY を追加)
+// =======================================================
+// ★★★ ステージ発表のデータ (シンプル版・完成形) ★★★
+// =======================================================
 const stageData = [
     // --- DAY 1 ---
     {
         id: 'day1-keion-1',
-        name: '軽音楽部',
+        groupId: 'keion',
+        groupName: '軽音楽部',
+        name: 'ライブ',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '10:30 - 11:20',
-        tags: ['DAY1', 'ステージ'],
-        description: '軽音楽部によるライブパフォーマンスです。熱い演奏をお楽しみください！',
-        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live'
+        tags: ['DAY1', 'ステージ', '音楽', '部活動'],
+        groupDescription: '私たち軽音楽部は、最高の音楽で文化祭を盛り上げます！体育館ステージと視聴覚室の両方でライブを行うので、ぜひ見に来てください！',
+        image: 'images/group-keion.jpg'
     },
     {
         id: 'day1-shafuku',
-        name: '社会福祉部',
+        groupId: 'shafuku',
+        groupName: '社会福祉部',
+        name: '発表',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '11:45 - 12:05',
-        tags: ['DAY1', 'ステージ'],
-        description: '社会福祉部による活動報告・発表です。',
-        image: 'https://via.placeholder.com/800x400.png?text=Presentation'
+        tags: ['DAY1', 'ステージ', '発表', '部活動'],
+        groupDescription: '社会福祉部の活動について発表します。私たちの取り組みをぜひご覧ください。',
+        image: 'images/group-shafuku.jpg'
     },
     {
         id: 'day1-keion-2',
-        name: '軽音楽部',
+        groupId: 'keion',
+        groupName: '軽音楽部',
+        name: 'ライブ',
         place: '3階視聴覚室',
-    locationId: 'av-room',
+        locationId: 'av-room',
         time: '12:00 - 15:00',
-        tags: ['DAY1', 'ステージ'],
-        description: '視聴覚室から、軽音楽部がノンストップライブをお届けします！',
-        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+2'
+        tags: ['DAY1', 'ステージ', '音楽', '部活動'],
+        groupDescription: '私たち軽音楽部は、最高の音楽で文化祭を盛り上げます！体育館ステージと視聴覚室の両方でライブを行うので、ぜひ見に来てください！',
+        image: 'images/group-keion.jpg'
     },
     {
         id: 'day1-danbasu',
-        name: '男子バスケ部',
+        groupId: 'danbasu',
+        groupName: '男子バスケ部',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '12:20 - 12:45',
-        tags: ['DAY1', 'ステージ'],
-        description: '男子バスケ部によるスペシャルパフォーマンス！',
-        image: 'https://via.placeholder.com/800x400.png?text=Basketball'
+        tags: ['DAY1', 'ステージ', 'パフォーマンス', '部活動'],
+        groupDescription: '男子バスケットボール部が、コートを離れてステージでスペシャルパフォーマンスを披露します！お楽しみに！',
+        image: 'images/group-danbasu.jpg'
     },
     {
         id: 'day1-gunma',
-        name: 'ぐんまさ',
+        groupId: 'gunma',
+        groupName: 'ぐんまさ',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '13:10 - 13:20',
-        tags: ['DAY1', 'ステージ'],
-        description: '有志団体「ぐんまさ」によるパフォーマンスです。',
-        image: 'https://via.placeholder.com/800x400.png?text=Performance'
+        tags: ['DAY1', 'ステージ', 'パフォーマンス', '有志'],
+        groupDescription: '有志団体「ぐんまさ」によるスペシャルパフォーマンスです！',
+        image: 'images/group-yushi.jpg'
     },
     {
         id: 'day1-aomito-1',
-        name: 'あおみと',
+        groupId: 'aomito',
+        groupName: 'あおみと',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '13:30 - 13:40',
-        tags: ['DAY1', 'ステージ'],
-        description: '有志団体「あおみと」によるパフォーマンスです。',
-        image: 'https://via.placeholder.com/800x400.png?text=Performance+2'
+        tags: ['DAY1', 'ステージ', 'パフォーマンス', '有志'],
+        groupDescription: '有志団体「あおみと」によるスペシャルパフォーマンスです！',
+        image: 'images/group-yushi.jpg'
     },
     {
         id: 'day1-suibu',
-        name: '吹奏楽部',
+        groupId: 'suibu',
+        groupName: '吹奏楽部',
+        name: 'コンサート',
         place: '4階 音楽室',
-locationId: 'music-room',
+        locationId: 'music-room',
         time: '13:30 - 14:15',
-        tags: ['DAY1','ステージ'],
-        description: '吹奏楽部によるミニコンサートです。美しいハーモニーをお楽しみください。',
-        image: 'https://via.placeholder.com/800x400.png?text=Brass+Band'
+        tags: ['DAY1','ステージ', '音楽', '部活動'],
+        groupDescription: '吹奏楽部によるミニコンサートです。両日とも音楽室で開催します。美しいハーモニーをお楽しみください。',
+        image: 'images/group-suibu.jpg'
     },
     {
         id: 'day1-modern-dance',
-        name: 'モダンダンス部',
+        groupId: 'moderndance',
+        groupName: 'モダンダンス部',
+        name: 'ダンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '14:10 - 15:00',
-        tags: ['DAY1', 'ステージ'],
-        description: 'モダンダンス部による情熱的なパフォーマンスにご期待ください。',
-        image: 'https://via.placeholder.com/800x400.png?text=Modern+Dance'
+        tags: ['DAY1', 'ステージ', 'ダンス', '部活動'],
+        groupDescription: 'モダンダンス部による情熱的なパフォーマンスにご期待ください。両日とも体育館で発表します！',
+        image: 'images/group-moderndance.jpg'
     },
     
     // --- DAY 2 ---
     {
         id: 'day2-soukyoku',
-        name: '箏曲部',
+        groupId: 'soukyoku',
+        groupName: '箏曲部',
+        name: '演奏会',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '10:30 - 11:00',
-        tags: ['DAY2', 'ステージ'],
-        description: '箏曲部による、和の美しい音色をお楽しみください。',
-        image: 'https://via.placeholder.com/800x400.png?text=Koto+Music'
+        tags: ['DAY2', 'ステージ', '音楽', '部活動'],
+        groupDescription: '箏曲部による、和の美しい音色をお楽しみください。',
+        image: 'images/group-soukyoku.jpg'
     },
     {
         id: 'day2-keion-3',
-        name: '軽音楽部',
+        groupId: 'keion',
+        groupName: '軽音楽部',
+        name: 'ライブ',
         place: '3階視聴覚室',
-    locationId: 'av-room',
+        locationId: 'av-room',
         time: '10:00 - 13:00',
-        tags: ['DAY2', 'ステージ'],
-        description: 'DAY2も視聴覚室からノンストップライブ！',
-        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+3'
+        tags: ['DAY2', 'ステージ', '音楽', '部活動'],
+        groupDescription: '私たち軽音楽部は、最高の音楽で文化祭を盛り上げます！体育館ステージと視聴覚室の両方でライブを行うので、ぜひ見に来てください！',
+        image: 'images/group-keion.jpg'
     },
     {
         id: 'day2-danbasu',
-        name: '男子バスケ部',
+        groupId: 'danbasu',
+        groupName: '男子バスケ部',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '11:00 - 11:25',
-        tags: ['DAY2', 'ステージ'],
-        description: '男子バスケ部、DAY2のスペシャルパフォーマンス！',
-        image: 'https://via.placeholder.com/800x400.png?text=Basketball+2'
+        tags: ['DAY2', 'ステージ', 'パフォーマンス', '部活動'],
+        groupDescription: '男子バスケットボール部が、コートを離れてステージでスペシャルパフォーマンスを披露します！お楽しみに！',
+        image: 'images/group-danbasu.jpg'
     },
     {
         id: 'day2-game',
-        name: 'ゲーム同好会',
+        groupId: 'game',
+        groupName: 'ゲーム同好会',
+        name: 'ステージ',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '11:25 - 11:40',
-        tags: ['DAY2', 'ステージ'],
-        description: 'ゲーム同好会による活動紹介＆デモンストレーション！',
-        image: 'https://via.placeholder.com/800x400.png?text=Game+Club'
+        tags: ['DAY2', 'ステージ', '発表', '部活動'],
+        groupDescription: 'ゲーム同好会です！2階でのスマブラ大会に加えて、体育館ステージでも活動紹介を行います！',
+        image: 'images/group-game.jpg'
     },
     {
         id: 'day2-shafuku',
-        name: '社会福祉部',
+        groupId: 'shafuku',
+        groupName: '社会福祉部',
+        name: '発表',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '11:40 - 12:00',
-        tags: ['DAY2', 'ステージ'],
-        description: '社会福祉部、DAY2の発表です。',
-        image: 'https://via.placeholder.com/800x400.png?text=Presentation+2'
+        tags: ['DAY2', 'ステージ', '発表', '部活動'],
+        groupDescription: '社会福祉部の活動について発表します。私たちの取り組みをぜひご覧ください。',
+        image: 'images/group-shafuku.jpg'
     },
     {
         id: 'day2-gunma',
-        name: 'ぐんまさ',
+        groupId: 'gunma',
+        groupName: 'ぐんまさ',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '12:00 - 12:10',
-        tags: ['DAY2', 'ステージ'],
-        description: '有志団体「ぐんまさ」DAY2のステージ！',
-        image: 'https://via.placeholder.com/800x400.png?text=Performance+3'
+        tags: ['DAY2', 'ステージ', 'パフォーマンス', '有志'],
+        groupDescription: '有志団体「ぐんまさ」によるスペシャルパフォーマンスです！',
+        image: 'images/group-yushi.jpg'
     },
     {
         id: 'day2-aomito-2',
-        name: 'あおみと',
+        groupId: 'aomito',
+        groupName: 'あおみと',
+        name: 'パフォーマンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '12:10 - 12:20',
-        tags: ['DAY2', 'ステージ'],
-        description: '有志団体「あおみと」DAY2のステージ！',
-        image: 'https://via.placeholder.com/800x400.png?text=Performance+4'
+        tags: ['DAY2', 'ステージ', 'パフォーマンス', '有志'],
+        groupDescription: '有志団体「あおみと」によるスペシャルパフォーマンスです！',
+        image: 'images/group-yushi.jpg'
     },
     {
         id: 'day2-dancingjk',
-        name: 'ダンシングJK',
+        groupId: 'dancingjk',
+        groupName: 'ダンシングJK',
+        name: 'ダンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '12:20 - 13:00',
-        tags: ['DAY2', 'ステージ'],
-        description: '有志団体「ダンシングJK」による、パワフルなダンスステージ！',
-        image: 'https://via.placeholder.com/800x400.png?text=Dancing'
+        tags: ['DAY2', 'ステージ', 'ダンス', '有志'],
+        groupDescription: '有志団体「ダンシングJK」による、パワフルなダンスステージ！',
+        image: 'images/group-yushi.jpg'
     },
     {
         id: 'day2-chorus',
-        name: 'コーラス部',
+        groupId: 'chorus',
+        groupName: 'コーラス部',
+        name: 'コンサート',
         place: '4階 音楽室',
-locationId: 'music-room',
+        locationId: 'music-room',
         time: '12:30 - 13:30',
-        tags: ['DAY2', 'ステージ'],
-        description: 'コーラス部による美しい歌声が音楽室に響き渡ります。',
-        image: 'https://via.placeholder.com/800x400.png?text=Chorus'
+        tags: ['DAY2', 'ステージ', '音楽', '部活動'],
+        groupDescription: 'コーラス部による美しい歌声が音楽室に響き渡ります。ぜひ聴きに来てください。',
+        image: 'images/group-chorus.jpg'
     },
     {
         id: 'day2-modern-dance',
-        name: 'モダンダンス部',
+        groupId: 'moderndance',
+        groupName: 'モダンダンス部',
+        name: 'ダンス',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '13:00 - 13:50',
-        tags: ['DAY2', 'ステージ'],
-        description: 'モダンダンス部、DAY2のパフォーマンスです。',
-        image: 'https://via.placeholder.com/800x400.png?text=Modern+Dance+2'
+        tags: ['DAY2', 'ステージ', 'ダンス', '部活動'],
+        groupDescription: 'モダンダンス部による情熱的なパフォーマンスにご期待ください。両日とも体育館で発表します！',
+        image: 'images/group-moderndance.jpg'
     },
     {
         id: 'day2-suibu',
-        name: '吹奏楽部',
+        groupId: 'suibu',
+        groupName: '吹奏楽部',
+        name: 'コンサート',
         place: '4階 音楽室',
-locationId: 'music-room',
+        locationId: 'music-room',
         time: '13:30 - 14:15',
-        tags: ['DAY2', 'ステージ'],
-        description: '吹奏楽部、音楽室からのミニコンサートDAY2！',
-        image: 'https://via.placeholder.com/800x400.png?text=Brass+Band+2'
+        tags: ['DAY2', 'ステージ', '音楽', '部活動'],
+        groupDescription: '吹奏楽部によるミニコンサートです。両日とも音楽室で開催します。美しいハーモニーをお楽しみください。',
+        image: 'images/group-suibu.jpg'
     },
     {
         id: 'day2-keion-4',
-        name: '軽音楽部',
+        groupId: 'keion',
+        groupName: '軽音楽部',
+        name: 'ライブ',
         place: '体育館',
-    locationId: 'gymnasium',
+        locationId: 'gymnasium',
         time: '14:10 - 15:00',
-        tags: ['DAY2', 'ステージ'],
-        description: '文化祭のフィナーレを飾る、軽音楽部の熱いライブ！',
-        image: 'https://via.placeholder.com/800x400.png?text=Rock+Live+Final'
+        tags: ['DAY2', 'ステージ', '音楽', '部活動'],
+        groupDescription: '私たち軽音楽部は、最高の音楽で文化祭を盛り上げます！体育館ステージと視聴覚室の両方でライブを行うので、ぜひ見に来てください！',
+        image: 'images/group-keion.jpg'
     },
-{
-    id: 'place-gym',
-    name: '体育館ステージ',
-    place: '体育館',
-    locationId: 'gymnasium', 
-    hubType: 'primary',
-    floor: 1, 
-    mapX: 1014,
-    mapY: 1327,  
-    catchphrase: '文化祭のメインステージ！',
-    description: '熱いパフォーマンスが繰り広げられるメインステージです。タイムテーブルをチェック！',
-    tags: ['ステージ', 'ステージ'],
-    image: 'images/gym-stage.jpg' 
-},
-{
-    id: 'place-av-room', // 場所専用のユニークなID
-    name: '視聴覚室ライブ',
-    place: '3階 視聴覚室',
-    locationId: 'av-room', // ← 他の視聴覚室企画と全く同じ合言葉
-    floor: 3,  // 視聴覚室の階数
-    mapX: 1300, // 視聴覚室の座標
-    mapY: 570,  // 視聴覚室の座標
-    hubType: 'secondary',
-    catchphrase: 'ライブハウスはこちら！',
-    description: '熱いライブが繰り広げられるサブステージです。タイムテーブルをチェック！',
-    tags: ['ステージ',],
-    image: 'images/av-room.jpg' // 視聴覚室の写真など
-},
-{
-    id: 'place-music-room', // 場所専用のユニークなID
-    name: '音楽室コンサート',
-    place: '4階 音楽室',
-    locationId: 'music-room', // ← 他の音楽室企画と全く同じ合言葉
-    floor: 4,  // 音楽室の階数
-    mapX: 1752, // 音楽室の座標 (あなたの実測値に書き換える)
-    mapY: 1300,  // 音楽室の座標 (あなたの実測値に書き換える)
-    hubType: 'secondary',
-    catchphrase: '美しい音色が響き渡る。',
-    tags: ['ステージ'],
-    image: 'images/music-room.jpg'
-},
+    // --- 以下は場所の情報なので、変更なし ---
+    {
+        id: 'place-gym',
+        name: '体育館ステージ',
+        place: '体育館',
+        locationId: 'gymnasium', 
+        hubType: 'primary',
+        floor: 1, 
+        mapX: 1014,
+        mapY: 1327,  
+        catchphrase: '文化祭のメインステージ！',
+        description: '熱いパフォーマンスが繰り広げられるメインステージです。タイムテーブルをチェック！',
+        tags: ['ステージ', 'ステージ'],
+        image: 'images/gym-stage.jpg' 
+    },
+    {
+        id: 'place-av-room',
+        name: '視聴覚室ライブ',
+        place: '3階 視聴覚室',
+        locationId: 'av-room',
+        floor: 3,
+        mapX: 1300,
+        mapY: 570,  
+        hubType: 'secondary',
+        catchphrase: 'ライブハウスはこちら！',
+        description: '熱いライブが繰り広げられるサブステージです。タイムテーブルをチェック！',
+        tags: ['ステージ'],
+        image: 'images/av-room.jpg'
+    },
+    {
+        id: 'place-music-room',
+        name: '音楽室コンサート',
+        place: '4階 音楽室',
+        locationId: 'music-room',
+        floor: 4,
+        mapX: 1752,
+        mapY: 1300,
+        hubType: 'secondary',
+        catchphrase: '美しい音色が響き渡る。',
+        tags: ['ステージ'],
+        image: 'images/music-room.jpg'
+    }
 ];
