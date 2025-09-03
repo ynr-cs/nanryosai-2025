@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <style>
-        /* (基本CSSは変更ありません) */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
         :root { --header-height: 80px; --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --sidenav-width: 320px; --shadow-medium: 0 15px 50px rgba(0, 0, 0, 0.15); --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.2); }
-        html { scroll-behavior: smooth; } /* ★★★ ページ内スクロールを滑らかに ★★★ */
+        html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-gradient); min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-height); overflow-x: hidden; position: relative; color: white; }
         body.sidenav-open, body.panel-open { overflow: hidden; }
@@ -107,7 +106,6 @@
         .item-content .project-title { font-size: 1.3em; font-weight: 700; margin-top: 2px; }
         .item-actions { display: flex; gap: 10px; flex-shrink: 0; }
         .item-actions .list-button { display: inline-block; text-decoration: none; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.9em; font-weight: 600; transition: all 0.3s ease; border: 1px solid transparent; }
-        /* ★★★ 修正点(1)：地図ボタンのアニメーションと無効化スタイルを追加 ★★★ */
         .item-actions .list-button:hover:not(:disabled) { transform: scale(1.05); }
         .item-actions .list-button:disabled { opacity: 0.5; cursor: not-allowed; }
         .item-actions .detail-btn { background: var(--secondary-gradient); }
@@ -156,13 +154,8 @@
     <script src="data.js"></script> 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // (ナビゲーションロジックは変更なし)
             const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function closeAllOverlays() { body.classList.remove('sidenav-open'); body.classList.remove('panel-open'); document.getElementById('special-panel').classList.remove('is-open'); } function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', closeAllOverlays); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }, false); }
             const fadeUpElements = document.querySelectorAll('.fade-up'); fadeUpElements.forEach((el, index) => { setTimeout(() => { el.classList.add('is-visible'); }, index * 150); });
-
-            // =========================================================================
-            // ▼▼▼ Version 7.2：マップ ＆ リスト統合ロジック (UX最終調整版) ▼▼▼
-            // =========================================================================
 
             let map;
             let imageOverlay;
@@ -203,7 +196,7 @@
                 let filtered = allProjectAndStage.filter(p => !p.id.startsWith('place-'));
                 if (activeFilters.grade !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.grade)); }
                 if (activeFilters.type !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.type)); }
-                if (activeFilters.search) { filtered = filtered.filter(p => p.name.toLowerCase().includes(activeFilters.search)); }
+                if (activeFilters.search) { filtered = filtered.filter(p => p.name.toLowerCase().includes(activeFilters.search.toLowerCase()) || (p.groupName && p.groupName.toLowerCase().includes(activeFilters.search.toLowerCase()))); }
                 renderList(filtered);
             }
 
@@ -214,9 +207,8 @@
                 listContainer.innerHTML = '';
                 let itemsHTML = '';
                 projectsToRender.forEach(project => {
-                    const match = project.name.match(/^(.+?組|.+?部|.+?科|.+?委員)/);
-                    let groupName = '', projectName = project.name;
-                    if (match) { groupName = match[1]; projectName = project.name.replace(groupName, '').trim().replace(/「|」/g, ''); }
+                    const groupName = project.groupName || project.name.match(/^(.+?組|.+?部|.+?科|.+?委員)/)?.[1] || '';
+                    const projectName = project.groupName ? project.name : project.name.replace(groupName, '').trim().replace(/「|」/g, '');
                     const hasLocation = project.mapX != null || project.locationId;
                     const mapButtonData = hasLocation ? `data-project-id="${project.id}"` : '';
                     itemsHTML += `
@@ -234,70 +226,132 @@
                 listContainer.innerHTML = itemsHTML;
             }
             
-            // ★★★ 修正点(2)：flyToMarker関数を修正 ★★★
             function flyToMarker(projectId) {
-                // まず、マップが表示されている位置までスクロール
                 document.getElementById('map-container').scrollIntoView({ behavior: 'smooth' });
-
                 const allProjects = [...projectData, ...stageData];
                 const targetProject = allProjects.find(p => p.id === projectId);
                 if (!targetProject) return;
-
                 let locationData = targetProject;
-                if (targetProject.locationId) {
-                    const representative = allProjects.find(p => p.locationId === targetProject.locationId && p.mapX != null);
-                    if (representative) { locationData = representative; }
-                }
-                
-                if (locationData.floor == null || locationData.mapX == null || locationData.mapY == null) {
-                    alert('この企画の場所は現在マップに登録されていません。');
-                    return;
-                }
-                
-                // --- 視点移動のロジック ---
-                const flyToTarget = () => {
-                    map.flyTo([locationData.mapY, locationData.mapX], 1, { // ズームレベルを「1」に調整
-                        animate: true,
-                        duration: 1.0 
-                    });
-                };
-
-                // 現在表示中のフロアと目的のフロアが違う場合のみ、フロアを切り替える
+                if (targetProject.locationId) { const representative = allProjects.find(p => p.locationId === targetProject.locationId && p.mapX != null); if (representative) { locationData = representative; } }
+                if (locationData.floor == null || locationData.mapX == null || locationData.mapY == null) { alert('この企画の場所は現在マップに登録されていません。'); return; }
+                const flyToTarget = () => { map.flyTo([locationData.mapY, locationData.mapX], 1, { animate: true, duration: 1.0 }); };
                 const floorSwitcher = document.querySelector('.floor-switcher');
                 const currentFloor = parseInt(floorSwitcher.querySelector('.active').dataset.floor, 10);
-                if (currentFloor !== locationData.floor) {
-                    // フロア切り替えが完了してから視点移動を実行するための工夫
-                    // 'moveend' イベントはマップの移動が完了した時に発火する
-                    map.once('moveend', flyToTarget);
-                    updateMapForFloor(locationData.floor);
-                } else {
-                    // すでに同じフロアなら、すぐに視点移動
-                    flyToTarget();
-                }
+                if (currentFloor !== locationData.floor) { map.once('moveend', flyToTarget); updateMapForFloor(locationData.floor); } 
+                else { flyToTarget(); }
             }
 
             function setupEventListeners() {
-                searchInput.addEventListener('input', () => { activeFilters.search = searchInput.value.toLowerCase().trim(); applyAllFilters(); });
+                searchInput.addEventListener('input', () => { activeFilters.search = searchInput.value; applyAllFilters(); });
                 gradeFilterContainer.addEventListener('click', (e) => { if (!e.target.matches('.filter-btn')) return; gradeFilterContainer.querySelector('.active').classList.remove('active'); e.target.classList.add('active'); activeFilters.grade = e.target.dataset.filter; applyAllFilters(); });
                 typeFilterContainer.addEventListener('click', (e) => { if (!e.target.matches('.filter-btn')) return; typeFilterContainer.querySelector('.active').classList.remove('active'); e.target.classList.add('active'); activeFilters.type = e.target.dataset.filter; applyAllFilters(); });
-                listContainer.addEventListener('click', (e) => {
-                    const mapButton = e.target.closest('.map-btn');
-                    if (mapButton && mapButton.dataset.projectId) {
-                        flyToMarker(mapButton.dataset.projectId);
-                    }
-                });
+                listContainer.addEventListener('click', (e) => { const mapButton = e.target.closest('.map-btn'); if (mapButton && mapButton.dataset.projectId) { flyToMarker(mapButton.dataset.projectId); } });
             }
 
             function setupFloorSwitcher() { const buttons = document.querySelectorAll('.floor-switcher button'); buttons.forEach(button => { button.addEventListener('click', () => { const floor = parseInt(button.dataset.floor, 10); updateMapForFloor(floor); }); }); }
             function updateMapForFloor(floor) { document.querySelectorAll('.floor-switcher button').forEach(btn => { btn.classList.toggle('active', parseInt(btn.dataset.floor, 10) === floor); }); imageOverlay.setUrl(floorImageUrls[floor]); renderMarkers(floor); if (map && imageBounds) { map.fitBounds(imageBounds); } }
-            function renderMarkers(floor) { markerClusterGroup.clearLayers(); const allProjects = [...projectData, ...stageData]; const locations = {}; allProjects.forEach(project => { const key = project.locationId || project.id; if (!locations[key]) { locations[key] = []; } locations[key].push(project); }); const markersToAdd = []; for (const locationKey in locations) { const group = locations[locationKey]; const representative = group.find(p => p.mapX != null) || group[0]; if (representative.floor !== floor) { continue; } if (representative.mapX == null || representative.mapY == null) continue; const isGroup = group.length > 1; const isPrimaryHub = representative.hubType === 'primary'; const isHub = representative.hubType != null; const markerName = isHub ? representative.name : (isGroup ? `${group.length}件の企画` : representative.name.split('「')[0]); const markerSubText = (representative.tags && representative.tags.length > 1) ? representative.tags[1] : (representative.place || ''); const markerClass = `project-marker ${isGroup ? 'is-group' : ''} ${isHub ? 'is-hub' : ''}`; const markerHtml = `<div class="${markerClass}"><div class="marker-name">${markerName}</div><div class="marker-id">${markerSubText}</div></div>`; const customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [null, null] }); const marker = L.marker([representative.mapY, representative.mapX], { icon: customIcon }); marker.options.customData = { group: group, representative: representative }; markersToAdd.push(marker); } markerClusterGroup.addLayers(markersToAdd); }
-            function handleMarkerClick(e) { const marker = e.layer; const { group, representative } = marker.options.customData; const isPrimaryHub = representative.hubType === 'primary'; if (isPrimaryHub) { openSpecialPanel(group, representative); } else { marker.bindPopup(() => createStandardPopup(group, representative), { minWidth: 310 }).openPopup(); } }
-            function createStandardPopup(group, representative) { const container = L.DomUtil.create('div', 'popup-content list-popup-content'); const project = group[0]; const isGroup = group.length > 1; const isSecondaryHub = representative.hubType === 'secondary'; const title = (isGroup || isSecondaryHub) ? (representative.place || project.name) : project.name; let html = `<h3>${title}</h3>`; const displayGroup = group.filter(p => !p.id.startsWith('place-')); if (isSecondaryHub) { const tabsHtml = `<div class="popup-tabs"><button data-day="DAY1" class="active">DAY 1</button><button data-day="DAY2">DAY 2</button></div>`; const listContainerHtml = `<ul class="list-container"></ul>`; container.innerHTML = html + tabsHtml + listContainerHtml; const listContainer = container.querySelector('.list-container'); const updateList = (day) => { const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99")); let listHtml = ''; if(eventsForDay.length > 0) { listHtml = eventsForDay.map(event => `<li><a href="project-detail.htm?id=${event.id}"><span class="time">${event.time || ''}</span><span class="name">${event.name}</span></a></li>`).join(''); } else { listHtml = `<p style="font-size:0.9em; opacity:0.8; padding-left: 5px;">この日の発表はありません。</p>`; } listContainer.innerHTML = listHtml; }; L.DomEvent.on(container, 'click', (e) => { if (e.target.tagName === 'BUTTON') { const day = e.target.dataset.day; container.querySelector('.popup-tabs .active').classList.remove('active'); e.target.classList.add('active'); updateList(day); } }); updateList('DAY1'); } else if (isGroup) { const listItems = displayGroup.map(p => `<li><a href="project-detail.htm?id=${p.id}"><span class="name">${p.name}</span></a></li>`).join(''); html += `<ul>${listItems}</ul>`; container.innerHTML = html; } else { const descriptionText = project.catchphrase || project.description || (project.tags && project.tags.length > 1 ? project.tags[1] : ''); html += `<p>${descriptionText}</p> <a href="project-detail.htm?id=${project.id}" class="detail-button">詳細を見る</a>`; container.innerHTML = html; } return container; }
+            
+            function renderMarkers(floor) {
+                markerClusterGroup.clearLayers();
+                const allProjects = [...projectData, ...stageData];
+                const locations = {};
+                allProjects.forEach(project => { const key = project.locationId || project.id; if (!locations[key]) { locations[key] = []; } locations[key].push(project); });
+                const markersToAdd = [];
+                for (const locationKey in locations) {
+                    const group = locations[locationKey];
+                    const representative = group.find(p => p.mapX != null) || group[0];
+                    if (representative.floor !== floor) continue;
+                    if (representative.mapX == null || representative.mapY == null) continue;
+                    const isGroup = group.length > 1;
+                    const isPrimaryHub = representative.hubType === 'primary';
+                    const isHub = representative.hubType != null;
+                    let markerName = '';
+                    if (isHub) { markerName = representative.name; } 
+                    else if (isGroup) { markerName = `${group.length}件の企画`; } 
+                    else { const proj = group[0]; markerName = proj.groupName || proj.name.split('「')[0]; }
+                    const markerSubText = (representative.tags && representative.tags.length > 1) ? representative.tags[1] : (representative.place || '');
+                    const markerClass = `project-marker ${isGroup ? 'is-group' : ''} ${isHub ? 'is-hub' : ''}`;
+                    const markerHtml = `<div class="${markerClass}"><div class="marker-name">${markerName}</div><div class="marker-id">${markerSubText}</div></div>`;
+                    const customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [null, null] });
+                    const marker = L.marker([representative.mapY, representative.mapX], { icon: customIcon });
+                    marker.options.customData = { group: group, representative: representative };
+                    markersToAdd.push(marker);
+                }
+                markerClusterGroup.addLayers(markersToAdd);
+            }
+
+            function handleMarkerClick(e) {
+                const marker = e.layer;
+                const { group, representative } = marker.options.customData;
+                const isPrimaryHub = representative.hubType === 'primary';
+                if (isPrimaryHub) { openSpecialPanel(group, representative); } 
+                else { const popup = L.popup({ minWidth: 310 }).setContent(createStandardPopup(group, representative)); marker.bindPopup(popup).openPopup(); }
+            }
+            
+            function createStandardPopup(group, representative) {
+                const container = L.DomUtil.create('div', 'popup-content list-popup-content');
+                const isGroup = group.length > 1;
+                const isSecondaryHub = representative.hubType === 'secondary';
+                const title = (isGroup || isSecondaryHub) ? (representative.place || representative.name) : group[0].name;
+                let html = `<h3>${title}</h3>`;
+                const displayGroup = group.filter(p => !p.id.startsWith('place-'));
+                if (isSecondaryHub) {
+                    const tabsHtml = `<div class="popup-tabs"><button data-day="DAY1" class="active">DAY 1</button><button data-day="DAY2">DAY 2</button></div>`;
+                    const listContainerHtml = `<ul class="list-container"></ul>`;
+                    container.innerHTML = html + tabsHtml + listContainerHtml;
+                    const listContainer = container.querySelector('.list-container');
+                    const updateList = (day) => {
+                        const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
+                        let listHtml = '';
+                        if(eventsForDay.length > 0) {
+                            listHtml = eventsForDay.map(event => `<li><a href="project-detail.htm?id=${event.id}"><span class="time">${event.time || ''}</span><span class="name">${event.groupName}「${event.name}」</span></a></li>`).join('');
+                        } else {
+                            listHtml = `<p style="font-size:0.9em; opacity:0.8; padding-left: 5px;">この日の発表はありません。</p>`;
+                        }
+                        listContainer.innerHTML = listHtml;
+                    };
+                    L.DomEvent.on(container, 'click', (e) => {
+                        if (e.target.tagName === 'BUTTON') { const day = e.target.dataset.day; container.querySelector('.popup-tabs .active').classList.remove('active'); e.target.classList.add('active'); updateList(day); }
+                    });
+                    updateList('DAY1');
+                } else if (isGroup) {
+                    const listItems = displayGroup.map(p => `<li><a href="project-detail.htm?id=${p.id}"><span class="name">${p.name}</span></a></li>`).join('');
+                    html += `<ul>${listItems}</ul>`;
+                    container.innerHTML = html;
+                } else {
+                    const project = group[0];
+                    const descriptionText = project.catchphrase || '';
+                    html += `<p>${descriptionText}</p> <a href="project-detail.htm?id=${project.id}" class="detail-button">詳細を見る</a>`;
+                    container.innerHTML = html;
+                }
+                return container;
+            }
+
             function setupSpecialPanel() { const panel = document.getElementById('special-panel'); const tabs = panel.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => { tab.addEventListener('click', (e) => { const day = e.target.dataset.day; const currentHubId = panel.dataset.hubId; const hubEvents = [...stageData].filter(p => p.locationId === currentHubId); updatePanelContent(day, hubEvents); }); }); }
             function openSpecialPanel(group, representative) { const panel = document.getElementById('special-panel'); panel.dataset.hubId = representative.locationId; document.getElementById('panel-title').textContent = representative.name; const hubEvents = group.filter(p => p.tags); updatePanelContent('DAY1', hubEvents); body.classList.add('panel-open'); panel.classList.add('is-open'); }
-            function updatePanelContent(day, allEvents) { const contentArea = document.getElementById('panel-content'); const tabs = document.querySelectorAll('.panel-tabs button'); tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day)); const displayGroup = allEvents.filter(p => !p.id.startsWith('place-')); const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a, b) => (a.time || "").localeCompare(b.time || "")); let contentHtml = ''; if (eventsForDay.length > 0) { eventsForDay.forEach((event, index) => { contentHtml += `<div class="timetable-item" style="animation-delay: ${index * 0.05}s"><div class="time">${event.time || '時間未定'}</div><div class="details"><h3>${event.name}</h3><p>${event.description || ''}</p><a href="project-detail.htm?id=${event.id}">詳細を見る →</a></div></div>`; }); } else { contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`; } contentArea.innerHTML = contentHtml; }
+            function updatePanelContent(day, allEvents) {
+                const contentArea = document.getElementById('panel-content');
+                const tabs = document.querySelectorAll('.panel-tabs button');
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.day === day));
+                const displayGroup = allEvents.filter(p => !p.id.startsWith('place-'));
+                const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a, b) => (a.time || "").localeCompare(b.time || ""));
+                let contentHtml = '';
+                if (eventsForDay.length > 0) {
+                    eventsForDay.forEach((event, index) => {
+                        contentHtml += `<div class="timetable-item" style="animation-delay: ${index * 0.05}s">
+                            <div class="time">${event.time || '時間未定'}</div>
+                            <div class="details">
+                                <h3>${event.groupName}「${event.name}」</h3>
+                                <a href="project-detail.htm?id=${event.id}">詳細を見る →</a>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    contentHtml = `<p style="color:white; opacity:0.8;">この日のステージ発表はありません。</p>`;
+                }
+                contentArea.innerHTML = contentHtml;
+            }
 
-            // --- 実行フェーズ ---
             initializeMap();
             setupEventListeners();
             applyAllFilters();
