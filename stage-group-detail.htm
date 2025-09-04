@@ -51,7 +51,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // (テンプレート共通処理は変更なし)
         const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
-        const siteHeader = document.querySelector('.site-header'); const siteFooter = document.querySelector('.site-footer'); const sidenav = document.querySelector('.sidenav'); if (siteHeader) { siteHeader.innerHTML = `<div class="site-title"><a href="index.htm">南陵祭'25</a></div> <nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav>`; } if (sidenav) { sidenav.innerHTML = `<ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="timetable.htm">タイムテーブル</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li><li class="about-us"><a href="about-us.htm">About Us</a></li></ul>`; } if (siteFooter) { siteFooter.innerHTML = `<p>&copy; 2024 横浜南陵高校 コンピューター科学部</p>`; }
+        const siteHeader = document.querySelector('.site-header'); const siteFooter = document.querySelector('.site-footer'); const sidenav = document.querySelector('.sidenav'); if (siteHeader) { siteHeader.innerHTML = `<div class="site-title"><a href="index.htm">南陵祭'25</a></div> <nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav>`; } if (sidenav) { sidenav.innerHTML = `<ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li><li class="about-us"><a href="about-us.htm">About Us</a></li></ul>`; } if (siteFooter) { siteFooter.innerHTML = `<p>&copy; 2024 横浜南陵高校 コンピューター科学部</p>`; }
 
         // ★★★ ここからが新しいロジック ★★★
         const urlParams = new URLSearchParams(window.location.search);
@@ -136,4 +136,5 @@
     // function initializeMiniMap(currentProject) { ... }
     </script>
 </body>
+
 </html>
