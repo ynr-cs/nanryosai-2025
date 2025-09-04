@@ -41,10 +41,10 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .filter-section { background: rgba(0,0,0,0.2); padding: 30px; border-radius: 15px; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .filter-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; } /* ラップと中央揃えを追加 */
+        .filter-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
         .filter-group:not(:last-child) { margin-bottom: 15px; }
         .filter-label { color: rgba(255,255,255,0.8); font-weight: 500; white-space: nowrap; }
-        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; } /* 中央揃えを追加 */
+        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 8px 18px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; transition: all 0.2s ease-in-out; }
         .filter-btn:hover { background: rgba(255,255,255,0.2); color: white; }
         .filter-btn.active { background: var(--secondary-gradient); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-color: transparent; }
@@ -134,7 +134,6 @@
 <script defer>
     document.addEventListener('DOMContentLoaded', function() {
         
-        // (テンプレート共通処理は変更なし)
         const body = document.body;
         const hamburger = document.querySelector('.hamburger-menu');
         const overlay = document.querySelector('.page-overlay');
@@ -148,7 +147,6 @@
         const gridContainer = document.getElementById('project-grid-container');
         const noResultsMessage = document.getElementById('no-results-message');
 
-        // ★★★ 修正されたカード描画関数 ★★★
         function renderCards(projectsToRender) {
             if (!gridContainer || !noResultsMessage) return;
             if (projectsToRender.length === 0) {
@@ -163,7 +161,6 @@
             
             let cardsHTML = '';
             projectsToRender.forEach((project, index) => {
-                // 正規表現を使って「団体名」と「企画名」を賢く分割
                 const nameParts = project.name.match(/^(.+?)(?:「(.*)」)?$/);
                 const groupName = nameParts ? nameParts[1].trim() : project.name;
                 const projectName = nameParts && nameParts[2] ? nameParts[2].trim() : '';
@@ -182,15 +179,19 @@
             gridContainer.innerHTML = cardsHTML;
         }
 
-        if (typeof projectData !== 'undefined' && typeof stageData !== 'undefined') {
+        if (typeof projectData !== 'undefined') {
             const gradeFilterContainer = document.getElementById('filter-by-grade');
             const typeFilterContainer = document.getElementById('filter-by-type');
             const searchInput = document.getElementById('search-input');
             let activeFilters = { grade: 'すべて', type: 'すべて', search: '' };
             
             function applyAllFilters() {
-                const allProjects = [...projectData, ...stageData].filter(p => !p.id.startsWith('place-'));
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                // ★ ここが修正点です！ stageDataを読み込まないようにしました ★
+                // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                const allProjects = projectData; 
                 let filtered = allProjects;
+
                 if (activeFilters.grade !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.grade)); }
                 if (activeFilters.type !== 'すべて') { filtered = filtered.filter(p => p.tags && p.tags.includes(activeFilters.type)); }
                 if (activeFilters.search) {
@@ -217,4 +218,3 @@
 </script>
 </body>
 </html>
-
