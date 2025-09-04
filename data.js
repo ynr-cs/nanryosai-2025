@@ -2,19 +2,19 @@
 // ★★★ 2025年度南陵祭 公式企画データ ★★★
 // =======================================================
 
-// 企画の名簿データ (変更なし)
+// 企画の名簿データ
 const projectData = [
     // --- 4階 ---
     {
         id: '1-1',
         name: '1年1組「タケムランド」',
-        catchphrase: '',
+        catchphrase: '人生変えませんか?',
         place: '4階',
         floor: 4,
         mapX: 160,
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
-        description: '',
+        description: 'カジノへようこそ!	<br>安心してください、破産しません。',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -22,13 +22,13 @@ const projectData = [
     {
         id: '1-2',
         name: '1年2組「赤字のカジノ ~ちょっぴり大人な休憩所~」',
-        catchphrase: '',
+        catchphrase: '赤字ですたすけて！',
         place: '4階',
         floor: 4,
         mapX: 362,
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
-        description: '',
+        description: 'チンチロ、ポーカー、ブラックジャック、限界しりとりができます！<br>遊んでお菓子GET！！',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -36,13 +36,13 @@ const projectData = [
     {
         id: '1-3',
         name: '1年3組「中村縁日 ~射的でストレス発散~」',
-        catchphrase: '',
+        catchphrase: '射的でストレス発散しましょう',
         place: '4階',
         floor: 4,
         mapX: 574,
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
-        description: '',
+        description: '何発か当てるとお菓子が貰えるかも??<br>本物の屋台で使われる銃を使用しておりなんと一丁2万5000円!!!<br>文化祭で体験できるのはここのみ！',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -50,13 +50,13 @@ const projectData = [
     {
         id: '1-4',
         name: '1年4組「あの子はどこ? ~次々といなくなる不可解な事件~」',
-        catchphrase: '',
+        catchphrase: '一番怖いお化け屋敷',
         place: '4階',
         floor: 4,
         mapX: 784,
         mapY: 833,
         tags: ['1年生', 'お化け屋敷'],
-        description: '',
+        description: '追いかけてくるお化けから逃げながら人形を持って脱出してください!',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -78,13 +78,13 @@ const projectData = [
     {
         id: '1-6',
         name: '1年6組「前園のハッピーライド」',
-        catchphrase: '',
+        catchphrase: '回ったっていいじゃん!',
         place: '4階',
         floor: 4,
         mapX: 2034,
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
-        description: '',
+        description: 'モンスタースイング仕様のコーヒーカップに乗れます!!!',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -92,13 +92,13 @@ const projectData = [
     {
         id: '1-7',
         name: '1年7組「MADE in MENDY」',
-        catchphrase: '',
+        catchphrase: '来た人全員にラブ注入します ;',
         place: '4階',
         floor: 4,
         mapX: 2240,
         mapY: 833,
         tags: ['1年生', 'カフェ'],
-        description: '',
+        description: '店に入るとメイドや執事が席に案内してくれて色々なおもてなしをしてくれます!!!',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
         menu: []
@@ -108,11 +108,11 @@ const projectData = [
         name: '選挙コーナー「選挙の投票体験」',
         catchphrase: '',
         place: '4階 選択教室1',
-	locationId: 'ec1',
+        locationId: 'ec1',
         floor: 4,
         mapX: 1823,
         mapY: 833,
-        tags: ['その他', '体験・ゲーム'],
+        tags: ['その他'],
         description: '',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
@@ -123,7 +123,7 @@ const projectData = [
         name: '横田めぐみさん「拉致被害者 横田めぐみさんに関する展示」',
         catchphrase: '',
         place: '4階 選択教室1',
-	locationId: 'ec1',
+        locationId: 'ec1',
         tags: ['その他', '展示'],
         description: '',
         image: 'images/placeholder.jpg',
@@ -135,13 +135,13 @@ const projectData = [
     {
         id: '2-1',
         name: '2年1組「13年前の校舎」',
-        catchphrase: '',
+        catchphrase: 'あなたは教室の謎を解明できるか',
         place: '3階',
         floor: 3,
         mapX: 162,
         mapY: 833,
         tags: ['2年生', 'お化け屋敷'],
-        description: '',
+        description: '13年前、2年1組の教室で36番の子が突然行方不明になりました。<br>手がかりは教室内に散らばっており、皆様に探して、持ってきてもらいます。<br>もしかしたら36番目の子とあってしまうかも...<br>ぜひ2年1組に来てください。',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -149,13 +149,13 @@ const projectData = [
     {
         id: '2-2',
         name: '2年2組「ROUND2」',
-        catchphrase: '',
+        catchphrase: '的に夢中青春ストライク！',
         place: '3階',
         floor: 3,
         mapX: 372,
         mapY: 833,
         tags: ['2年生', '体験・ゲーム'],
-        description: '',
+        description: 'ダーツが楽しい',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -172,7 +172,7 @@ const projectData = [
         description: '',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [],
     },
     {
         id: '2-4',
@@ -183,35 +183,50 @@ const projectData = [
         mapX: 788,
         mapY: 833,
         tags: ['2年生', 'カフェ'],
-        description: '',
+        description: 'お菓子や飲み物を販売しています。<br>お客さん自身が売っているもので組み合わせてカスタマイズできるようになっています!<br>come on!!',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+            { name: '三ツ矢サイダー', price: '80円', desc: '' },
+            { name: 'オレンジジュース', price: '70円', desc: '' },
+            { name: 'カルピス', price: '80円', desc: '' },
+            { name: 'コーラ', price: '60円', desc: '' },
+            { name: 'ミルクティー', price: '50円', desc: '' },
+            { name: 'パチパチパニック', price: '40円', desc: '' },
+            { name: 'わたあめ', price: '80円', desc: '' },
+            { name: 'ソーダアイス', price: '60円', desc: '' },
+            { name: 'カルパス', price: 'おまけ', desc: '' }
+        ],
     },
     {
         id: '2-5',
         name: '2年5組「純喫茶ナオヤとヒカル兄やん。」',
-        catchphrase: '',
+        catchphrase: '昭和レトロで一服しよっ',
         place: '3階',
         floor: 3,
         mapX: 992,
         mapY: 833,
         tags: ['2年生', 'カフェ'],
-        description: '',
+        description: 'レトロをテーマにしたカフェでプリンとかラムネがあります！',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+            { name: 'プリン', desc: '', price: '100円' },
+            { name: 'ラムネ', desc: '', price: '100円' },
+            { name: 'メロンソーダ', desc: '', price: '100円' },
+            { name: 'オレンジジュース', desc: '', price: '100円' }
+        ]
     },
     {
         id: '2-6',
         name: '2年6組「ナベ病院 ~開かずの診察室~」',
-        catchphrase: '',
+        catchphrase: '文化祭で体験する廃病院',
         place: '3階',
         floor: 3,
         mapX: 1611,
         mapY: 833,
         tags: ['2年生', 'お化け屋敷'],
-        description: '',
+        description: '2年6組にある廃病院の中から数字を見つけ出して脱出してもらいます！',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -219,13 +234,13 @@ const projectData = [
     {
         id: '2-7',
         name: '2年7組「?Melty めいど?」',
-        catchphrase: '',
+        catchphrase: 'チョコミントよりもあなた??',
         place: '3階',
         floor: 3,
         mapX: 1816,
         mapY: 833,
         tags: ['2年生', 'カフェ'],
-        description: '',
+        description: 'ドキドキさせる時間をお届けします??',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
         menu: []
@@ -247,14 +262,14 @@ const projectData = [
     {
         id: 'art-club',
         name: '美術部「展示発表会」',
-        catchphrase: '',
+        catchphrase: '美術of美術',
         place: '3階 美術室',
         floor: 3,
         mapX: 1757,
         mapY: 1292,
-	locationId: 'art-room', 
+        locationId: 'art-room',
         tags: ['部活動・同好会', '展示'],
-        description: '',
+        description: '一筆の線、一滴の色彩。<br>重なり合って生まれるのは、私たちだけの景色。<br>美術部の世界へようこそ。',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -265,7 +280,7 @@ const projectData = [
         catchphrase: '',
         place: '3階 美術室',
         floor: 3,
-	locationId: 'art-room', 
+        locationId: 'art-room',
         tags: ['その他', '展示'],
         description: '',
         image: 'images/placeholder.jpg',
@@ -275,15 +290,16 @@ const projectData = [
     
     // --- 2階 ---
     {
-        id: 'game-club-room', // ★IDをステージ発表と区別するために変更
-        name: 'ゲーム同好会「南陵スマブラ王決定戦」',
-        catchphrase: '',
-        place: '2階',
+        id: 'game-club-room',
+        name: 'ゲーム同好会「威超頂点杯（南陵スマブラ大会）」',
+        catchphrase: '南陵一のスマブラプレイヤーは誰だ',
+        place: '2階 2-3教室',
         floor: 2,
         mapX: 573,
         mapY: 833,
+        time: '11:00-',
         tags: ['部活動・同好会', '体験・ゲーム'],
-        description: '',
+        description: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に2-3教室で予選、DAY2に体育館で決勝戦を行います！',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -291,14 +307,14 @@ const projectData = [
     {
         id: 'tea-ceremony-club',
         name: '茶道部「夏果の茶会~ふらっと茶縁日和~」',
-        catchphrase: '',
+        catchphrase: '一茶入魂',
         place: '2階',
         floor: 2,
         mapX: 2271,
         mapY: 867,
         tags: ['部活動・同好会', 'カフェ'],
-        description: '',
-        image: 'images/placeholder.jpg',
+        description: '心を込めて作り上げるお抹茶と美しい和菓子を提供し、皆様に癒しのひとときを提供します',
+        image: 'images/placeholder.png',
         contentType: 'gallery',
         gallery: []
     },
@@ -359,29 +375,15 @@ const projectData = [
         gallery: []
     },
     {
-        id: 'cs-club',
-        name: 'コンピューター科学部「南稜文化祭ホームページ」',
-        catchphrase: '',
-        place: '2階',
-        floor: 2,
-        mapX: null,
-        mapY: null,
-        tags: ['部活動・同好会', '展示'],
-        description: '',
-        image: 'images/placeholder.jpg',
-        contentType: 'gallery',
-        gallery: []
-    },
-    {
         id: 'pta',
         name: 'PTA「Nanryo Mart」',
-        catchphrase: '',
+        catchphrase: 'あなたとコンビニ、南陵マート',
         place: '2階',
         floor: 2,
         mapX: 366,
         mapY: 833,
         tags: ['その他', '販売'],
-        description: '',
+        description: 'ドリンクやパン、お菓子を販売??',
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
@@ -407,16 +409,19 @@ const projectData = [
     {
         id: '3-1-food',
         name: '3年1組「フランクフルト」',
-        catchphrase: '',
+        catchphrase: 'かおりに誘われて...ひとくちの幸せ',
         place: '外テント',
         floor: 1,
         mapX: 367,
         mapY: 1238,
         tags: ['3年生', '販売'],
-        description: '',
+        description: '食べ歩きにぴったり!<br>文化祭限定の味を楽しもう!',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+            { name: 'フランクフルト', desc: '', price: '70円' },
+            { name: 'ホットドック', desc: '', price: '100円' }
+        ]
     },
     {
         id: '3-2-food',
@@ -491,30 +496,38 @@ const projectData = [
     {
         id: '3-7-food',
         name: '3年7組「豚串こみちゃん」',
-        catchphrase: '',
+        catchphrase: 'タン串がなななんと150円！！',
         place: '外テント',
         floor: 1,
         mapX: 598,
         mapY: 1128,
         tags: ['3年生', '販売'],
-        description: '',
+        description: '私たち3年7組は豚串とタン串を販売しています。<br>味は塩、タレとレモン汁はお好みで付けられます。<br>タン串は1日100本限定なので是非来てください！',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+            { name: '豚バラ串', desc: '', price: '100円' },
+            { name: 'タン串', desc: '', price: '150円' }
+        ]
     },
     {
         id: 'home-making-club',
         name: 'ホームメイキング部「手作りお菓子の販売」',
-        catchphrase: '',
+        catchphrase: 'おいしいスコーンはいかが？',
         place: 'ピロティ(外)',
         floor: 1,
         mapX: 1993,
         mapY: 879,
         tags: ['部活動・同好会', '販売'],
-        description: '',
+        description: 'ホームメイキング部手作りの4種類のスコーンを販売します!!<br>味は「抹茶」「ココア」「紅茶」「塩」全品100円<br>校門入って右曲がってまっすぐ行った先のピロティで販売するので、ぜひ食べてみてはいかがでしょうか…？',
         image: 'images/placeholder.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+            { name: 'スコーン(抹茶味)', desc: '程よい甘みの中に感じる抹茶がとても良い…。', price: '100円' },
+            { name: 'スコーン(ココア味)', desc: '定番のココア…！ちょうどよい甘みが口の中でとろける…。', price: '100円' },
+            { name: 'スコーン(紅茶味)', desc: 'ほんのり甘くて、紅茶の香りで満たされる…！', price: '100円' },
+            { name: 'スコーン(塩味)', desc: '甘いのが苦手な人でも食べられる、いい塩加減がやみつきになる！', price: '100円' }
+        ]
     },
     {
         id: 'student-council',
@@ -525,9 +538,8 @@ const projectData = [
         image: 'images/placeholder.jpg',
         contentType: 'gallery',
         gallery: []
-    },
+    }
 ];
-
 
 // =======================================================
 // ★★★ ステージ発表のデータ (シンプル版・完成形) ★★★
@@ -671,13 +683,13 @@ const stageData = [
     {
         id: 'day2-game',
         groupId: 'game',
-        groupName: 'ゲーム同好会',
-        name: 'ステージ',
+        groupName: 'ゲーム同好会「威超頂点杯（南陵スマブラ大会）」',
+        name: '大会',
         place: '体育館',
         locationId: 'gymnasium',
         time: '11:25 - 11:40',
         tags: ['DAY2', 'ステージ', '発表', '部活動'],
-        groupDescription: 'ゲーム同好会です！2階でのスマブラ大会に加えて、体育館ステージでも活動紹介を行います！',
+        groupDescription: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に2-3教室で予選、DAY2に体育館で決勝戦を行います！',
         image: 'images/group-game.jpg'
     },
     {
