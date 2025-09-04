@@ -154,6 +154,35 @@
 
 @keyframes flashing { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
+        /* styleタグのどこかに追加 */
+.realtime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.realtime-venue-card {
+    background: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 15px;
+}
+.realtime-venue-card h4 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+}
+.realtime-content {
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+/* ↓リアルタイム情報の中身のデザインは、既存のものを少し調整して再利用する */
+.rt-status-small { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.status-indicator-small { width: 12px; height: 12px; /* ... */ }
+.status-text-small { font-size: 1em; font-weight: 600; }
+.rt-event-name-small { font-weight: 700; margin-bottom: 5px; }
+.rt-next-event-small { font-size: 0.8em; opacity: 0.7; margin-top: 10px; }
     </style>
 
     <!-- ★★★ここからFirebase SDKの追加★★★ -->
@@ -174,12 +203,27 @@
         <section class="hero-section"> <h1 class="slogan-text">南陵万博2025<br>"きっと歴史には残らない"<br>サイトはまだ未完成です<br>Classroomの提出お願いします</h1>  </section>
         <section class="countdown-section"> <h2 class="countdown-title">南陵祭'25 開催まで</h2> <div id="countdown-timer"> <div class="timer-unit"><span id="days">00</span><small>日</small></div> <div class="timer-unit"><span id="hours">00</span><small>時間</small></div> <div class="timer-unit"><span id="minutes">00</span><small>分</small></div> <div class="timer-unit"><span id="seconds">00</span><small>秒</small></div> </div> </section>
         
-        <div class="info-card text-center">
-            <h3>リアルタイム情報</h3>
-            <div id="realtime-info"> <!-- 中身をからっぽに！ -->
-                <p>情報を取得中です...</p>
-            </div>
+        <!-- ▼▼▼ <div class="info-card text-center">...リアルタイム情報...</div> を、これで上書き ▼▼▼ -->
+<div class="info-card">
+    <h3 style="text-align: center;">リアルタイム情報</h3>
+    <div class="realtime-grid">
+        <!-- 体育館の情報表示エリア -->
+        <div id="realtime-gym" class="realtime-venue-card">
+            <h4>体育館</h4>
+            <div class="realtime-content"><p>情報を取得中...</p></div>
         </div>
+        <!-- 音楽室の情報表示エリア -->
+        <div id="realtime-music" class="realtime-venue-card">
+            <h4>音楽室</h4>
+            <div class="realtime-content"><p>情報を取得中...</p></div>
+        </div>
+        <!-- 視聴覚室の情報表示エリア -->
+        <div id="realtime-av" class="realtime-venue-card">
+            <h4>視聴覚室</h4>
+            <div class="realtime-content"><p>情報を取得中...</p></div>
+        </div>
+    </div>
+</div>
         <!-- ★★★企画紹介のulの中を空にして、IDを付与★★★ -->
         <div class="info-card scroller-wrapper">
             <h3>企画紹介ハイライト</h3>
@@ -228,7 +272,10 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const realtimeInfoRef = database.ref('realtimeInfo/stageStatus');
+
+
+const realtimeInfoRef = database.ref('realtimeInfo');
+
 
         // === 2. テンプレート共通の処理 ===
         const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
@@ -236,34 +283,80 @@
         // === 3. カウントダウンタイマーの処理 ===
         const countdownContainer = document.getElementById('countdown-timer'); if(countdownContainer) { const countdownTimer = () => { const targetDate = new Date('2025-09-05T09:00:00').getTime(); const now = new Date().getTime(); const remainingTime = targetDate - now; if (remainingTime < 0) { countdownContainer.innerHTML = `<h3 style='color:white;width:100%;text-align:center;'>南陵祭、開催中！</h3>`; if(window.countdownInterval) clearInterval(window.countdownInterval); } else { document.getElementById('days').innerText = String(Math.floor(remainingTime / (1000 * 60 * 60 * 24))).padStart(2, '0'); document.getElementById('hours').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); document.getElementById('minutes').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); document.getElementById('seconds').innerText = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0'); } }; window.countdownInterval = setInterval(countdownTimer, 1000); countdownTimer(); }
     
-        // === 4. リアルタイム情報取得の処理 (Firebase版) ===
-        const infoElement = document.getElementById('realtime-info');
-        if (infoElement && typeof stageData !== 'undefined') {
-            realtimeInfoRef.on('value', (snapshot) => {
+        // === 4. リアルタイム情報取得の処理 (究極進化版) ===
+
+        // この関数は、「場所の名前」と「書き込むHTML要素のID」を受け取って、
+        // その場所専用のリアルタイム更新システムを起動する、魔法の設計図だ。
+        function createRealtimeUpdater(placeId, elementId) {
+            const infoElement = document.getElementById(elementId);
+            if (!infoElement) {
+                console.error(`Error: Element with ID '${elementId}' not found.`);
+                return; // 書き込む場所がなければ、何もしない
+            }
+
+            // Firebaseの、指定された場所のデータを監視する
+            const dbRef = realtimeInfoRef.child(placeId); //例: realtimeInfo/gym
+
+            dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
+                const contentElement = infoElement.querySelector('.realtime-content');
+                if (!contentElement) return;
+
                 if (data && data.currentEventId) {
-                    const currentEvent = stageData.find(item => item.id === data.currentEventId);
-                    const nextEvent = stageData.find(item => item.id === data.nextEventId);
-                    // ... (ここから先のHTML生成ロジックは、君の持っている完璧なコードのままでOK)
-                    let statusClass = 'preparing'; let statusText = data.status || '情報なし';
-                    switch (statusText) { case 'ライブ中！': case 'ライブ中': statusClass = 'live'; statusText = 'ライブ中！'; break; case 'まもなく開始': statusClass = 'soon'; break; case '準備中': statusClass = 'preparing'; break; case '終了': statusClass = 'finished'; break; }
-                    let html = `<div class="rt-status"><div class="status-indicator ${statusClass}"></div><div class="status-text">${statusText}</div></div><div class="rt-event-container"><div class="rt-main-event-name">${currentEvent.name}</div><div class="rt-main-event-time">予定時間: ${currentEvent.time}</div><a href="stage-detail.htm?id=${currentEvent.id}" class="rt-button">詳しく見る</a></div>`;
-                    if (nextEvent) { html += `<div class="rt-next-event"><div class="next-label">NEXT</div><div class="next-event-name">${nextEvent.name} (${nextEvent.time})</div><a href="stage-detail.htm?id=${nextEvent.id}" class="card-button small">詳しく見る</a></div>`; }
-                    else if (data.nextEventId) { html += `<div class="rt-next-event"><div class="next-event-name">NEXT: 未登録のイベント (${data.nextEventId})</div></div>`; }
-                    else { html += `<div class="rt-next-event"><div class="next-event-name">本日の発表はすべて終了しました</div></div>`; }
-                    infoElement.innerHTML = html;
+                    const currentEvent = stageData.find(e => e.id === data.currentEventId);
+                    const nextEvent = stageData.find(e => e.id === data.nextEventId);
+
+                    if (!currentEvent) {
+                        contentElement.innerHTML = `<p style="opacity:0.7; font-size:0.9em;">イベント情報が見つかりません。</p>`;
+                        return;
+                    }
+
+                    let statusClass = 'preparing';
+                    let statusText = data.status || '準備中';
+                    switch (statusText) {
+                        case '開催中': statusClass = 'live'; break;
+                        case 'まもなく開始': statusClass = 'soon'; break;
+                        case '準備中': statusClass = 'preparing'; break;
+                        case '終了': statusClass = 'finished'; break;
+                    }
+
+                    let html = `
+                        <div class="rt-status-small">
+                            <div class="status-indicator ${statusClass}"></div>
+                            <div class="status-text-small">${statusText}</div>
+                        </div>
+                        <div class="rt-event-name-small">${currentEvent.name}</div>
+                    `;
+
+                    if (nextEvent) {
+                        html += `<div class="rt-next-event-small">NEXT: ${nextEvent.name}</div>`;
+                    }
+                    contentElement.innerHTML = html;
+
                 } else {
-                    infoElement.innerHTML = `<p style="font-size:1em; opacity:0.8;">まだ情報が登録されていません。<br>管理画面で設定してください。</p>`;
+                    contentElement.innerHTML = `<p style="opacity:0.7; font-size:0.9em;">更新待機中</p>`;
                 }
             });
         }
             
-        // === 5. 横スクロールの中身を自動生成する処理 ===
-        const populateScroller = (containerId, dataArray, detailPage) => { /* ... */ };
-        if (typeof projectData !== 'undefined' && typeof stageData !== 'undefined') {
-            populateScroller('project-scroller-inner', projectData, 'project-detail.htm');
-            populateScroller('stage-scroller-inner', stageData, 'stage-detail.htm');
-        } else { console.error("data.jsの読み込みエラーのため、スクローラーは生成されません。"); }
+        // === 5. 各会場のリアルタイム更新を開始！ ===
+        // data.js と stageData が読み込めていることを確認してから実行
+        if (typeof stageData !== 'undefined') {
+            createRealtimeUpdater('gym', 'realtime-gym');
+            createRealtimeUpdater('music', 'realtime-music');
+            createRealtimeUpdater('av', 'realtime-av');
+        } else {
+            // もし読み込みが遅れても、表示を試みる
+            window.addEventListener('load', () => {
+                 if (typeof stageData !== 'undefined') {
+                    createRealtimeUpdater('gym', 'realtime-gym');
+                    createRealtimeUpdater('music', 'realtime-music');
+                    createRealtimeUpdater('av', 'realtime-av');
+                 } else {
+                     console.error("data.jsが読み込めませんでした。");
+                 }
+            });
+        }
 
         // === 6. 横スクロールに動きをつける処理 ===
         const scrollers = document.querySelectorAll('.projects-scroller');
@@ -272,6 +365,7 @@
 </script>
 </body>
 </html>
+
 
 
 
