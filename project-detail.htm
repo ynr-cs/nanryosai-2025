@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>企画詳細 | 南陵祭'25</title>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NV5VBBQNY7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NV5VBBQNY7');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NV5VBBQNY7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NV5VBBQNY7');
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <style>
         /* あなたの元のCSSを完全に維持 */
@@ -38,7 +37,6 @@
         .popup-content p { font-size: 0.9em; opacity: 0.9; margin-bottom: 15px; }
         .popup-content .detail-button { display: inline-block; text-decoration: none; color: white; font-weight: 500; padding: 10px 20px; border-radius: 25px; background: var(--accent-gradient); transition: all 0.3s ease; }
         .popup-content .detail-button:hover { transform: scale(1.05); }
-        /* ★★★ 修正点(1)：新しいCSSを追加 ★★★ */
         .floor-display-overlay { position: absolute; bottom: 20px; left: 20px; z-index: 800; background: rgba(0,0,0,0.5); color: white; padding: 10px 20px; border-radius: 10px; font-size: 1.5em; font-weight: 700; backdrop-filter: blur(5px); }
         .map-link-button { display: block; background: var(--secondary-gradient); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1em; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: none; text-align: center; margin-top: 20px; }
         .map-link-button:hover { transform: scale(1.05); }
@@ -53,6 +51,7 @@
     <main>
         <div id="header-bg" class="header-bg"></div>
         <div class="page-title-section">
+            <p id="project-group-name" class="page-group-name"></p>
             <h1 id="project-name" class="page-title">読み込み中...</h1>
             <p id="project-catchphrase" class="page-catchphrase"></p>
         </div>
@@ -83,7 +82,23 @@
             if (project) {
                 document.title = project.name + " | 南陵祭'25";
                 document.getElementById('header-bg').style.backgroundImage = `url(${project.image})`;
-                document.getElementById('project-name').innerText = project.name;
+                
+                // ▼▼▼ JavaScript修正箇所 ▼▼▼
+                const groupNameElement = document.getElementById('project-group-name');
+                const projectNameElement = document.getElementById('project-name');
+
+                // '「' が含まれているかで団体名と企画名を分割
+                if (project.name.includes('「') && project.name.includes('」')) {
+                    const parts = project.name.split('「');
+                    groupNameElement.innerText = parts[0]; // '「' より前を団体名に設定
+                    projectNameElement.innerText = '「' + parts[1]; // '「' 以降を企画名に設定
+                } else {
+                    // '「' がない場合は、団体名を空にして企画名のみ表示
+                    groupNameElement.innerText = '';
+                    projectNameElement.innerText = project.name;
+                }
+                // ▲▲▲ JavaScript修正箇所 ▲▲▲
+
                 document.getElementById('project-catchphrase').innerText = project.catchphrase || '';
                 const summary = document.getElementById('summary-section');
                 summary.innerHTML = `<div class="summary-item"><strong>場所</strong><span>${project.place}</span></div><div class="summary-item"><strong>時間</strong><span>${project.hours || project.time || '終日'}</span></div><div class="summary-item"><strong>タグ</strong><span>${(project.tags || []).join(', ')}</span></div>`;
@@ -170,5 +185,3 @@
     </script>
 </body>
 </html>
-
-
