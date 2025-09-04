@@ -82,20 +82,128 @@
     </div>
 </main>
 
-    <footer class="site-footer"></footer>
+    <footer class="site-footer"><p>&copy; 2024 横浜南陵高校 コンピューター科学部</p></footer>
 
     <script defer src="data.js"></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- ▼▼▼ テンプレート共通処理 (フッターを更新) ▼▼▼ ---
+    // === 1. テンプレート共通の処理 (変更なし) ===
     const body = document.body; const hamburger = document.querySelector('.hamburger-menu'); const overlay = document.querySelector('.page-overlay'); function toggleSidenav() { body.classList.toggle('sidenav-open'); } hamburger.addEventListener('click', toggleSidenav); overlay.addEventListener('click', toggleSidenav); let lastScrollTop = 0; const header = document.querySelector('.site-header'); if (header) { const headerHeight = header.offsetHeight; window.addEventListener('scroll', function() { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (scrollTop > lastScrollTop && scrollTop > headerHeight) { header.classList.add('hidden'); } else { header.classList.remove('hidden'); } lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; }); }
-    const siteHeader = document.querySelector('.site-header'); const siteFooter = document.querySelector('.site-footer'); const sidenav = document.querySelector('.sidenav'); if (siteHeader) { siteHeader.innerHTML = `<div class="site-title"><a href="index.htm">南陵祭'25</a></div> <nav class="desktop-nav"><ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li></ul></nav>`; } if (sidenav) { sidenav.innerHTML = `<ul><li><a href="about.htm">概要</a></li><li><a href="projects-list.htm">企画一覧</a></li><li><a href="stage-list.htm">ステージ発表</a></li><li><a href="map.htm">校内マップ</a></li><li><a href="access.htm">アクセス</a></li><li class="about-us"><a href="about-us.htm">About Us</a></li></ul>`; } 
-    if (siteFooter) { siteFooter.innerHTML = `<p>&copy; 2025 横浜南陵高校 コンピューター科学部</p><p>記載されている情報は古い可能性があります。</p>`; }
-    // --- ▲▲▲ テンプレート共通処理ここまで ▲▲▲ ---
     
+    // === 2. カウントダウンタイマーの処理 (変更なし) ===
     const countdownContainer = document.getElementById('countdown-timer'); if(countdownContainer) { const countdownTimer = () => { const targetDate = new Date('2025-09-05T09:00:00').getTime(); const now = new Date().getTime(); const remainingTime = targetDate - now; if (remainingTime < 0) { countdownContainer.innerHTML = `<h3 style='color:white;width:100%;text-align:center;'>南陵祭、開催中！</h3>`; if(window.countdownInterval) clearInterval(window.countdownInterval); } else { document.getElementById('days').innerText = String(Math.floor(remainingTime / (1000 * 60 * 60 * 24))).padStart(2, '0'); document.getElementById('hours').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); document.getElementById('minutes').innerText = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); document.getElementById('seconds').innerText = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0'); } }; window.countdownInterval = setInterval(countdownTimer, 1000); countdownTimer(); }
 
+    // ▼▼▼ 3. リアルタイム情報取得の処理 (GAS API版) ▼▼▼
     const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwmHWJjWtC1GixH4lk4JXFMBp2OvOUs2v2FLND-IOGYWh3IXB8gXcVLSuSF9k941tATlw/exec';
     const venues = [ { id: 'gym', elementId: 'realtime-gym' }, { id: 'MusicRoom', elementId: 'realtime-musicroom' }, { id: 'sityoukakusitu', elementId: 'realtime-sityoukakusitu' } ];
-    const getStatusInfo = (statusText) => { switch (statusText) { case '開催中': case 'ライブ中': return { text: 'ライブ中！', className: 'live' }; case 'まもなく開始': return { text: 'まもなく開始', className: 'soon' }; case '準備中': return { text: '準備中', className: 'preparing' }; ca
+    const getStatusInfo = (statusText) => { switch (statusText) { case '開催中': case 'ライブ中': return { text: 'ライブ中！', className: 'live' }; case 'まもなく開始': return { text: 'まもなく開始', className: 'soon' }; case '準備中': return { text: '準備中', className: 'preparing' }; case '終了': return { text: '終了', className: 'finished' }; default: return { text: statusText || '情報なし', className: 'preparing' }; } };
+
+    const renderVenueData = (element, data) => {
+        if (data.error) { element.innerHTML = `<p class="error-text">エラー: ${data.error}</p>`; return; }
+        const current = data.current_event;
+        const next = data.next_event;
+        const status = getStatusInfo(current.status);
+        const currentEventDetails = (typeof stageData !== 'undefined' && stageData.find(item => item.id === current.id)) || { name: current.name, groupName: current.name, id: current.id };
+        const nextEventDetails = (typeof stageData !== 'undefined' && next && next.id && stageData.find(item => item.id === next.id)) || (next ? { name: next.name, groupName: next.name, time: next.time, id: next.id } : null);
+        
+        // ▼▼▼ 修正点: groupName を優先して表示 ▼▼▼
+        const currentEventName = currentEventDetails.groupName || currentEventDetails.name;
+        const detailLink = (currentEventDetails.groupId) ? `stage-group-detail.htm?group=${currentEventDetails.groupId}` : `stage-detail.htm?id=${currentEventDetails.id}`;
+
+        let html = `
+            <div class="rt-status"><div class="status-indicator ${status.className}"></div><div class="status-text">${status.text}</div></div>
+            <div class="rt-event-container">
+                <div class="rt-main-event-name">${currentEventName}</div>
+                <div class="rt-main-event-time">予定時間: ${current.time}</div>
+                <a href="${detailLink}" class="rt-button">詳しく見る</a>
+            </div>`;
+        
+        if (nextEventDetails) {
+            const nextEventName = nextEventDetails.groupName || nextEventDetails.name;
+            html += `<div class="rt-next-event"><div class="next-label">NEXT</div><div class="next-event-name">${nextEventName} (${nextEventDetails.time})</div></div>`;
+        } else {
+            html += `<div class="rt-next-event"><div class="next-label">NEXT</div><div class="next-event-name">次の予定はありません</div></div>`;
+        }
+        element.innerHTML = html;
+    };
+
+    const fetchAllVenues = () => {
+        venues.forEach(venue => {
+            const element = document.getElementById(venue.elementId);
+            if (!element) return;
+            fetch(`${GAS_API_URL}?place=${venue.id}`).then(response => { if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } return response.json(); }).then(data => { renderVenueData(element, data); }).catch(error => { console.error('Fetch error for', venue.id, ':', error); element.innerHTML = `<p class="error-text">情報の取得に失敗しました。<br>時間をおいてお試しください。</p>`; });
+        });
+    };
+    fetchAllVenues();
+    setInterval(fetchAllVenues, 30000); 
+
+    // ▼▼▼ 4. 横スクロールの中身を生成する処理 (全面的に修正) ▼▼▼
+    
+    // --- 企画紹介用のスクローラーを生成する関数 ---
+    const populateProjectScroller = (containerId, dataArray) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        let itemsHTML = '';
+        dataArray.forEach(item => {
+            itemsHTML += `
+                <li class="project-card-small">
+                    <h4>${item.name}</h4>
+                    <p>${item.catchphrase || item.place}</p>
+                    <a href="project-detail.htm?id=${item.id}" class="card-button">詳細を見る</a>
+                </li>`;
+        });
+        container.innerHTML = itemsHTML + itemsHTML; // 無限スクロール用に2倍にする
+    };
+
+    // --- ステージ発表用のスクローラーを生成する関数 (新設) ---
+    const populateStageScroller = (containerId, dataArray) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // groupIdをキーにして、重複のない団体のリストを作成する
+        const uniqueGroups = Array.from(new Map(
+            dataArray
+                .filter(p => p.groupId) // groupIdがないデータ(場所情報など)を除外
+                .map(p => [p.groupId, p])
+        ).values());
+
+        let itemsHTML = '';
+        uniqueGroups.forEach(item => {
+            // 団体の全ての公演場所をリストアップして説明文を作成
+            const places = [...new Set(dataArray.filter(p => p.groupId === item.groupId).map(p => p.place))].join(', ');
+            itemsHTML += `
+                <li class="project-card-small">
+                    <h4>${item.groupName}</h4>
+                    <p>${places}</p>
+                    <a href="stage-group-detail.htm?group=${item.groupId}" class="card-button">詳細を見る</a>
+                </li>`;
+        });
+        container.innerHTML = itemsHTML + itemsHTML; // 無限スクロール用に2倍にする
+    };
+
+    // --- data.jsが読み込まれたら、各スクローラーを生成する ---
+    if (typeof projectData !== 'undefined' && typeof stageData !== 'undefined') {
+        populateProjectScroller('project-scroller-inner', projectData);
+        populateStageScroller('stage-scroller-inner', stageData);
+    } else {
+        console.error("data.jsの読み込みエラーのため、スクローラーは生成されません。");
+    }
+
+
+    // === 5. 横スクロールに動きをつける処理 (変更なし) ===
+    const scrollers = document.querySelectorAll('.projects-scroller');
+    scrollers.forEach(scroller => {
+        let isDown = false; let startX; let scrollLeft;
+        scroller.addEventListener('mousedown', (e) => { isDown = true; scroller.classList.add('scrolling'); startX = e.pageX - scroller.offsetLeft; scrollLeft = scroller.scrollLeft; scroller.style.animationPlayState = 'paused'; });
+        scroller.addEventListener('mouseleave', () => { if (!isDown) return; isDown = false; scroller.classList.remove('scrolling'); scroller.style.animationPlayState = 'running'; });
+        scroller.addEventListener('mouseup', () => { if (!isDown) return; isDown = false; scroller.classList.remove('scrolling'); scroller.style.animationPlayState = 'running'; });
+        scroller.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - scroller.offsetLeft; const walk = (x - startX) * 2; scroller.scrollLeft = scrollLeft - walk; });
+        scroller.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - scroller.offsetLeft; scrollLeft = scroller.scrollLeft; scroller.style.animationPlayState = 'paused'; });
+        scroller.addEventListener('touchend', () => { isDown = false; scroller.style.animationPlayState = 'running'; });
+        scroller.addEventListener('touchmove', (e) => { if (!isDown) return; const x = e.touches[0].pageX - scroller.offsetLeft; const walk = (x - startX) * 2; scroller.scrollLeft = scrollLeft - walk; });
+    });
+});
+</script>
+</body>
+</html>
