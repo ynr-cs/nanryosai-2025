@@ -313,7 +313,7 @@
                         const eventsForDay = displayGroup.filter(p => p.tags && p.tags.includes(day)).sort((a,b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
                         let listHtml = '';
                         if(eventsForDay.length > 0) {
-                            listHtml = eventsForDay.map(event => `<li><a href="project-detail.htm?id=${event.id}"><span class="time">${event.time || ''}</span><span class="name">${event.groupName}「${event.name}」</span></a></li>`).join('');
+                            listHtml = eventsForDay.map(event => `<li><a href="stage-group-detail.htm?group=${event.groupId}"><span class="time">${event.time || ''}</span><span class="name">${event.groupName}「${event.name}」</span></a></li>`).join('');
                         } else {
                             listHtml = `<p style="font-size:0.9em; opacity:0.8; padding-left: 5px;">この日の発表はありません。</p>`;
                         }
@@ -351,7 +351,7 @@
                             <div class="time">${event.time || '時間未定'}</div>
                             <div class="details">
                                 <h3>${event.groupName}「${event.name}」</h3>
-                                <a href="project-detail.htm?id=${event.id}">詳細を見る →</a>
+                                <a href="stage-group-detail.htm?group=${event.groupId}">詳細を見る →</a>
                             </div>
                         </div>`;
                     });
