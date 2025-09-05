@@ -15,7 +15,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
         description: 'カジノへようこそ!	<br>安心してください、破産しません。',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/1-1.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -29,7 +29,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
         description: 'チンチロ、ポーカー、ブラックジャック、限界しりとりができます！<br>遊んでお菓子GET！！',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/1-2.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -43,7 +43,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
         description: '何発か当てるとお菓子が貰えるかも??<br>本物の屋台で使われる銃を使用しておりなんと一丁2万5000円!!!<br>文化祭で体験できるのはここのみ！',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/1-3.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -57,7 +57,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', 'お化け屋敷'],
         description: '追いかけてくるお化けから逃げながら人形を持って脱出してください!',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/1-4.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -71,7 +71,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', 'カフェ'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/1-5.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -85,7 +85,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
         description: 'モンスタースイング仕様のコーヒーカップに乗れます!!!',
-        image: 'images/placeholder.jpg',
+        image: 'images/edited/1-6.png',
         contentType: 'gallery',
         gallery: []
     },
@@ -99,7 +99,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', 'カフェ'],
         description: '店に入るとメイドや執事が席に案内してくれて色々なおもてなしをしてくれます!!!',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/1-7.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -114,7 +114,7 @@ const projectData = [
         mapY: 833,
         tags: ['その他'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/no.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -126,7 +126,7 @@ const projectData = [
         locationId: 'ec1',
         tags: ['その他', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/no.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -142,7 +142,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'お化け屋敷'],
         description: '13年前、2年1組の教室で36番の子が突然行方不明になりました。<br>手がかりは教室内に散らばっており、皆様に探して、持ってきてもらいます。<br>もしかしたら36番目の子とあってしまうかも...<br>ぜひ2年1組に来てください。',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/2-1.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -156,7 +156,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', '体験・ゲーム'],
         description: 'ダーツが楽しい',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/2-2.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -170,7 +170,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'カフェ'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/2-3.jpg',
         contentType: 'menu',
         menu: [],
     },
@@ -184,7 +184,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'カフェ'],
         description: 'お菓子や飲み物を販売しています。<br>お客さん自身が売っているもので組み合わせてカスタマイズできるようになっています!<br>come on!!',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/2-4.jpg',
         contentType: 'menu',
         menu: [
             { name: '三ツ矢サイダー', price: '80円', desc: '' },
@@ -208,7 +208,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'カフェ'],
         description: 'レトロをテーマにしたカフェでプリンとかラムネがあります！',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/2-5.jpg',
         contentType: 'menu',
         menu: [
             { name: 'プリン', desc: '', price: '100円' },
@@ -227,7 +227,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'お化け屋敷'],
         description: '2年6組にある廃病院の中から数字を見つけ出して脱出してもらいます！',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/2-6.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -241,7 +241,7 @@ const projectData = [
         mapY: 833,
         tags: ['2年生', 'カフェ'],
         description: 'ドキドキさせる時間をお届けします??',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/2-7.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -255,7 +255,7 @@ const projectData = [
         mapY: 1431,
         tags: ['部活動・同好会', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/生物部.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -270,7 +270,7 @@ const projectData = [
         locationId: 'art-room',
         tags: ['部活動・同好会', '展示'],
         description: '一筆の線、一滴の色彩。<br>重なり合って生まれるのは、私たちだけの景色。<br>美術部の世界へようこそ。',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/美術部.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -283,7 +283,7 @@ const projectData = [
         locationId: 'art-room',
         tags: ['その他', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/no.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -293,14 +293,14 @@ const projectData = [
         id: 'game-club-room',
         name: 'ゲーム同好会「威超頂点杯（南陵スマブラ大会）」',
         catchphrase: '南陵一のスマブラプレイヤーは誰だ',
-        place: '2階 2-3教室',
+        place: '2階 3-3教室',
         floor: 2,
         mapX: 573,
         mapY: 833,
         time: '11:00-',
         tags: ['部活動・同好会', '体験・ゲーム'],
-        description: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に2-3教室で予選、DAY2に体育館で決勝戦を行います！',
-        image: 'images/placeholder.jpg',
+        description: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に3-3教室で予選、DAY2に体育館で決勝戦を行います！',
+        image: 'images/main/ゲーム同好会.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -314,7 +314,7 @@ const projectData = [
         mapY: 867,
         tags: ['部活動・同好会', 'カフェ'],
         description: '心を込めて作り上げるお抹茶と美しい和菓子を提供し、皆様に癒しのひとときを提供します',
-        image: 'images/placeholder.png',
+        image: 'images/main/茶道部.png',
         contentType: 'gallery',
         gallery: []
     },
@@ -328,7 +328,7 @@ const projectData = [
         mapY: 833,
         tags: ['部活動・同好会', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/文芸部.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -342,13 +342,13 @@ const projectData = [
         mapY: 833,
         tags: ['部活動・同好会', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/マンガ研究会.jpg',
         contentType: 'gallery',
         gallery: []
     },
     {
         id: 'disaster-prevention-committee',
-        name: '防災委員「高めよう防災意識」',
+        name: '防災委員会「高めよう防災意識」',
         catchphrase: '',
         place: '2階廊下',
         floor: 2,
@@ -356,7 +356,7 @@ const projectData = [
         mapY: 968,
         tags: ['委員会', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/防災委員会.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -370,7 +370,7 @@ const projectData = [
         mapY: 1301,
         tags: ['その他', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/no.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -384,7 +384,7 @@ const projectData = [
         mapY: 833,
         tags: ['その他', '販売'],
         description: 'ドリンクやパン、お菓子を販売??',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/PTA.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -392,7 +392,7 @@ const projectData = [
     // --- 5階 ---
     {
         id: 'library-committee',
-        name: '図書委員「天球の図書館」',
+        name: '図書委員会「天球の図書館」',
         catchphrase: '',
         place: '5階 図書館',
         floor: 5,
@@ -400,7 +400,7 @@ const projectData = [
         mapY: 874,
         tags: ['委員会', '展示'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/図書委員会.jpg',
         contentType: 'gallery',
         gallery: []
     },
@@ -416,7 +416,7 @@ const projectData = [
         mapY: 1238,
         tags: ['3年生', '販売'],
         description: '食べ歩きにぴったり!<br>文化祭限定の味を楽しもう!',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/3-1.jpg',
         contentType: 'menu',
         menu: [
             { name: 'フランクフルト', desc: '', price: '70円' },
@@ -433,7 +433,7 @@ const projectData = [
         mapY: 1128,
         tags: ['3年生', '販売'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/3-2.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -447,7 +447,7 @@ const projectData = [
         mapY: 1452,
         tags: ['3年生', '販売'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/main/3-3.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -461,7 +461,7 @@ const projectData = [
         mapY: 1348,
         tags: ['3年生', '販売'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/3-4.jpg',
         contentType: 'menu',
         menu: []
     },
@@ -475,23 +475,25 @@ const projectData = [
         mapY: 1550,
         tags: ['3年生', '販売'],
         description: '',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/3-5.jpg',
         contentType: 'menu',
         menu: []
     },
     {
         id: '3-6-food',
         name: '3年6組「そばにいて。」',
-        catchphrase: '',
+        catchphrase: '浅野屋より焼きそばの提供',
         place: '外テント',
         floor: 1,
         mapX: 2124,
         mapY: 1350,
         tags: ['3年生', '販売'],
-        description: '',
-        image: 'images/placeholder.jpg',
+        description: 'がっつりソース焼きそば',
+        image: 'images/main/3-6.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [
+             { name: '焼きそば', desc: 'がっつり焼きそば', price: '180円' },
+        ]
     },
     {
         id: '3-7-food',
@@ -503,7 +505,7 @@ const projectData = [
         mapY: 1128,
         tags: ['3年生', '販売'],
         description: '私たち3年7組は豚串とタン串を販売しています。<br>味は塩、タレとレモン汁はお好みで付けられます。<br>タン串は1日100本限定なので是非来てください！',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/3-7.jpg',
         contentType: 'menu',
         menu: [
             { name: '豚バラ串', desc: '', price: '100円' },
@@ -520,7 +522,7 @@ const projectData = [
         mapY: 879,
         tags: ['部活動・同好会', '販売'],
         description: 'ホームメイキング部手作りの4種類のスコーンを販売します!!<br>味は「抹茶」「ココア」「紅茶」「塩」全品100円<br>校門入って右曲がってまっすぐ行った先のピロティで販売するので、ぜひ食べてみてはいかがでしょうか…？',
-        image: 'images/placeholder.jpg',
+        image: 'images/ira/ホームメイキング部.jpg',
         contentType: 'menu',
         menu: [
             { name: 'スコーン(抹茶味)', desc: '程よい甘みの中に感じる抹茶がとても良い…。', price: '100円' },
@@ -529,16 +531,7 @@ const projectData = [
             { name: 'スコーン(塩味)', desc: '甘いのが苦手な人でも食べられる、いい塩加減がやみつきになる！', price: '100円' }
         ]
     },
-    {
-        id: 'student-council',
-        name: '生徒会「南陵祭部門別ランキング」',
-        catchphrase: '',
-        tags: ['その他', 'その他'],
-        description: '',
-        image: 'images/placeholder.jpg',
-        contentType: 'gallery',
-        gallery: []
-    }
+    
 ];
 
 // =======================================================
@@ -609,14 +602,14 @@ const stageData = [
     {
         id: 'day1-aomito-1',
         groupId: 'aomito',
-        groupName: 'あおみと',
+        groupName: 'あおみとnumber〜',
         name: 'パフォーマンス',
         place: '体育館',
         locationId: 'gymnasium',
         time: '13:30 - 13:40',
         tags: ['DAY1', 'ステージ', 'パフォーマンス', '有志'],
-        groupDescription: '有志団体「あおみと」によるスペシャルパフォーマンスです！',
-        image: 'images/group-yushi.jpg'
+        groupDescription: '',
+        image: 'images/main/あおみとnumber.jpg'
     },
     {
         id: 'day1-suibu',
@@ -628,7 +621,7 @@ const stageData = [
         time: '13:30 - 14:15',
         tags: ['DAY1','ステージ', '音楽', '部活動'],
         groupDescription: '吹奏楽部によるミニコンサートです。両日とも音楽室で開催します。美しいハーモニーをお楽しみください。',
-        image: 'images/group-suibu.jpg'
+        image: 'images/ira/吹奏楽部.jpg'
     },
     {
         id: 'day1-modern-dance',
@@ -689,8 +682,8 @@ const stageData = [
         locationId: 'gymnasium',
         time: '11:25 - 11:40',
         tags: ['DAY2', 'ステージ', '発表', '部活動'],
-        groupDescription: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に2-3教室で予選、DAY2に体育館で決勝戦を行います！',
-        image: 'images/group-game.jpg'
+        groupDescription: '南陵生徒、教師でNo.1スマブラプレイヤーを決めるトーナメント。<br>DAY1に3-3教室で予選、DAY2に体育館で決勝戦を行います！',
+        image: 'images/main/ゲーム同好会.jpg'
     },
     {
         id: 'day2-shafuku',
