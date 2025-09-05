@@ -17,7 +17,10 @@ const projectData = [
         description: 'カジノへようこそ!	<br>安心してください、破産しません。',
         image: 'images/ira/1-1.jpg',
         contentType: 'gallery',
-        gallery: []
+        gallery: [ {
+            src: 'image/gallery/PXL_20250904_001330858 - こやまさあや.jpg',      // 1枚目の写真のパス
+            caption: 'みんなで教室を飾り付け中！'   // 1枚目の写真の説明文
+        }]
     },
     {
         id: '1-2',
