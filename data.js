@@ -15,7 +15,7 @@ const projectData = [
         mapY: 833,
         tags: ['1年生', '体験・ゲーム'],
         description: 'カジノへようこそ!	<br>安心してください、破産しません。',
-        image: 'images/ira/1-1.jpg',
+        image: 'images/gallery/2-2.jpg',
         contentType: 'gallery',
         gallery: [ {
             src: 'images/gallery/PXL_20250904_001330858 - こやまさあや.jpg',      // 1枚目の写真のパス
@@ -827,4 +827,5 @@ const stageData = [
         image: 'images/music-room.jpg'
     }
 ];
+
 
