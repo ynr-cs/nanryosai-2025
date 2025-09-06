@@ -41,14 +41,21 @@
             animation: fadeIn 1s ease-out;
         }
         .thank-you-card h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            background: linear-gradient(45deg, #fff, #e8f4f8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
+    /* 基本の文字サイズを少し小さめに設定 */
+    font-size: 1.8em; 
+    /* ★★★ ここが魔法！★★★ */
+    /* 画面幅に応じて、文字サイズが自動で拡大縮小するようになる */
+    /* clamp(最小サイズ, 推奨サイズ, 最大サイズ) */
+    font-size: clamp(1.5em, 6vw, 2.5em);
+
+    font-weight: 700;
+    background: linear-gradient(45deg, #fff, #e8f4f8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    line-height: 1.4; /* 行間を少し調整 */
+}
         .thank-you-card p {
             font-size: 1.1em;
             line-height: 1.8;
@@ -105,8 +112,7 @@
         @media (max-width: 600px) {
             .thank-you-card { padding: 30px 25px; }
             .thank-you-card h1 { font-size: 2em; }
-            font-size: 1.8em; /* ★フォントサイズを少し小さく */
-        line-height: 1.4; /* ★行間を少し詰める */
+            
         }
     </style>
 </head>
