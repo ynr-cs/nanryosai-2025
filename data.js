@@ -17,8 +17,7 @@ const projectData = [
         description: 'カジノへようこそ!	<br>安心してください、破産しません。',
         image: 'images/ira/1-1.jpg',
         contentType: 'gallery',
-        gallery: [           
-        ]
+        gallery: []
     },
     {
         id: '1-2',
@@ -32,7 +31,8 @@ const projectData = [
         description: 'チンチロ、ポーカー、ブラックジャック、限界しりとりができます！<br>遊んでお菓子GET！！',
         image: 'images/main/1-2.jpg',
         contentType: 'gallery',
-        gallery: []
+        gallery: ['images/gallery/1-2-1.jpg',
+                    'images/gallery/1-2-2.jpg',]   
     },
     {
         id: '1-3',
@@ -88,7 +88,9 @@ const projectData = [
         description: 'モンスタースイング仕様のコーヒーカップに乗れます!!!',
         image: 'images/edited/1-6.png',
         contentType: 'gallery',
-        gallery: []
+        gallery: ['images/gallery/1-6-1.jpg',
+            'images/gallery/1-6-2.jpg'
+        ]
     },
     {
         id: '1-7',
@@ -216,6 +218,11 @@ const projectData = [
             { name: 'ラムネ', desc: '', price: '100円' },
             { name: 'メロンソーダ', desc: '', price: '100円' },
             { name: 'オレンジジュース', desc: '', price: '100円' }
+        ],
+        gallery: ['images/gallery/2-5.jpg',
+            'images/gallery/2-5-2.jpg',
+            'images/gallery/2-5-3.jpg',
+            'images/gallery/2-5-4.jpg',
         ]
     },
     {
@@ -273,7 +280,9 @@ const projectData = [
         description: '一筆の線、一滴の色彩。<br>重なり合って生まれるのは、私たちだけの景色。<br>美術部の世界へようこそ。',
         image: 'images/main/美術部.jpg',
         contentType: 'gallery',
-        gallery: []
+        gallery: ['images/gallery/bijyutubu1.jpg',
+            'images/gallery/bijyutubu2.jpg'
+        ]
     },
     {
         id: 'art-course',
@@ -436,7 +445,11 @@ const projectData = [
         description: '',
         image: 'images/main/3-2.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [],
+        gallery: ['images/gallery/3-2-1.jpg',
+            'images/gallery/3-2-2.jpg',
+            'images/gallery/3-2-3.jpg'
+        ]
     },
     {
         id: '3-3-food',
@@ -450,7 +463,8 @@ const projectData = [
         description: '',
         image: 'images/main/3-3.jpg',
         contentType: 'menu',
-        menu: []
+        menu: [],
+        gallery: ['images/gallery/3-3-1.jpg']
     },
     {
         id: '3-4-food',
@@ -506,12 +520,14 @@ const projectData = [
         mapY: 1128,
         tags: ['3年生', '販売'],
         description: '私たち3年7組は豚串とタン串を販売しています。<br>味は塩、タレとレモン汁はお好みで付けられます。<br>タン串は1日100本限定なので是非来てください！',
-        image: 'images/ira/3-7.jpg',
+        image: 'images/gallery/3-7-1.jpg',
         contentType: 'menu',
+        gallery: [''],
         menu: [
             { name: '豚バラ串', desc: '', price: '100円' },
             { name: 'タン串', desc: '', price: '150円' }
         ]
+        
     },
     {
         id: 'home-making-club',
@@ -825,6 +841,3 @@ const stageData = [
         image: 'images/music-room.jpg'
     }
 ];
-
-
-
