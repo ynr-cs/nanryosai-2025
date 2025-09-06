@@ -57,7 +57,7 @@ const projectData = [
         mapX: 784,
         mapY: 833,
         tags: ['1年生', 'お化け屋敷'],
-        description: '追いかけてくるお化けから逃げながら人形を持って脱出してください!',
+        description: '南陵一怖いお化け屋敷へようこそ',
         image: 'images/ira/1-4.jpg',
         contentType: 'gallery',
         gallery: []
@@ -841,3 +841,4 @@ const stageData = [
         image: 'images/music-room.jpg'
     }
 ];
+
